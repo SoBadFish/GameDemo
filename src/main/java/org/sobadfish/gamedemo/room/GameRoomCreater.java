@@ -108,23 +108,23 @@ public class GameRoomCreater {
                     roomConfig = GameRoomConfig.createGameRoom("测试房间", 4, 16);
                     isRoomCreate = true;
                     creater.sendForceMessage("&2成功创建一个 名字已经固定为 &r“测试房间”&2的游戏房间模板 已设定最低玩家为 &b4&2 最大玩家为 &b16&r");
-                    creater.sendForceMessage("继续执行/bd 进行下一步 [进入游戏地图设置]");
+                    creater.sendForceMessage("继续执行/gda 进行下一步 [进入游戏地图设置]");
                 }else{
                     creater.sendForceMessage("&2成功预设房间设置");
-                    creater.sendForceMessage("&e继续执行 &r/bd &r进行下一步 &b[进入游戏地图设置]");
+                    creater.sendForceMessage("&e继续执行 &r/gda &r进行下一步 &b[进入游戏地图设置]");
                 }
                 flag++;
                 break;
             case 2:
                 worldInfoConfig = WorldInfoConfig.createWorldConfig(creater.getLevel().getFolderName());
                 creater.sendForceMessage("&2成功设定游戏地图");
-                creater.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &b[设置等待大厅]");
+                creater.sendForceMessage("&e继续执行 &r/gda &e进行下一步 &b[设置等待大厅]");
                 flag++;
                 break;
             case 3:
                 worldInfoConfig.setWaitPosition(creater.getPosition());
                 creater.sendForceMessage("&2成功等待大厅");
-                creater.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"出生点 &21&b /&d "+roomConfig.teamCfg.size()+"&r]");
+                creater.sendForceMessage("&e继续执行 &r/gda &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"出生点 &21&b /&d "+roomConfig.teamCfg.size()+"&r]");
                 flag++;
                 break;
             case 6:
@@ -150,7 +150,7 @@ public class GameRoomCreater {
                     creater.sendForceMessage("&a游戏房间创建完成 &c(重启生效配置)");
                     return true;
                 }
-                creater.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"出生点 &r[&2"+(team.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
+                creater.sendForceMessage("&e继续执行 &r/gda &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"出生点 &r[&2"+(team.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
                 break;
             default:
                 break;
