@@ -4,6 +4,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.manager.TotalManager;
 
 /**
  * 跟随玩家
@@ -23,7 +24,7 @@ public class FollowItem {
         Item item = Item.get(345);
         item.addEnchantment(Enchantment.get(9));
         CompoundTag tag = item.getNamedTag();
-        tag.putString("gamedemo","follow");
+        tag.putString(TotalManager.GAME_NAME,"follow");
         item.setNamedTag(tag);
         item.setCustomName(TextFormat.colorize('&',"&r&l&e点我传送到玩家"));
         return item;

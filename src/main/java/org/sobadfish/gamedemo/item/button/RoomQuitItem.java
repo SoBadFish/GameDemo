@@ -5,6 +5,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.manager.TotalManager;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ public class RoomQuitItem {
         Item item = Item.get(324);
         item.addEnchantment(Enchantment.get(9));
         CompoundTag tag = item.getNamedTag();
-        tag.putString("gamedemo","quitItem");
+        tag.putString(TotalManager.GAME_NAME,"quitItem");
         item.setNamedTag(tag);
         item.setCustomName(TextFormat.colorize('&',"&r&l&e点我退出游戏"));
         return item;

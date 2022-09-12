@@ -622,19 +622,19 @@ public class RoomManager implements Listener {
             GameRoom room = getRoom(roomName);
             if(room != null){
                 Item item = event.getItem();
-                if(item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem")){
+                if(item.hasCompoundTag() && "quitItem".equalsIgnoreCase(item.getNamedTag().getString(TotalManager.GAME_NAME))){
                     player.getInventory().setHeldItemSlot(0);
                     if (quitRoomItem(player, roomName, room)) {
                         return;
                     }
                 }
-                if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
+                if(item.hasCompoundTag() && "choseTeam".equalsIgnoreCase(item.getNamedTag().getString(TotalManager.GAME_NAME))){
                     player.getInventory().setHeldItemSlot(0);
                     choseteamItem(player, room);
 
 
                 }
-                if(item.hasCompoundTag() && item.getNamedTag().getBoolean("follow")){
+                if(item.hasCompoundTag() && "follow".equalsIgnoreCase(item.getNamedTag().getString(TotalManager.GAME_NAME))){
                     followPlayer(room.getPlayerInfo(player),room);
                     player.getInventory().setHeldItemSlot(0);
                 }

@@ -20,6 +20,8 @@ public class TotalManager {
 
     public static PluginBase plugin = null;
 
+    public static final String GAME_NAME = "GameDemo";
+
     public static LinkedHashMap<String, GameFrom> FROM = new LinkedHashMap<>();
 
     public static void init(PluginBase pluginBase){

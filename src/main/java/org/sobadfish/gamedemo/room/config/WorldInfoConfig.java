@@ -26,6 +26,7 @@ public class WorldInfoConfig {
      * 等待大厅坐标
      * */
     private String waitPosition;
+
     private WorldInfoConfig(String gameWorld,
                             String waitPosition
     ){

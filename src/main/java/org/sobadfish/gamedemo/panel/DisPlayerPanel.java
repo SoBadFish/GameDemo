@@ -20,8 +20,6 @@ public class DisPlayerPanel implements InventoryHolder {
 
 
 
-
-
     public void displayPlayer(PlayerInfo player, Map<Integer, BasePlayPanelItemInstance> itemMap, String name){
         ChestInventoryPanel panel = new ChestInventoryPanel(player,this,name);
         panel.setPanel(itemMap);
