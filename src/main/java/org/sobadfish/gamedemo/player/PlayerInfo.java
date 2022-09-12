@@ -82,6 +82,14 @@ public class PlayerInfo {
         this.player = player;
     }
 
+    public LinkedHashMap<PlayerInfo, Long> getAssistsPlayers() {
+        return assistsPlayers;
+    }
+
+    public int getAssists() {
+        return assists;
+    }
+
     public EntityHuman getPlayer() {
         return player;
     }

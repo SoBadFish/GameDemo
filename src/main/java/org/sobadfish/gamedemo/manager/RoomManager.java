@@ -3,16 +3,23 @@ package org.sobadfish.gamedemo.manager;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockBed;
 import cn.nukkit.block.BlockCraftingTable;
+import cn.nukkit.block.BlockTNT;
+import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.item.EntityPrimedTNT;
 import cn.nukkit.event.EventHandler;
+import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
+import cn.nukkit.event.entity.EntityExplodeEvent;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
+import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
 import cn.nukkit.event.level.WeatherChangeEvent;
 import cn.nukkit.event.player.*;
@@ -30,6 +37,8 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.event.GameRoomStartEvent;
+import org.sobadfish.gamedemo.event.TeamDefeatEvent;
+import org.sobadfish.gamedemo.event.TeamVictoryEvent;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
 import org.sobadfish.gamedemo.item.button.RoomQuitItem;
 import org.sobadfish.gamedemo.item.button.TeamChoseItem;
@@ -740,6 +749,134 @@ public class RoomManager implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onTeamDefeat(TeamDefeatEvent event){
+
+        final GameRoom room = event.getRoom();
+        for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
+
+            room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
+            if(event.getRoom().getRoomConfig().isAutomaticNextRound){
+                info.sendMessage("&7即将自动进行下一局");
+                RandomJoinManager.joinManager.nextJoin(info);
+//                ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,info,event.getRoom(),null));
+
+            }
+
+        }
+    }
+
+    @EventHandler
+    public void onExecuteCommand(PlayerCommandPreprocessEvent event){
+        PlayerInfo info = getPlayerInfo(event.getPlayer());
+        if(info != null){
+            GameRoom room = info.getGameRoom();
+            if(room != null) {
+                for(String cmd: room.getRoomConfig().banCommand){
+                    if(event.getMessage().contains(cmd)){
+                        event.setCancelled();
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    @EventHandler
+    public void onTeamVictory(TeamVictoryEvent event){
+        event.getTeamInfo().sendTitle("&e&l胜利!",5);
+        String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■";
+        event.getRoom().sendTipMessage("&a"+line);
+        event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",line.length()));
+        event.getRoom().sendTipMessage("");
+        for(PlayerInfo playerInfo: event.getTeamInfo().getInRoomPlayer()){
+            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount())+" 助攻: "+playerInfo.getAssists(),line.length()));
+        }
+        event.getRoom().sendTipMessage("&a"+line);
+        for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
+            event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
+        }
+
+        event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
+
+    }
+
+
+    @EventHandler
+    public void onCraft(CraftItemEvent event){
+        Player player = event.getPlayer();
+        GameRoom room = getGameRoomByLevel(player.getLevel());
+        if(room != null) {
+            PlayerInfo info = room.getPlayerInfo(player);
+            if (info != null) {
+                event.setCancelled();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlaceBlock(BlockPlaceEvent event){
+        Level level = event.getBlock().level;
+
+        Block block = event.getBlock();
+        Item item = event.getItem();
+        if(item.hasCompoundTag() && (item.getNamedTag().contains(TotalManager.GAME_NAME)
+        )){
+            event.setCancelled();
+            return;
+        }
+        GameRoom room = getGameRoomByLevel(level);
+        if(room != null){
+            PlayerInfo info = room.getPlayerInfo(event.getPlayer());
+            if(info != null) {
+                if (info.isWatch()) {
+                    info.sendMessage("&c观察状态下不能放置方块");
+                    event.setCancelled();
+
+                }
+
+            }
+        }
+
+
+    }
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onChat(PlayerChatEvent event){
+        PlayerInfo info = getPlayerInfo(event.getPlayer());
+        if(info != null){
+            GameRoom room = info.getGameRoom();
+            if(room != null){
+                if(info.isWatch()){
+                    room.sendMessageOnWatch(info+" &r>> "+event.getMessage());
+                }else{
+                    String msg = event.getMessage();
+                    if(msg.startsWith("@") || msg.startsWith("!")){
+                        info.getGameRoom().sendFaceMessage("&l&7(全体消息)&r "+info+"&r >> "+msg.substring(1));
+                    }else{
+                        TeamInfo teamInfo = info.getTeamInfo();
+                        if(teamInfo != null){
+                            if(info.isDeath()){
+                                room.sendMessageOnDeath(info+"&7(死亡) &r>> "+msg);
+                            }else {
+                                teamInfo.sendMessage(teamInfo.getTeamConfig().getNameColor() + "[队伍]&7 " + info.getPlayer().getName() + " &f>>&r " + msg);
+                            }
+                        }else{
+                            room.sendMessage(info+" &f>>&r "+msg);
+                        }
+                    }
+                }
+                event.setCancelled();
+            }
+        }
+    }
+
+
+
+
+
+
 
 
 
