@@ -231,10 +231,9 @@ public class GameRoomConfig {
         ArrayList<String> strings = new ArrayList<>();
 
         strings.add("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-        strings.add("&f战桥");
+        strings.add("&f小游戏");
         strings.add("&e");
-        strings.add("&e达到对面的据点就可以获得1分");
-        strings.add("&e率先得到5分的队伍获胜");
+        strings.add("&e小游戏介绍");
         strings.add("&e");
         strings.add("&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
         return strings;
@@ -242,6 +241,36 @@ public class GameRoomConfig {
 
     public void save(){
         //TODO 保存配置逻辑
+        Config config = new Config(TotalManager.getDataFolder()+"/rooms/"+getName()+"/room.yml",Config.YAML);
+        config.set("world",worldInfo.getLevel());
+        config.set("gameTime",time);
+
+        config.set("callbackY",callbackY);
+        config.set("waitTime",waitTime);
+        config.set("max-player-waitTime",maxWaitTime);
+        config.set("minPlayerSize",minPlayerSize);
+        config.set("maxPlayerSize",maxPlayerSize);
+        ArrayList<LinkedHashMap<String, Object>> teamSpawn = new ArrayList<>();
+        for(TeamInfoConfig infoConfig: teamConfigs) {
+            teamSpawn.add(infoConfig.save());
+        }
+        config.set("teamSpawn",teamSpawn);
+
+        config.set("waitPosition",WorldInfoConfig.positionToString(worldInfo.getWaitPosition()));
+        config.set("ban-command",banCommand);
+        config.set("QuitRoom",quitRoomCommand);
+        config.set("hasWatch", hasWatch);
+        config.set("AutomaticNextRound",isAutomaticNextRound);
+        config.set("defeatCmd",defeatCommand);
+        config.set("victoryCmd",victoryCommand);
+        config.set("roomStartMessage",gameStartMessage);
+        List<Map<String,Object>> pos = new ArrayList<>();
+        for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){
+            pos.add(floatTextInfoConfig.toConfig());
+        }
+        config.set("floatSpawnPos",pos);
+        config.save();
+
     }
 
     @Override

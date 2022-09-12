@@ -11,6 +11,7 @@ public class FloatTextInfoConfig {
 
     public String text;
 
+    //
     public FloatTextInfoConfig(String name,String position,String text){
         this.name = name;
         this.position = position;
