@@ -133,6 +133,9 @@ public class GameRoomConfig {
     }
 
 
+    public LinkedHashMap<String, TeamConfig> getTeamCfg() {
+        return teamCfg;
+    }
 
     public ArrayList<TeamInfoConfig> getTeamConfigs() {
         return teamConfigs;
@@ -148,6 +151,14 @@ public class GameRoomConfig {
 
     public int getMaxPlayerSize() {
         return maxPlayerSize;
+    }
+
+    public void setWorldInfo(WorldInfoConfig worldInfo) {
+        this.worldInfo = worldInfo;
+    }
+
+    public void setTeamConfigs(ArrayList<TeamInfoConfig> teamConfigs) {
+        this.teamConfigs = teamConfigs;
     }
 
     public WorldInfoConfig getWorldInfo() {
@@ -225,6 +236,21 @@ public class GameRoomConfig {
 
        return null;
 
+    }
+
+
+
+    public boolean notHasFloatText(String name){
+        for(FloatTextInfoConfig config: floatTextInfoConfigs){
+            if(config.name.equalsIgnoreCase(name)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void removeFloatText(String name){
+        floatTextInfoConfigs.removeIf(config -> config.name.equalsIgnoreCase(name));
     }
 
     public static ArrayList<String> defaultGameStartMessage(){
