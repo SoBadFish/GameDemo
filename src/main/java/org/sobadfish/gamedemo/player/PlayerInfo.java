@@ -6,7 +6,11 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.inventory.PlayerEnderChestInventory;
 import cn.nukkit.inventory.PlayerInventory;
 import cn.nukkit.item.*;
+import cn.nukkit.level.Level;
+import cn.nukkit.level.Location;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.math.BlockFace;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
@@ -68,6 +72,29 @@ public class PlayerInfo {
     public EntityHuman getPlayer() {
         return player;
     }
+
+    public Level getLevel(){
+        return player.getLevel();
+    }
+
+    public Location getLocation(){
+        return player.getLocation();
+    }
+
+    public BlockFace getHorizontalFacing(){
+        return player.getHorizontalFacing();
+    }
+
+    public String getName(){
+        return player.getName();
+    }
+
+    public Position getPosition(){
+        return player.getPosition();
+    }
+
+
+
 
     public void setTeamInfo(TeamInfo teamInfo) {
         this.teamInfo = teamInfo;

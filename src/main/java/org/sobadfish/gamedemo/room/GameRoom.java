@@ -26,6 +26,7 @@ import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfo;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.gamedemo.room.world.WorldInfo;
+import org.sobadfish.gamedemo.tools.Utils;
 
 
 import java.util.ArrayList;
@@ -526,6 +527,19 @@ public class GameRoom {
     }
 
     private void onEnd() {
+        if(loadTime == -1){
+            loadTime = 10;
+        }
+
+        for(PlayerInfo playerInfo:getLivePlayers()){
+            Utils.spawnFirework(playerInfo.getPosition());
+        }
+
+        if(loadTime == 0){
+            type = GameType.CLOSE;
+
+        }
+
     }
 
     private void onStart() {
