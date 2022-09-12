@@ -1,4 +1,4 @@
-package org.sobadfish.gamedemo.item;
+package org.sobadfish.gamedemo.item.button;
 
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;

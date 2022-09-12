@@ -1,16 +1,8 @@
 package org.sobadfish.gamedemo;
 
-import cn.nukkit.Player;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
-import org.sobadfish.gamedemo.manager.MenuRoomManager;
-import org.sobadfish.gamedemo.manager.RoomManager;
-import org.sobadfish.gamedemo.manager.ThreadManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
-import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
-
-
-import java.io.File;
 
 /**
 

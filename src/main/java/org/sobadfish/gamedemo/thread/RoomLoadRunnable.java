@@ -77,7 +77,6 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
                 try {
                     if (room.worldInfo != null) {
                         if (!room.worldInfo.isClose()) {
-                            //把掉落物啥的扔回主线程
                             Server.getInstance().getScheduler().scheduleTask(TotalManager.getPlugin(),new WorldInfoMasterThread(room,room.worldInfo,TotalManager.getPlugin()));
                         }
                     }

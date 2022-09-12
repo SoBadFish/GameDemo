@@ -1,14 +1,15 @@
 package org.sobadfish.gamedemo.manager;
 
 import cn.nukkit.Player;
-import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.GameDemoMain;
+import org.sobadfish.gamedemo.panel.from.GameFrom;
 import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 
 /**
  * 插件启动控制器
@@ -18,6 +19,8 @@ import java.io.File;
 public class TotalManager {
 
     public static PluginBase plugin = null;
+
+    public static LinkedHashMap<String, GameFrom> FROM = new LinkedHashMap<>();
 
     public static void init(PluginBase pluginBase){
         TotalManager.plugin = pluginBase;
