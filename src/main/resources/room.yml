@@ -1,0 +1,27 @@
+world: ""
+gameTime: 1200
+callbackY: 17
+hasWatch: true
+waitTime: 120
+max-player-waitTime: 20
+minPlayerSize: 4
+maxPlayerSize: 16
+teamSpawn: {}
+waitPosition: ""
+ban-command: []
+QuitRoom: []
+AutomaticNextRound: true
+victoryCmd: []
+defeatCmd: []
+
+floatSpawnPos: []
+
+roomStartMessage:
+  - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
+  - "&f小游戏名称"
+  - "&e"
+  - "&e小游戏介绍"
+  - "&e"
+  - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
+
+
