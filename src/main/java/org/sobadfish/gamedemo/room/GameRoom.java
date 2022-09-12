@@ -22,6 +22,7 @@ import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.manager.WorldResetManager;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
+import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfo;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
@@ -77,6 +78,9 @@ public class GameRoom {
         this.worldInfo = new WorldInfo(this,roomConfig.worldInfo);
 
         type = GameType.WAIT;
+        for(TeamInfoConfig config: getRoomConfig().getTeamConfigs()){
+            teamInfos.add(new TeamInfo(this,config));
+        }
 
         //启动事件
 
