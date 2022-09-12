@@ -606,8 +606,7 @@ public class RoomManager implements Listener {
                     return;
                 }
                 Item item = event.getItem();
-                if (item.hasCompoundTag() && (item.getNamedTag().getBoolean("quitItem") || item.hasCompoundTag()
-                        || item.getNamedTag().getBoolean("choseTeam") || item.getNamedTag().getBoolean("follow"))) {
+                if (item.hasCompoundTag() && item.getNamedTag().contains(TotalManager.GAME_NAME)) {
                     event.setCancelled();
                 }
             }
