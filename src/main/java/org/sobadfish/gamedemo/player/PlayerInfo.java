@@ -26,9 +26,8 @@ import org.sobadfish.gamedemo.player.message.ScoreBoardMessage;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author Sobadfish
@@ -548,8 +547,47 @@ public class PlayerInfo {
     }
 
     private ArrayList<String> getLore(boolean isWait){
-        //TODO 构建Lore
-       return  null;
+        ArrayList<String> lore = new ArrayList<>();
+        String levelName = TotalManager.getMenuRoomManager().getNameByRoom(gameRoom.getRoomConfig());
+        if(levelName == null){
+            levelName = " -- ";
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        lore.add("&7"+format.format(new Date()));
+        lore.add("游戏模式: &a"+levelName);
+
+        lore.add(" ");
+        if(isWait){
+            lore.add("玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize());
+            lore.add("等待中....");
+            lore.add("   ");
+
+        }else{
+
+            lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
+
+            for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
+                String me = "";
+                if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
+                    me = "&7(我)";
+                }
+                lore.add("◎ "+ teamInfo +": &r  &c"+teamInfo.getLivePlayer().size()+" "+me);
+            }
+            lore.add("      ");
+            lore.add("&b击杀数: &a"+killCount);
+            lore.add("&e助攻数: &a"+assists);
+
+            lore.add("        ");
+        }
+        Object obj = TotalManager.getConfig().get("game-logo");
+        if(obj instanceof List){
+            for(Object s : (List<?>)obj){
+                lore.add(s.toString());
+            }
+        }else{
+            lore.add(TotalManager.getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
+        }
+        return lore;
     }
     private int loadTime = 0;
 
