@@ -218,6 +218,44 @@ public class Utils {
         return sb2.toString();
 
     }
+
+    /**
+     * 获取百分比
+     * */
+    public double getExpPercent(int n,int max){
+        double r = 0;
+        if(n > 0){
+            r = (double) n / (double) max;
+        }
+        return r;
+    }
+
+    /**
+     * 绘制颜色条
+     * @param size 长度
+     * @param percent 百分比
+     * @param hasColor 颜色块
+     * @param noColor 没有颜色的块
+     *
+     * @return 颜色条
+     * */
+    public String getExpLine(int size,double percent,String hasColor,String noColor){
+        int l = (int) (size * percent);
+        int other = size - l;
+        StringBuilder ls = new StringBuilder();
+        if(l > 0){
+            for(int i = 0;i < l;i++){
+                ls.append(hasColor);
+            }
+        }
+        StringBuilder others = new StringBuilder();
+        if(other > 0){
+            for(int i = 0;i < other;i++){
+                others.append(noColor);
+            }
+        }
+        return ls +others.toString();
+    }
     /**
      * 复制文件
      * */
