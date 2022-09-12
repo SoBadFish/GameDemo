@@ -1,9 +1,9 @@
 package org.sobadfish.gamedemo.panel;
 
 import cn.nukkit.Player;
-import cn.nukkit.utils.Utils;
 import org.sobadfish.gamedemo.panel.from.GameFrom;
 import org.sobadfish.gamedemo.panel.from.button.BaseIButtom;
+import org.sobadfish.gamedemo.tools.Utils;
 
 
 import java.util.LinkedHashMap;
