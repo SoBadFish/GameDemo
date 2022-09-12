@@ -2,6 +2,9 @@ package org.sobadfish.gamedemo;
 
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.command.GameDemoAdminCommand;
+import org.sobadfish.gamedemo.command.GameDemoCommand;
+import org.sobadfish.gamedemo.command.GameDemoSpeakCommand;
 import org.sobadfish.gamedemo.manager.TotalManager;
 
 /**
@@ -25,9 +28,13 @@ public class GameDemoMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&e正在加载GameDemo 插件 本版本为&av"+this.getDescription().getVersion()));
         this.getLogger().info(TextFormat.colorize('&',"&a插件加载完成，祝您使用愉快"));
 
+        TotalManager.init(this);
+        this.getServer().getCommandMap().register("gamedemo",new GameDemoAdminCommand("gda"));
+        this.getServer().getCommandMap().register("gamedemo",new GameDemoCommand("gd"));
+        this.getServer().getCommandMap().register("gamedemo",new GameDemoSpeakCommand("gds"));
 
         this.getLogger().info(TextFormat.colorize('&',"&a插件加载完成，祝您使用愉快"));
-        TotalManager.init(this);
+
     }
 
 

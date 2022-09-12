@@ -3,17 +3,17 @@ package org.sobadfish.gamedemo.command;
 import cn.nukkit.Player;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
-import org.sobadfish.warbridge.WarBridgeMain;
-import org.sobadfish.warbridge.player.PlayerInfo;
+import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.player.PlayerInfo;
 
 
 /**
  * @author SoBadFish
  * 2022/1/15
  */
-public class WarBridgeSpeakCommand extends Command {
+public class GameDemoSpeakCommand extends Command {
 
-    public WarBridgeSpeakCommand(String name) {
+    public GameDemoSpeakCommand(String name) {
         super(name);
     }
 
@@ -21,7 +21,7 @@ public class WarBridgeSpeakCommand extends Command {
     @Override
     public boolean execute(CommandSender commandSender, String s, String[] strings) {
         if(commandSender instanceof Player){
-            PlayerInfo info = WarBridgeMain.getRoomManager().getPlayerInfo((Player) commandSender);
+            PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo((Player) commandSender);
             if(info == null){
                 new PlayerInfo((Player)commandSender).sendForceMessage("&c你不在游戏房间内!");
                 return false;
