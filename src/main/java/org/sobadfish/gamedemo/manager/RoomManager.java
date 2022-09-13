@@ -34,10 +34,7 @@ import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
-import org.sobadfish.gamedemo.event.GameRoomStartEvent;
-import org.sobadfish.gamedemo.event.PlayerGetExpEvent;
-import org.sobadfish.gamedemo.event.TeamDefeatEvent;
-import org.sobadfish.gamedemo.event.TeamVictoryEvent;
+import org.sobadfish.gamedemo.event.*;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
 import org.sobadfish.gamedemo.item.button.RoomQuitItem;
 import org.sobadfish.gamedemo.item.button.TeamChoseItem;
@@ -914,39 +911,96 @@ public class RoomManager implements Listener {
             }
 
         }
+
     /**
      * 修改玩家聊天信息事件
 
      * */
-        @EventHandler(priority = EventPriority.LOWEST)
-        public void onChat(PlayerChatEvent event){
-            PlayerInfo info = getPlayerInfo(event.getPlayer());
-            if(info != null){
-                GameRoom room = info.getGameRoom();
-                if(room != null){
-                    if(info.isWatch()){
-                        room.sendMessageOnWatch(info+" &r>> "+event.getMessage());
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onChat(PlayerChatEvent event){
+        PlayerInfo info = getPlayerInfo(event.getPlayer());
+        if(info != null){
+            GameRoom room = info.getGameRoom();
+            if(room != null){
+                if(info.isWatch()){
+                    room.sendMessageOnWatch(info+" &r>> "+event.getMessage());
+                }else{
+                    String msg = event.getMessage();
+                    if(msg.startsWith("@") || msg.startsWith("!")){
+                        info.getGameRoom().sendFaceMessage("&l&7(全体消息)&r "+info+"&r >> "+msg.substring(1));
                     }else{
-                        String msg = event.getMessage();
-                        if(msg.startsWith("@") || msg.startsWith("!")){
-                            info.getGameRoom().sendFaceMessage("&l&7(全体消息)&r "+info+"&r >> "+msg.substring(1));
-                        }else{
-                            TeamInfo teamInfo = info.getTeamInfo();
-                            if(teamInfo != null){
-                                if(info.isDeath()){
-                                    room.sendMessageOnDeath(info+"&7(死亡) &r>> "+msg);
-                                }else {
-                                    teamInfo.sendMessage(teamInfo.getTeamConfig().getNameColor() + "[队伍]&7 " + info.getPlayer().getName() + " &f>>&r " + msg);
-                                }
-                            }else{
-                                room.sendMessage(info+" &f>>&r "+msg);
+                        TeamInfo teamInfo = info.getTeamInfo();
+                        if(teamInfo != null){
+                            if(info.isDeath()){
+                                room.sendMessageOnDeath(info+"&7(死亡) &r>> "+msg);
+                            }else {
+                                teamInfo.sendMessage(teamInfo.getTeamConfig().getNameColor() + "[队伍]&7 " + info.getPlayer().getName() + " &f>>&r " + msg);
                             }
+                        }else{
+                            room.sendMessage(info+" &f>>&r "+msg);
                         }
                     }
-                    event.setCancelled();
+                }
+                event.setCancelled();
+            }
+        }
+    }
+    @EventHandler
+    public void onPlayerJoinRoom(PlayerJoinRoomEvent event){
+        PlayerInfo info = event.getPlayerInfo();
+        GameRoom gameRoom = event.getRoom();
+        if (TotalManager.getRoomManager().playerJoin.containsKey(info.getPlayer().getName())) {
+            String roomName = TotalManager.getRoomManager().playerJoin.get(info.getPlayer().getName());
+            if (roomName.equalsIgnoreCase(event.getRoom().getRoomConfig().name) && gameRoom.getPlayerInfos().contains(info)) {
+                if(event.isSend()) {
+                    info.sendForceMessage("&c你已经在这个房间内了");
+                }
+                event.setCancelled();
+                return;
+            }
+            if (TotalManager.getRoomManager().hasGameRoom(roomName)) {
+                GameRoom room = TotalManager.getRoomManager().getRoom(roomName);
+                if (room.getType() != GameRoom.GameType.END && room.getPlayerInfos().contains(info)) {
+                    if (room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.WATCH ||
+                            room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.LEAVE) {
+                        if(event.isSend()) {
+                            info.sendForceMessage("&c你已经在游戏房间内了");
+                        }
+                        event.setCancelled();
+
+                    }
                 }
             }
         }
+        if(gameRoom.getType() != GameRoom.GameType.WAIT){
+            if(GameType.END != gameRoom.getType()){
+                //TODO 或许还能旁观
+                if(gameRoom.getRoomConfig().hasWatch){
+                    event.setCancelled();
+                    return;
+                }
+
+            }
+            if(event.isSend()) {
+                info.sendForceMessage("&c游戏已经开始了");
+            }
+            event.setCancelled();
+            return;
+        }
+        if(gameRoom.getPlayerInfos().size() == gameRoom.getRoomConfig().getMaxPlayerSize()){
+            if(event.isSend()) {
+                info.sendForceMessage("&c房间满了");
+            }
+            event.setCancelled();
+        }
+        if(info.getPlayer() instanceof Player) {
+            ((Player) info.getPlayer()).setFoodEnabled(false);
+            ((Player) info.getPlayer()).setGamemode(2);
+        }
+
+    }
+
+
 
 
 
