@@ -1,14 +1,13 @@
-title: "&f[&a战桥&f]"
+title: "&f[&a小游戏&f]"
 
-scoreboard-title: "&a战桥"
+scoreboard-title: "&a小游戏"
 
 # 是否保存玩家背包
 save-playerInventory:  true
 
 
 
-
-game-logo: "&l&cW&6a&er&aB&br&9i&cd&ag&ee"
+game-logo: "author: sobadfish "
 
 join-menu:
   cw:
