@@ -222,7 +222,7 @@ public class Utils {
     /**
      * 获取百分比
      * */
-    public double getExpPercent(int n,int max){
+    public static double getPercent(int n,int max){
         double r = 0;
         if(n > 0){
             r = (double) n / (double) max;
@@ -239,7 +239,7 @@ public class Utils {
      *
      * @return 颜色条
      * */
-    public String getExpLine(int size,double percent,String hasColor,String noColor){
+    public static String getLine(int size,double percent,String hasColor,String noColor){
         int l = (int) (size * percent);
         int other = size - l;
         StringBuilder ls = new StringBuilder();

@@ -37,6 +37,11 @@ public class GameDemoMain extends PluginBase {
 
     }
 
+    @Override
+    public void onDisable() {
+       TotalManager.onDisable();
+    }
+
 
 //    public enum UiType{
 //        /**

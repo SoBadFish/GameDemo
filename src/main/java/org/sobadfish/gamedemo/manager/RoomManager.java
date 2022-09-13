@@ -6,7 +6,6 @@ import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockBed;
 import cn.nukkit.block.BlockCraftingTable;
-import cn.nukkit.block.BlockTNT;
 import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
@@ -17,7 +16,6 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.event.entity.EntityExplodeEvent;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
@@ -37,6 +35,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.event.GameRoomStartEvent;
+import org.sobadfish.gamedemo.event.PlayerGetExpEvent;
 import org.sobadfish.gamedemo.event.TeamDefeatEvent;
 import org.sobadfish.gamedemo.event.TeamVictoryEvent;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
@@ -48,6 +47,7 @@ import org.sobadfish.gamedemo.panel.from.GameFrom;
 import org.sobadfish.gamedemo.panel.from.button.BaseIButtom;
 import org.sobadfish.gamedemo.panel.items.BasePlayPanelItemInstance;
 import org.sobadfish.gamedemo.panel.items.PlayerItem;
+import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
@@ -620,6 +620,37 @@ public class RoomManager implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onGetExp(PlayerGetExpEvent event){
+        String playerName = event.getPlayerName();
+        Player player = Server.getInstance().getPlayer(playerName);
+        if(player != null){
+            player.sendMessage(TextFormat.colorize('&',"&b +"+event.getExp()+" 经验("+event.getCause()+")"));
+            PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo(player);
+            PlayerData data = TotalManager.getDataManager().getData(playerName);
+
+            if(info == null || info.getGameRoom() == null){
+
+                TotalManager.sendTipMessageToObject("&l&m"+Utils.writeLine(5,"&a▁▁▁"),player);
+                TotalManager.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
+                String line = String.format("%20s","");
+                player.sendMessage(line);
+                String inputTitle = "&b&l小游戏经验\n";
+                TotalManager.sendTipMessageToObject(Utils.getCentontString(inputTitle,30),player);
+                TotalManager.sendTipMessageToObject(Utils.getCentontString("&b等级 "+data.getLevel()+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.getLevel() + 1)+"\n",30),player);
+
+                TotalManager.sendTipMessageToObject("&7["+data.getExpLine(20)+"&7]\n",player);
+
+                String d = String.format("%.1f",data.getExpPercent() * 100.0);
+                TotalManager.sendTipMessageToObject(Utils.getCentontString("&b"+data.getExpString(data.getExp())+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
+                TotalManager.sendTipMessageToObject("&l&m"+Utils.writeLine(5,"&a▁▁▁"),player);
+                TotalManager.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
+
+            }
+        }
+
     }
 
     @EventHandler

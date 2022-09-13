@@ -1,17 +1,20 @@
 package org.sobadfish.gamedemo.command;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.manager.ThreadManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.GameRoomCreater;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
+import org.sobadfish.gamedemo.top.TopItem;
 
 import java.util.LinkedHashMap;
 
@@ -22,7 +25,7 @@ import java.util.LinkedHashMap;
 public class GameDemoAdminCommand extends Command {
     public GameDemoAdminCommand(String name) {
         super(name);
-        this.usageMessage = "/wba help 查看指令帮助";
+        this.usageMessage = "/gda help 查看指令帮助";
         this.setPermission("op");
     }
 
@@ -61,18 +64,24 @@ public class GameDemoAdminCommand extends Command {
             return true;
         }
         if (strings.length > 0 && "help".equalsIgnoreCase(strings[0])) {
-            commandSender.sendMessage("只需要输入/bd 就可以了");
+            commandSender.sendMessage("只需要输入/gda 就可以了");
             commandSender.sendMessage("其他指令介绍:");
-            commandSender.sendMessage("/wba reload 重新载入配置");
-            commandSender.sendMessage("/wba set [名称] 创建一个自定义房间模板");
-            commandSender.sendMessage("/wba tsl 读取模板的队伍数据");
-            commandSender.sendMessage("/wba see 查看所有加载的房间");
-            commandSender.sendMessage("/wba close [名称] 关闭房间");
-            commandSender.sendMessage("/wba status 查看线程状态");
-            commandSender.sendMessage("/wba end 停止模板预设");
-            commandSender.sendMessage("/wba float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
-            commandSender.sendMessage("/wba cancel 终止房间创建");
-
+            commandSender.sendMessage("/gda reload 重新载入配置");
+            commandSender.sendMessage("/gda set [名称] 创建一个自定义房间模板");
+            commandSender.sendMessage("/gda tsl 读取模板的队伍数据");
+            commandSender.sendMessage("/gda see 查看所有加载的房间");
+            commandSender.sendMessage("/gda close [名称] 关闭房间");
+            commandSender.sendMessage("/gda exp [玩家] [数量] <由来> 增加玩家经验");
+            commandSender.sendMessage("/gda status 查看线程状态");
+            commandSender.sendMessage("/gda end 停止模板预设");
+            commandSender.sendMessage("/gda float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
+            commandSender.sendMessage("/gda cancel 终止房间创建");
+            commandSender.sendMessage("/gda top add/remove [名称] [类型] [房间(可不填)] 创建/删除排行榜");
+            StringBuilder v = new StringBuilder("类型: ");
+            for(PlayerData.DataType type: PlayerData.DataType.values()){
+                v.append(type.getName()).append(" , ");
+            }
+            commandSender.sendMessage(v.toString());
             return true;
         }
         if (strings.length == 0) {
@@ -92,7 +101,7 @@ public class GameDemoAdminCommand extends Command {
                         return false;
                     }
                 }else{
-                    commandSender.sendMessage(TextFormat.colorize('&',"/bd set [内容] &e首次创建为房间名称"));
+                    commandSender.sendMessage(TextFormat.colorize('&',"/gda set [内容] &e首次创建为房间名称"));
                     return false;
                 }
             case "end":
@@ -105,10 +114,89 @@ public class GameDemoAdminCommand extends Command {
                     return false;
                 }
                 break;
+            case "exp":
+                if(strings.length < 3){
+                    commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
+                    return false;
+                }
+                String playerName = strings[1];
+                Player player = Server.getInstance().getPlayer(playerName);
+                if(player != null){
+                    playerName = player.getName();
+                }
+                String expString = strings[2];
+                int exp = 0;
+                try {
+                    exp = Integer.parseInt(expString);
+                }catch (Exception ignore){}
+                String cause = "指令给予";
+                if(strings.length > 3){
+                    cause = strings[3];
+                }
+                if(exp > 0){
+                    PlayerData playerData = TotalManager.getDataManager().getData(playerName);
+                    playerData.addExp(exp,cause);
+                    commandSender.sendMessage("成功给予玩家 "+playerName+" "+exp+" 点经验");
+                }else{
+                    commandSender.sendMessage("经验必须大于0");
+                    return false;
+                }
+                break;
+            case "top":
+                if(commandSender instanceof Player) {
+                    if (strings.length < 3) {
+                        commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
+                        return false;
+                    }
+                    String name = strings[2];
+
+
+                    if ("add".equalsIgnoreCase(strings[1])) {
+                        if(strings.length < 4){
+                            commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
+                            return false;
+                        }
+                        PlayerData.DataType type = PlayerData.DataType.byName(strings[3]);
+                        if (type == null) {
+                            commandSender.sendMessage("未知类型");
+                            return true;
+                        }
+                        String room = null;
+                        if (strings.length > 4) {
+                            room = strings[4];
+                        }
+                        TopItem item = new TopItem(name,type,((Player) commandSender).getPosition(),"");
+                        item.room = room;
+                        if(TotalManager.getTopManager().hasTop(name)){
+                            commandSender.sendMessage("存在名称为 "+name+" 的排行榜了");
+                            return true;
+                        }
+                        item.setTitle(TextFormat.colorize('&',TotalManager.getTitle()+" &a"+type.getName()+" &r排行榜"));
+                        TotalManager.getTopManager().addTopItem(item);
+                        commandSender.sendMessage("排行榜创建成功");
+                    } else {
+                        if(!TotalManager.getTopManager().hasTop(name)){
+                            commandSender.sendMessage("不存在名称为 "+name+" 的排行榜");
+                            return true;
+                        }
+                        TopItem topItem = TotalManager.getTopManager().getTop(name);
+                        if(topItem == null){
+                            commandSender.sendMessage("不存在名称为 "+name+" 的排行榜");
+                            return true;
+                        }
+                        TotalManager.getTopManager().removeTopItem(topItem);
+                        commandSender.sendMessage("排行榜删除成功");
+
+                    }
+                }else{
+                    commandSender.sendMessage("请不要在控制台执行");
+                    return false;
+                }
+                break;
             case "float":
                 if(strings.length < 4){
 
-                    commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
+                    commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
                     return false;
                 }
                 if(commandSender instanceof Player) {
@@ -127,7 +215,7 @@ public class GameDemoAdminCommand extends Command {
 
                     }else{
                         if(strings.length < 5){
-                            commandSender.sendMessage("指令参数错误 执行/bw help 查看帮助");
+                            commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
                             return false;
                         }
                         if(roomConfig.notHasFloatText(strings[3])){

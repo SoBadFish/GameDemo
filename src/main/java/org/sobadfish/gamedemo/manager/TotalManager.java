@@ -5,11 +5,12 @@ import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.GameDemoMain;
-import org.sobadfish.gamedemo.panel.from.GameFrom;
+import org.sobadfish.gamedemo.manager.data.PlayerDataManager;
+import org.sobadfish.gamedemo.manager.data.PlayerTopManager;
 import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
+import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 
 import java.io.File;
-import java.util.LinkedHashMap;
 
 /**
  * 插件启动控制器
@@ -22,7 +23,16 @@ public class TotalManager {
 
     public static final String GAME_NAME = "GameDemo";
 
-    public static LinkedHashMap<String, GameFrom> FROM = new LinkedHashMap<>();
+
+
+    private static PlayerDataManager dataManager;
+
+    private static PlayerTopManager topManager;
+
+
+
+
+    public static int upExp;
 
     public static void init(PluginBase pluginBase){
         TotalManager.plugin = pluginBase;
@@ -87,6 +97,7 @@ public class TotalManager {
         if(plugin == null){
             return;
         }
+        upExp = getConfig().getInt("up-exp",500);
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
         File mainFileDir = new File(plugin.getDataFolder()+File.separator+"rooms");
@@ -104,7 +115,20 @@ public class TotalManager {
             plugin.reloadConfig();
         }
         menuRoomManager = new MenuRoomManager(plugin.getConfig());
+        dataManager = PlayerDataManager.asFile(new File(plugin.getDataFolder()+File.separator+"player.json"));
+        //初始化排行榜
+        topManager = PlayerTopManager.asFile(new File(plugin.getDataFolder()+File.separator+"top.json"));
+        if(topManager != null){
+            topManager.init();
+        }
 
+    }
+    public static PlayerDataManager getDataManager() {
+        return dataManager;
+    }
+
+    public static PlayerTopManager getTopManager() {
+        return topManager;
     }
 
     public static RoomManager getRoomManager() {
@@ -124,7 +148,11 @@ public class TotalManager {
         sendTipMessageToObject(message,o);
     }
 
-    public static void sendSubTitle(String msg,Player o){
+    public static int getUpExp() {
+        return upExp;
+    }
+
+    public static void sendSubTitle(String msg, Player o){
         String message = TextFormat.colorize('&',msg);
         if(o != null){
             if(o.isOnline()) {
@@ -163,11 +191,31 @@ public class TotalManager {
         }
     }
 
+    public static void saveResource(String s,  boolean b) {
+        if(!isDisabled()){
+            plugin.saveResource(s, b);
+        }
+    }
+
     public static File getDataFolder() {
         if(isDisabled()){
             return new File("");
         }
         return plugin.getDataFolder();
+    }
+
+    public static void onDisable() {
+        if(topManager != null){
+            topManager.save();
+        }
+        if(dataManager != null){
+            dataManager.save();
+        }
+        if(roomManager != null){
+            for (GameRoomConfig roomConfig: roomManager.getRoomConfigs()){
+                roomConfig.save();
+            }
+        }
     }
 
 

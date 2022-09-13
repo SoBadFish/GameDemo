@@ -1,13 +1,11 @@
 package org.sobadfish.gamedemo.manager;
 
 
-
-
-import org.sobadfish.gamedemo.GameDemoMain;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.thread.PluginMasterRunnable;
 import org.sobadfish.gamedemo.thread.RandomJoinRunnable;
 import org.sobadfish.gamedemo.thread.RoomLoadRunnable;
+import org.sobadfish.gamedemo.thread.TopRunnable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -114,10 +112,9 @@ public class ThreadManager {
 
     public static void init() {
         ThreadManager.schedule(new RunnableCheck());
-        //TODO 线程
-        ThreadManager.schedule(new RunnableCheck());
         ThreadManager.schedule(new PluginMasterRunnable(),1);
         ThreadManager.schedule(new RoomLoadRunnable());
+        ThreadManager.schedule(new TopRunnable());
         ThreadManager.schedule(new RandomJoinRunnable());
 
     }
