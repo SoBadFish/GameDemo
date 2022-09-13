@@ -1,6 +1,7 @@
 world: ""
 gameTime: 1200
 callbackY: 17
+reSpawnTime: 5
 hasWatch: true
 waitTime: 120
 max-player-waitTime: 20

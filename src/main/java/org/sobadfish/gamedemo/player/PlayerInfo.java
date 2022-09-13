@@ -610,6 +610,48 @@ public class PlayerInfo {
     public void onUpdate(){
         //TODO 玩家进入房间后每秒就会调用这个方法
 
+        //助攻间隔
+        LinkedHashMap<PlayerInfo,Long> ass = new LinkedHashMap<>(assistsPlayers);
+        for(Map.Entry<PlayerInfo,Long> entry: ass.entrySet()){
+            if(System.currentTimeMillis() - entry.getValue() > 3000){
+                assistsPlayers.remove(entry.getKey());
+            }
+        }
+        if(damageTime > 0){
+            damageTime--;
+        }else{
+            damageByInfo = null;
+        }
+        if(damageByInfo != null){
+            sendTip(damageByInfo+"  &a"+damageByInfo.getPlayer().getHealth()+" / "+damageByInfo.getPlayer().getMaxHealth());
+        }
+
+        //死亡倒计时
+        if(playerType == PlayerType.DEATH){
+            if(gameRoom != null){
+                if(gameRoom.roomConfig.reSpawnTime > 0){
+                    if(spawnTime >= gameRoom.roomConfig.reSpawnTime){
+                        sendTitle("&a你复活了",1);
+                        sendSubTitle("");
+                        spawn();
+                        spawnTime = 0;
+                    }else{
+                        if(spawnTime == 0 && !isSendkey){
+                            isSendkey = true;
+                            sendTitle("&c你死了", gameRoom.roomConfig.reSpawnTime);
+                        }
+                        if(gameRoom != null) {
+                            sendSubTitle((gameRoom.roomConfig.reSpawnTime - spawnTime) + " 秒后复活");
+                        }
+                        spawnTime++;
+                    }
+                }else{
+                    playerType = PlayerType.START;
+                }
+
+            }
+        }
+
         //TODO 玩家更新线程
         if(playerType == PlayerType.START){
             //TODO 游戏开始后 可以弄一些buff
@@ -668,11 +710,22 @@ public class PlayerInfo {
         }
         PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),TotalManager.getPlugin());
         Server.getInstance().getPluginManager().callEvent(event1);
-        if(getPlayer() instanceof Player) {
-            ((Player) getPlayer()).setGamemode(3);
-        }
+
 
         player.removeAllEffects();
+        if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
+            return;
+        }
+        if(gameRoom != null && gameRoom.roomConfig.reSpawnTime > 0) {
+            if (getPlayer() instanceof Player) {
+                ((Player) getPlayer()).setGamemode(3);
+            }
+            player.teleport(getGameRoom().worldInfo.getConfig().getGameWorld().getSafeSpawn());
+            player.teleport(new Position(player.x, teamInfo.getTeamConfig().getSpawnPosition().y + 64, player.z, getLevel()));
+            sendTitle("&c你死了",2);
+            playerType = PlayerType.DEATH;
+        }
+
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
             return;
         }

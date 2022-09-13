@@ -44,6 +44,8 @@ public class GameRoom {
 
     public GameRoomConfig roomConfig;
 
+
+
     private boolean isInit = true;
 
     private boolean isMax;
