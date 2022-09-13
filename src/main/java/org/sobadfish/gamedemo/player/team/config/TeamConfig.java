@@ -6,19 +6,23 @@ import cn.nukkit.utils.BlockColor;
 
 import java.util.Map;
 
-/**
+/** 团队的基本数据
  * @author SoBadFish
  * 2022/1/2
  */
 
 public class TeamConfig {
 
+    //团队的名称
     private String name;
 
+    //团队的颜色符号
     private String nameColor;
 
+    //团队的代表方块物品(不给玩家也行，这个可以用作GUI)
     private Item blockWoolColor;
 
+    //团队皮革衣服的颜色
     private BlockColor rgb;
 
     private TeamConfig(String name, String nameColor, Item blockWoolColor, BlockColor rgb){

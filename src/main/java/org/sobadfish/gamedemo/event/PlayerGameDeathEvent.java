@@ -6,6 +6,7 @@ import org.sobadfish.gamedemo.room.GameRoom;
 
 
 /**
+ * 玩家在游戏中死亡的事件
  * @author SoBadFish
  * 2022/1/15
  */

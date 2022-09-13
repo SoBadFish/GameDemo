@@ -32,7 +32,12 @@ public class FloatTextInfo {
         return this;
     }
 
+    /**
+     * 游戏房间内浮空字更新
+     * @param room 游戏房间
+     * */
     public boolean stringUpdate(GameRoom room){
+        //TODO 房间内浮空字更新
         String text = floatTextInfoConfig.text;
         if(room == null){
             return false;

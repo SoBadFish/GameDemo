@@ -3,7 +3,6 @@ package org.sobadfish.gamedemo.player.team;
 import cn.nukkit.Server;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
-import org.sobadfish.gamedemo.GameDemoMain;
 import org.sobadfish.gamedemo.event.PlayerChoseTeamEvent;
 import org.sobadfish.gamedemo.event.TeamDefeatEvent;
 import org.sobadfish.gamedemo.event.TeamVictoryEvent;
@@ -11,7 +10,6 @@ import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.GameRoom;
-
 
 import java.util.ArrayList;
 
@@ -22,18 +20,18 @@ import java.util.ArrayList;
 
 public class TeamInfo {
 
+    //队伍基本配置
     private TeamInfoConfig teamConfig;
 
-    private boolean badExists = true;
 
     //淘汰
-
     private boolean stop;
 
     private boolean close;
 
     private final GameRoom room;
 
+    //队伍的玩家
     private ArrayList<PlayerInfo> teamPlayers = new ArrayList<>();
 
     public TeamInfo(GameRoom room,TeamInfoConfig teamConfig){
@@ -53,10 +51,6 @@ public class TeamInfo {
 
     public void setClose(boolean close) {
         this.close = close;
-    }
-
-    public void setBadExists(boolean badExists) {
-        this.badExists = badExists;
     }
 
 

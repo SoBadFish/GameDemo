@@ -23,7 +23,9 @@ public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem> {
     }
 
 
-
+    /**
+     * 排行榜初始化
+     * */
     public void init(){
         for(TopItem topItem: dataList){
             GameFloatText floatText = GameFloatText.showFloatText(topItem.name,topItem.getPosition(),"");
@@ -35,6 +37,11 @@ public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem> {
 
     }
 
+    /**
+     * 判断是否存在该名称的排行榜
+     * @param top 排行榜名称
+     * @return 是否存在排行榜
+     * */
     public boolean hasTop(String top){
         for(TopItem topItem: dataList){
             if(topItem.name.equals(top)){
@@ -44,6 +51,10 @@ public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem> {
         return false;
     }
 
+    /**
+     * 移除排行榜
+     * @param topItem 排行榜数据
+     * */
     public void removeTopItem(TopItem topItem){
         dataList.remove(topItem);
         TopItemInfo topItemInfo = new TopItemInfo(topItem,null);
@@ -57,6 +68,10 @@ public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem> {
         topItemInfos.remove(topItemInfo);
     }
 
+    /**
+     * 添加排行榜
+     * @param topItem 排行榜数据
+     * */
     public void addTopItem(TopItem topItem){
 
         GameFloatText floatText = GameFloatText.showFloatText(topItem.name,topItem.getPosition(),"");
@@ -72,6 +87,11 @@ public class PlayerTopManager extends BaseDataWriterGetterManager<TopItem> {
     }
 
 
+    /**
+     * 根据名称获取排行榜
+     * @param name 排行榜名称
+     * @return 排行榜数据
+     * */
     public TopItem getTop(String name) {
         for(TopItem topItem: dataList){
             if(topItem.name.equalsIgnoreCase(name)){

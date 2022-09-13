@@ -62,6 +62,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 游戏房间管理类
+ * 这里综合了获取房间
+ * 房间事件监听
+ *
  * @author Sobadfish
  * @date 2022/9/9
  */
@@ -91,6 +95,11 @@ public class RoomManager implements Listener {
         this.roomConfig = roomConfig;
     }
 
+    /**
+     * 根据地图获取房间
+     * @param level 地图
+     * @return 游戏房间
+     * */
     private GameRoom getGameRoomByLevel(Level level){
         for(GameRoom room : new ArrayList<>(rooms.values())){
             if(room.getRoomConfig().worldInfo.getGameWorld() == null){
@@ -104,6 +113,12 @@ public class RoomManager implements Listener {
     }
 
 
+    /**
+     * 玩家根据名称加入房间
+     * @param player 玩家对象 {@link PlayerInfo}
+     * @param roomName 房间名称
+     * @return 是否成功加入房间
+     * */
     public boolean joinRoom(PlayerInfo player, String roomName){
         PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo(player.getPlayer());
         if(info != null){
@@ -172,7 +187,12 @@ public class RoomManager implements Listener {
     }
 
 
-
+    /**
+     * 启动房间
+     * @param config 房间配置 {@link GameRoomConfig}
+     *
+     * @return 是否成功启动房间
+     * */
     public boolean enableRoom(GameRoomConfig config){
         if(config.getWorldInfo().getGameWorld() == null){
             return false;
@@ -202,6 +222,11 @@ public class RoomManager implements Listener {
         return new ArrayList<>(roomConfig.values());
     }
 
+    /**
+     * 根据名称获取已经实例化的房间
+     * @param name 房间名称
+     * @return 游戏房间
+     * */
     public GameRoom getRoom(String name){
         GameRoom room = rooms.getOrDefault(name,null);
         if(room == null || room.worldInfo == null){
@@ -214,6 +239,10 @@ public class RoomManager implements Listener {
         return room;
     }
 
+    /**
+     * 关闭游戏房间
+     * @param name 房间名称
+     * */
     public void disEnableRoom(String name){
         if(rooms.containsKey(name)){
             rooms.get(name).onDisable();
@@ -223,6 +252,11 @@ public class RoomManager implements Listener {
 
 
 
+    /**
+     * 获取在游戏房间内的玩家
+     * @param player 玩家 {@link Player}
+     * @return 玩家对象 {@link PlayerInfo}
+     * */
     public PlayerInfo getPlayerInfo(EntityHuman player){
         //TODO 获取游戏中的玩家
         if(playerJoin.containsKey(player.getName())) {
@@ -238,8 +272,11 @@ public class RoomManager implements Listener {
 
 
 
-
-
+    /**
+     * 初始化房间管理器
+     * @param file 配置文件
+     * @return 房间管理类
+     * */
     public static RoomManager initGameRoomConfig(File file){
         Map<String, GameRoomConfig> map = new LinkedHashMap<>();
         if(file.isDirectory()){
@@ -322,6 +359,7 @@ public class RoomManager implements Listener {
         }
 
     }
+
 
     private void reset(Player player){
         player.setNameTag(player.getName());
@@ -847,6 +885,10 @@ public class RoomManager implements Listener {
             }
         }
 
+    /**
+     * 限制玩家放置方块事件
+
+     * */
         @EventHandler
         public void onPlaceBlock(BlockPlaceEvent event){
             Level level = event.getBlock().level;
@@ -871,8 +913,11 @@ public class RoomManager implements Listener {
                 }
             }
 
-
         }
+    /**
+     * 修改玩家聊天信息事件
+
+     * */
         @EventHandler(priority = EventPriority.LOWEST)
         public void onChat(PlayerChatEvent event){
             PlayerInfo info = getPlayerInfo(event.getPlayer());
@@ -902,12 +947,6 @@ public class RoomManager implements Listener {
                 }
             }
         }
-
-
-
-
-
-
 
 
 

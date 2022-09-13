@@ -6,6 +6,7 @@ import org.sobadfish.gamedemo.room.GameRoom;
 
 
 /**
+ * 队伍失败事件
  * @author SoBadFish
  * 2022/5/24
  */

@@ -4,6 +4,9 @@ import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.HandlerList;
 
+/**
+ * 玩家游戏等级修改事件
+ * */
 public class PlayerLevelChangeEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();

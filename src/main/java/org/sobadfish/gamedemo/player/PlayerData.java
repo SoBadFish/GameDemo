@@ -9,12 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 玩家数据
+ * */
 public class PlayerData {
 
+    //玩家名称
     private String name = "";
 
+    //玩家经验
     private int exp;
 
+    //玩家等级
     private int level;
 
     public PlayerData(String name){
@@ -84,6 +90,9 @@ public class PlayerData {
         }
     }
 
+    /**
+     * 获取等级百分比
+     * */
     public double getExpPercent(){
         double r = 0;
         if(this.exp > 0){
@@ -92,6 +101,9 @@ public class PlayerData {
         return r;
     }
 
+    /**
+     * 获取等级条
+     * */
     public String getExpLine(int size){
         double r = getExpPercent();
         int l = (int) (size * r);
@@ -111,6 +123,9 @@ public class PlayerData {
         return ls +others.toString();
     }
 
+    /**
+     * 根据等级获取颜色
+     * */
     public String getColorByLevel(int level){
         String[] color = new String[]{"&7","&f","&6","&b","&2","&3","&4","&d","&6","&e"};
         if(level < 100){
@@ -166,17 +181,21 @@ public class PlayerData {
 
         public String roomName = "";
 
+        //击杀数量
         public int killCount = 0;
 
+        //死亡数量
         public int deathCount = 0;
-
-
+        //游戏次数
         public int gameCount = 0;
 
+        //失败次数
         public int defeatCount = 0;
 
+        //胜利次数
         public int victoryCount = 0;
 
+        //助攻次数
         public int assist = 0;
 
         @Override

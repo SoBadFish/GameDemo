@@ -5,6 +5,7 @@ import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 
 /**
+ * 地图的实例化方法，当房间启动后，这个方法也随之启动
  * @author Sobadfish
  * @date 2022/9/9
  */
@@ -38,6 +39,9 @@ public class WorldInfo {
     }
 
     public void onUpdate() {
-        //TODO 地图更新
+        //TODO 地图更新 每秒更新一次 可实现一些定制化功能
+
+
+        ///////////////////DO Something////////////
     }
 }

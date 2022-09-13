@@ -11,6 +11,8 @@ import org.sobadfish.gamedemo.tools.Utils;
 import java.io.File;
 
 /**
+ * 地图的一些配置信息
+ * 可以增加游戏地图内的一些坐标点
  * @author Sobadfish
  * @date 2022/9/9
  */

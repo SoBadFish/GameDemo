@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
+ * 玩家对象的信息
  * @author Sobadfish
  * @date 2022/9/9
  */
@@ -383,6 +384,8 @@ public class PlayerInfo {
     }
 
     public void spawn() {
+        //TODO 玩家复活进入游戏
+        //游戏刚开始也会进入这个方法
         if(isSendkey){
             isSendkey = false;
         }
@@ -605,6 +608,7 @@ public class PlayerInfo {
      * 定时任务
      * */
     public void onUpdate(){
+        //TODO 玩家进入房间后每秒就会调用这个方法
 
         //TODO 玩家更新线程
         if(playerType == PlayerType.START){
@@ -656,6 +660,7 @@ public class PlayerInfo {
 
     public void death(EntityDamageEvent event){
 
+        //TODO 玩家死亡后可以做一些逻辑处理
         player.setHealth(player.getMaxHealth());
         if(player instanceof Player){
             ((Player) player).removeAllWindows();

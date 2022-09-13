@@ -17,9 +17,10 @@ import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.WorldRoom;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 
-import java.util.LinkedHashMap;
-
 /**
+ * 玩家执行的指令
+ * 玩家执行这个指令后可以加入房间，或者弹出GUI选择房间加入
+ *
  * @author SoBadFish
  * 2022/1/12
  */
@@ -127,6 +128,13 @@ public class GameDemoCommand extends Command {
         }
         return true;
     }
+    /**
+     * 将GUI菜单发送给玩家
+     * @param name 菜单名称(一级按键的名称)
+     * @param player 发送的用户
+     *
+     *
+     * */
     private void disPlayRoomsFrom(Player player, String name){
         DisPlayWindowsFrom.FROM.remove(player.getName());
         GameFrom simple = new GameFrom(TotalManager.getTitle(), "请选择房间",DisPlayWindowsFrom.getId(51530,99810));

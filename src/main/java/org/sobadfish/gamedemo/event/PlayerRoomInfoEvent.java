@@ -6,6 +6,8 @@ import org.sobadfish.gamedemo.room.GameRoom;
 
 
 /**
+ * 玩家在房间内的事件主类。关于玩家在房间的操作都继承这个事件
+ *
  * @author SoBadFish
  * 2022/1/15
  */

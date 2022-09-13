@@ -16,6 +16,7 @@ import java.util.Map;
 @Data
 public class TeamInfoConfig {
 
+    //队伍的配置
     private TeamConfig teamConfig;
 
 

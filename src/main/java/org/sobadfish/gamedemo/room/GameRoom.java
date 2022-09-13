@@ -549,6 +549,7 @@ public class GameRoom {
     private void onStart() {
         hasStart = true;
         if(loadTime == -1 && teamAll){
+            //TODO 房间首次重置
             for(FloatTextInfoConfig config: roomConfig.floatTextInfoConfigs){
                 FloatTextInfo info = new FloatTextInfo(config).init(this);
                 if(info != null){
@@ -580,6 +581,7 @@ public class GameRoom {
 
         }
         if(loadTime > 0) {
+            //TODO 在房间倒计时内
 
             for (TeamInfo teamInfo : teamInfos) {
                 teamInfo.onUpdate();
@@ -592,6 +594,7 @@ public class GameRoom {
                 loadTime = 5;
             }
         }else{
+            //TODO 在房间倒计时结束
             TeamInfo successInfo = null;
             ArrayList<TeamInfo> teamInfos = getLiveTeam();
             if(teamInfos.size() > 0) {

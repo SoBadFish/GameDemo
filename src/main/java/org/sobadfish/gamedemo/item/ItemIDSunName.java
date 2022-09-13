@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 这个就是物品词典 可以根据ID获取中文名称以及图标路径
+ * 如果缺失可以在这个类补充
  * @author Winfxk
  * @author Anders233
  *

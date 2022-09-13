@@ -9,6 +9,7 @@ import org.sobadfish.gamedemo.player.PlayerInfo;
 
 
 /**
+ * 窗体按键，如果存在商店，可以使用这个方法
  * @author Sobadfish
  * @date 2022/9/9
  */

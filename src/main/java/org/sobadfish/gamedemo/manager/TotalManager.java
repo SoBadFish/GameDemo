@@ -24,12 +24,9 @@ public class TotalManager {
     public static final String GAME_NAME = "GameDemo";
 
 
-
     private static PlayerDataManager dataManager;
 
     private static PlayerTopManager topManager;
-
-
 
 
     public static int upExp;

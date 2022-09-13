@@ -8,6 +8,8 @@ import org.sobadfish.gamedemo.player.PlayerInfo;
 
 
 /**
+ * 玩家在游戏里的全体消息
+ *
  * @author SoBadFish
  * 2022/1/15
  */

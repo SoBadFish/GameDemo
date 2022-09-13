@@ -5,6 +5,7 @@ import cn.nukkit.plugin.Plugin;
 import org.sobadfish.gamedemo.room.GameRoom;
 
 /**
+ * 房间游戏开始事件
  * @author SoBadFish
  * 2022/1/15
  */

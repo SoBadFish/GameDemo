@@ -7,6 +7,7 @@ import org.sobadfish.gamedemo.room.GameRoom;
 
 
 /**
+ * 玩家加入房间事件
  * @author SoBadFish
  * 2022/1/15
  */

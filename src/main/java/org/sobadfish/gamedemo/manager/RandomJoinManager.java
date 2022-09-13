@@ -31,6 +31,10 @@ public class RandomJoinManager {
 
     public List<IPlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
 
+
+    /**
+     * 当玩家在房间内时，调用这个方法匹配房间
+     * */
     public void nextJoin(PlayerInfo info){
         //TODO 匹配下一局 程序分配
         GameRoom gameRoom = info.getGameRoom();
@@ -40,6 +44,10 @@ public class RandomJoinManager {
         join(info,null,true);
     }
 
+    /**
+     * 调用这个匹配房间
+     * 这个是进入匹配队列
+     * */
     public void join(PlayerInfo info, String name){
         join(info, name,false);
     }

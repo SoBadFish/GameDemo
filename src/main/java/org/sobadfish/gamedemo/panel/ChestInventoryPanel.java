@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * 箱子菜单接口
  * @author BadFish
  */
 public class ChestInventoryPanel extends DoubleChestFakeInventory implements InventoryHolder {

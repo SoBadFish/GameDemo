@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
+ * 房间创建器，可以根据自身需求定制化创建房间配置
  * @author SoBadFish
  * 2022/1/13
  */
@@ -79,6 +80,7 @@ public class GameRoomCreater {
                 roomConfig = GameRoomConfig.createGameRoom(roomName,min, max);
                 creater.sendForceMessage("&2设置最大人数:&b "+value);
                 creater.sendForceMessage("&a预设完成");
+                //TODO 到这了模板创建完成
                 isRoomCreate = true;
                 setFlag = 1;
                 break;
@@ -145,10 +147,11 @@ public class GameRoomCreater {
                     }
                     roomConfig.setTeamConfigs(teamInfoConfigs);
                     roomConfig.setWorldInfo(worldInfoConfig);
+                    //TODO 到这里房间创建完成
                     flag = 1;
                     isCreate = true;
                     creater.sendForceMessage("&a游戏房间创建完成 &c(重启生效配置)");
-                    return true;
+                    return false;
                 }
                 creater.sendForceMessage("&e继续执行 &r/gda &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"出生点 &r[&2"+(team.size() + 1)+" &b/&d "+roomConfig.getTeamCfg().size()+"&r]");
                 break;

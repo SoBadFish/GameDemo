@@ -7,6 +7,7 @@ import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import java.util.ArrayList;
 
 /**
+ * 玩家匹配队列的管理类
  * @author SoBadFish
  * 2022/1/15
  */

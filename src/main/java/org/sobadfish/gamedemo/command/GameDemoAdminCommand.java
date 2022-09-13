@@ -19,6 +19,12 @@ import org.sobadfish.gamedemo.top.TopItem;
 import java.util.LinkedHashMap;
 
 /**
+ *
+ * 游戏管理主命令
+ * 这个命令仅限管理员执行
+ * 可以根据游戏的具体需求修改
+ * 创建游戏房间的类参考{@link GameRoomCreater}
+ *
  * @author Sobadfish
  * @date 2022/9/12
  */
@@ -29,6 +35,15 @@ public class GameDemoAdminCommand extends Command {
         this.setPermission("op");
     }
 
+    /**
+     * 创建游戏房间模板
+     * 注意这个创建的是模板，不是房间
+     * 模板就是可以预设接下来创建房间的名称，人数
+     * 这里最好不要更改
+     *
+     * @param commandSender 执行指令的用户
+     * @param value 创建时传入的参数
+     * */
     private boolean createSetRoom(CommandSender commandSender, String value){
         GameRoomCreater creater;
         if (create.containsKey(commandSender.getName())) {
@@ -41,6 +56,14 @@ public class GameDemoAdminCommand extends Command {
         return true;
     }
 
+    /**
+     * 创建房间方法
+     * 具体的创建流程参考{@link GameRoomCreater}
+     * 当onCreateNext 为false的时候就代表创建流程结束，执行文件的写入
+     * @param commandSender 执行指令的用户
+     * @return 是否创建成功
+     *
+     * */
     private boolean createRoom(CommandSender commandSender){
         GameRoomCreater creater;
         if(create.containsKey(commandSender.getName())){

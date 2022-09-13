@@ -1,13 +1,11 @@
 package org.sobadfish.gamedemo.room.config;
 
 import cn.nukkit.utils.Config;
-import org.sobadfish.gamedemo.GameDemoMain;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.team.config.TeamConfig;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.gamedemo.tools.Utils;
-
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,6 +15,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
+ * 房间的基本配置，可以根据自身的需求修改
  * @author Sobadfish
  * @date 2022/9/9
  */

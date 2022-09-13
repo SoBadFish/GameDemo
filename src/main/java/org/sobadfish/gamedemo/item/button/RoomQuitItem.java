@@ -10,6 +10,7 @@ import org.sobadfish.gamedemo.manager.TotalManager;
 import java.util.ArrayList;
 
 /**
+ * 玩家离开房间的物品
  * @author SoBadFish
  * 2022/1/3
  */
@@ -19,12 +20,19 @@ public class RoomQuitItem {
     public static ArrayList<Player> clickAgain = new ArrayList<>();
 
 
-    private final ArrayList<Player> clickAgainTeam = new ArrayList<>();
 
+    /**
+     * 在物品栏的位置
+     * @return 位置
+     * */
     public static int getIndex(){
         return 8;
     }
 
+    /**
+     * 显示给玩家的物品，可以自定义修改
+     * @return 在物品栏的物品
+     * */
     public static Item get(){
         Item item = Item.get(324);
         item.addEnchantment(Enchantment.get(9));

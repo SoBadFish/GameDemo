@@ -6,6 +6,8 @@ import org.sobadfish.gamedemo.room.GameRoom;
 
 
 /**
+ *
+ * 玩家离开房间事件
  * @author SoBadFish
  * 2022/1/15
  */

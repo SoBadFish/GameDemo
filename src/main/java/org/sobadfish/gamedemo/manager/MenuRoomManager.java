@@ -2,16 +2,15 @@ package org.sobadfish.gamedemo.manager;
 
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.utils.Config;
-import org.sobadfish.gamedemo.GameDemoMain;
 import org.sobadfish.gamedemo.room.WorldRoom;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
-
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * 给玩家展示游戏房间菜单的管理类
  * @author SoBadFish
  * 2022/1/12
  */

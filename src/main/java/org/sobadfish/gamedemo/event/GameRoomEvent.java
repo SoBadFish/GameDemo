@@ -6,6 +6,8 @@ import cn.nukkit.plugin.Plugin;
 import org.sobadfish.gamedemo.room.GameRoom;
 
 /**
+ * 房间主事件
+ * 其他的房间事件都继承这个事件
  * @author SoBadFish
  * 2022/1/15
  */

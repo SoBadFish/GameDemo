@@ -3,6 +3,9 @@ package org.sobadfish.gamedemo.event;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.HandlerList;
 
+/**
+ * 玩家获取经验的事件
+ * */
 public class PlayerGetExpEvent extends Event  {
 
     private static final HandlerList HANDLERS = new HandlerList();

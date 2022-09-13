@@ -16,6 +16,12 @@ import org.sobadfish.gamedemo.room.GameRoom;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * 浮空字实体类
+ * 测试的基本没有问题，不建议修改
+ *
+ * @author Sobadfish
+ * */
 public class GameFloatText extends Entity {
 
     public String name;
@@ -54,6 +60,10 @@ public class GameFloatText extends Entity {
     }
 
 
+    /**
+     * 设置浮空字显示内容
+     * @param text 显示的文本
+     * */
     public void setText(String text) {
         this.text = text;
         this.setNameTag(TextFormat.colorize('&',text));
@@ -85,6 +95,16 @@ public class GameFloatText extends Entity {
     }
 
 
+    /**
+     * 在固定的位置显示浮空字信息
+     * 如果想动态更新文本信息，就将返回的浮空字实体缓存
+     * 调用setText方法即可
+     * @param name 浮空字的名称
+     * @param position 浮空字位置
+     * @param text 浮空字显示的文本信息
+     *
+     * @return @{@link GameFloatText} 浮空字实体
+     * */
     public static GameFloatText showFloatText(String name, Position position, String text){
         GameFloatText text1;
         try {
@@ -98,6 +118,11 @@ public class GameFloatText extends Entity {
         return text1;
     }
 
+    /**
+     * 显示给玩家，不过这个已经在
+     * {@link org.sobadfish.gamedemo.thread.PluginMasterRunnable}
+     * 写好调用了，不需要再重复调用
+     * */
     public void disPlayers(){
         for(Player player: player){
             if(player.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())){
