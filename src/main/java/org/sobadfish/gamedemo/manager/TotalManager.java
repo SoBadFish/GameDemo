@@ -33,6 +33,7 @@ public class TotalManager {
 
     public static void init(PluginBase pluginBase){
         TotalManager.plugin = pluginBase;
+        checkServer();
         loadConfig();
         ThreadManager.init();
     }
@@ -216,7 +217,7 @@ public class TotalManager {
     }
 
 
-    private void checkServer(){
+    private static void checkServer(){
         boolean ver = false;
         //双核心兼容
         try {

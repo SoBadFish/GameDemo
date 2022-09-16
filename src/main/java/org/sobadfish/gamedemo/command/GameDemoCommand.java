@@ -11,7 +11,7 @@ import org.sobadfish.gamedemo.manager.RandomJoinManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
 import org.sobadfish.gamedemo.panel.from.GameFrom;
-import org.sobadfish.gamedemo.panel.from.button.BaseIButtom;
+import org.sobadfish.gamedemo.panel.from.button.BaseIButton;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.WorldRoom;
@@ -42,7 +42,7 @@ public class GameDemoCommand extends Command {
                 }
                 GameFrom simple = new GameFrom(TotalManager.getTitle(), "请选择地图", DisPlayWindowsFrom.getId(51530, 99810));
                 PlayerInfo finalInfo = info;
-                simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
+                simple.add(new BaseIButton(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
                     @Override
                     public void onClick(Player player) {
                         RandomJoinManager.joinManager.join(finalInfo,null);
@@ -57,7 +57,7 @@ public class GameDemoCommand extends Command {
                             size += room.getPlayerInfos().size();
                         }
                     }
-                    simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&', wname + " &2" + size + " &r位玩家正在游玩\n&r房间数量: &a" + worldRoom.getRoomConfigs().size()), worldRoom.getImageData())) {
+                    simple.add(new BaseIButton(new ElementButton(TextFormat.colorize('&', wname + " &2" + size + " &r位玩家正在游玩\n&r房间数量: &a" + worldRoom.getRoomConfigs().size()), worldRoom.getImageData())) {
                         @Override
                         public void onClick(Player player) {
                             disPlayRoomsFrom(player, wname);
@@ -140,7 +140,7 @@ public class GameDemoCommand extends Command {
         GameFrom simple = new GameFrom(TotalManager.getTitle(), "请选择房间",DisPlayWindowsFrom.getId(51530,99810));
         WorldRoom worldRoom = TotalManager.getMenuRoomManager().getRoom(name);
         PlayerInfo info = new PlayerInfo(player);
-        simple.add(new BaseIButtom(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
+        simple.add(new BaseIButton(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
             @Override
             public void onClick(Player player) {
                 RandomJoinManager.joinManager.join(info,null);
@@ -164,7 +164,7 @@ public class GameDemoCommand extends Command {
                 }
             }
 
-            simple.add(new BaseIButtom(new ElementButton(TextFormat.colorize('&',roomConfig.name+" &r状态:"+type + "&r\n人数: "+size+" / " + roomConfig.getMaxPlayerSize()), worldRoom.getImageData())) {
+            simple.add(new BaseIButton(new ElementButton(TextFormat.colorize('&',roomConfig.name+" &r状态:"+type + "&r\n人数: "+size+" / " + roomConfig.getMaxPlayerSize()), worldRoom.getImageData())) {
                 @Override
                 public void onClick(Player player) {
                     PlayerInfo playerInfo = new PlayerInfo(player);

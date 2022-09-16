@@ -2,7 +2,7 @@ package org.sobadfish.gamedemo.panel;
 
 import cn.nukkit.Player;
 import org.sobadfish.gamedemo.panel.from.GameFrom;
-import org.sobadfish.gamedemo.panel.from.button.BaseIButtom;
+import org.sobadfish.gamedemo.panel.from.button.BaseIButton;
 import org.sobadfish.gamedemo.tools.Utils;
 
 
@@ -23,9 +23,9 @@ public class DisPlayWindowsFrom {
     public static LinkedHashMap<String, GameFrom> FROM = new LinkedHashMap<>();
 
 
-    public static void disPlayerCustomMenu(Player player, String tag, List<BaseIButtom> from){
+    public static void disPlayerCustomMenu(Player player, String tag, List<BaseIButton> from){
         GameFrom bedWarFrom = new GameFrom(tag,"",getId());
-        bedWarFrom.setBaseIButtoms(from);
+        bedWarFrom.setBaseIButtons(from);
         FROM.put(player.getName(), bedWarFrom);
         bedWarFrom.disPlay(player);
     }

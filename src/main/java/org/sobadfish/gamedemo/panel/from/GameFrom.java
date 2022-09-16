@@ -5,7 +5,7 @@ import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.utils.TextFormat;
 import lombok.Getter;
 import lombok.Setter;
-import org.sobadfish.gamedemo.panel.from.button.BaseIButtom;
+import org.sobadfish.gamedemo.panel.from.button.BaseIButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class GameFrom {
 
     @Getter
     @Setter
-    private List<BaseIButtom> baseIButtoms = new ArrayList<>();
+    private List<BaseIButton> baseIButtons = new ArrayList<>();
 
     private final String title;
 
@@ -37,13 +37,13 @@ public class GameFrom {
     }
 
 
-    public void add(BaseIButtom baseIButtom){
-        baseIButtoms.add(baseIButtom);
+    public void add(BaseIButton baseIButtom){
+        baseIButtons.add(baseIButtom);
     }
 
     public void disPlay(Player player){
         FormWindowSimple simple = new FormWindowSimple(TextFormat.colorize('&',title), TextFormat.colorize('&', context));
-        for(BaseIButtom baseIButtom : baseIButtoms){
+        for(BaseIButton baseIButtom : baseIButtons){
             simple.addButton(baseIButtom.getButton());
         }
         player.showFormWindow(simple, getId());
@@ -51,6 +51,6 @@ public class GameFrom {
 
     @Override
     public String toString() {
-        return id+" -> "+baseIButtoms;
+        return id+" -> "+ baseIButtons;
     }
 }

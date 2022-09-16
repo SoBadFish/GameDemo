@@ -41,7 +41,7 @@ import org.sobadfish.gamedemo.item.button.TeamChoseItem;
 import org.sobadfish.gamedemo.panel.ChestInventoryPanel;
 import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
 import org.sobadfish.gamedemo.panel.from.GameFrom;
-import org.sobadfish.gamedemo.panel.from.button.BaseIButtom;
+import org.sobadfish.gamedemo.panel.from.button.BaseIButton;
 import org.sobadfish.gamedemo.panel.items.BasePlayPanelItemInstance;
 import org.sobadfish.gamedemo.panel.items.PlayerItem;
 import org.sobadfish.gamedemo.player.PlayerData;
@@ -602,10 +602,10 @@ public class RoomManager implements Listener {
     }
 
     private void disPlayProtect(PlayerInfo info,GameRoom room){
-        List<BaseIButtom> list = new ArrayList<>();
+        List<BaseIButton> list = new ArrayList<>();
         //手机玩家
         for(PlayerInfo i: room.getLivePlayers()){
-            list.add(new BaseIButtom(new PlayerItem(i).getGUIButton(info)) {
+            list.add(new BaseIButton(new PlayerItem(i).getGUIButton(info)) {
                 @Override
                 public void onClick(Player player) {
                     player.teleport(i.getPlayer().getLocation());
@@ -767,7 +767,7 @@ public class RoomManager implements Listener {
     private boolean onGameFrom(PlayerFormRespondedEvent event, Player player, GameFrom simple) {
         if(simple.getId() == event.getFormID()) {
             if (event.getResponse() instanceof FormResponseSimple) {
-                BaseIButtom button = simple.getBaseIButtoms().get(((FormResponseSimple) event.getResponse())
+                BaseIButton button = simple.getBaseIButtons().get(((FormResponseSimple) event.getResponse())
                         .getClickedButtonId());
                 button.onClick(player);
             }

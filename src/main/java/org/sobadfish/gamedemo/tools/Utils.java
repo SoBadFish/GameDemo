@@ -56,6 +56,12 @@ public class Utils {
         }
     }
 
+    /**
+     * 获取中心坐标点周围 x格的所有玩家
+     * @param player 中心坐标点
+     * @param size 范围
+     * @return 在范围内玩家
+     * */
     public static ArrayList<Player> getAroundOfPlayers(Position player, int size) {
         ArrayList<Player> players = new ArrayList<>();
         for (Entity entity : getAroundPlayers(player, size, false)) {
@@ -64,6 +70,13 @@ public class Utils {
         return players;
     }
 
+    /**
+     * 获取中心坐标点周围 x格的所有生物
+     * @param player 中心坐标点
+     * @param size 范围
+     * @param isEntity 是否获取生物
+     * @return 在范围内生物
+     * */
     public static LinkedList<Entity> getAroundPlayers(Position player, int size, boolean isEntity) {
         LinkedList<Entity> explodePlayer = new LinkedList<>();
         for (Entity player1 : player.level.getEntities()) {
@@ -141,6 +154,9 @@ public class Utils {
 
 
 
+    /**
+     * 画一条自定义长度的线
+     * */
     public static String writeLine(int size,String line){
         StringBuilder s = new StringBuilder();
         for(int i = 0;i< size;i++){
@@ -149,6 +165,14 @@ public class Utils {
         return s.toString();
     }
 
+    /**
+     * 文本居中
+     * 这个是在总长内居中
+     *
+     * @param input 要居中的文本
+     * @param lineWidth 文本总长度
+     * @return 居中后的文本
+     * */
     public static String getCentontString(String input,int lineWidth){
         input = input.replace(' ','$');
         return justify(input,lineWidth,'c').replace('$',' ');
