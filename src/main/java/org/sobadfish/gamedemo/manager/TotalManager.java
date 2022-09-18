@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.manager;
 
 import cn.nukkit.Player;
+import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
@@ -86,6 +87,8 @@ public class TotalManager {
         plugin.getLogger().info(message);
 
     }
+
+
 
     /**
      * 加载配置文件
@@ -237,5 +240,5 @@ public class TotalManager {
         }
     }
 
-
+    
 }

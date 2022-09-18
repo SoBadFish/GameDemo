@@ -113,14 +113,14 @@ public class TeamInfo {
 
     public void echoVictory(){
         //TODO 当队伍胜利
-        TeamVictoryEvent event = new TeamVictoryEvent(this,room, TotalManager.getGameDemoMain());
+        TeamVictoryEvent event = new TeamVictoryEvent(this,room, TotalManager.getPlugin());
         Server.getInstance().getPluginManager().callEvent(event);
 
     }
 
     public void echoDefeat(){
         //TODO 当队伍失败
-        TeamDefeatEvent event = new TeamDefeatEvent(this,room,TotalManager.getGameDemoMain());
+        TeamDefeatEvent event = new TeamDefeatEvent(this,room,TotalManager.getPlugin());
         Server.getInstance().getPluginManager().callEvent(event);
 
     }
