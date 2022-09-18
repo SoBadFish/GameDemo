@@ -240,5 +240,5 @@ public class TotalManager {
         }
     }
 
-    
+
 }

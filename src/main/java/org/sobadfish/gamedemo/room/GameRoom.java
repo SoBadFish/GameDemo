@@ -51,6 +51,8 @@ public class GameRoom {
 
     private boolean teamAll;
 
+
+
     private final ArrayList<FloatTextInfo> floatTextInfos = new ArrayList<>();
 
     //房间内的玩家

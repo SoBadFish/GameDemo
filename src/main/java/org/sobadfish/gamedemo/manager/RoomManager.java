@@ -467,7 +467,7 @@ public class RoomManager implements Listener {
                     if (entity instanceof EntityPrimedTNT) {
                         event.setDamage(2);
                     }
-                    //TODO 阻止队伍PVP
+
                     if (entity instanceof Player) {
                         PlayerInfo damageInfo = room.getPlayerInfo((Player) entity);
                         if (damageInfo != null) {
@@ -475,6 +475,8 @@ public class RoomManager implements Listener {
                                 event.setCancelled();
                                 return;
                             }
+                            ///////////////// 阻止队伍PVP///////////////
+                            //TODO 阻止队伍PVP
                             TeamInfo t1 = playerInfo.getTeamInfo();
                             TeamInfo t2 = damageInfo.getTeamInfo();
                             if (t1 != null && t2 != null) {
@@ -483,6 +485,7 @@ public class RoomManager implements Listener {
                                     return;
                                 }
                             }
+                            ///////////////// 阻止队伍PVP///////////////
                             playerInfo.setDamageByInfo(damageInfo);
                         } else {
                             event.setCancelled();
