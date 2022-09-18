@@ -549,6 +549,19 @@ public class GameRoom {
 
     }
 
+    /**
+     * 执行这个可以将游戏直接结束
+     * 传入胜利的队伍
+     * */
+    public void gameEnd(TeamInfo... teamInfo){
+        for(TeamInfo teamInfo1:teamInfo){
+            teamInfo1.echoVictory();
+        }
+        type = GameType.END;
+        worldInfo.setClose(true);
+        loadTime = 5;
+    }
+
     private void onStart() {
         hasStart = true;
         if(loadTime == -1 && teamAll){
@@ -562,7 +575,6 @@ public class GameRoom {
             //TODO 当房间开始
 
             for(PlayerInfo i : getPlayerInfos()){
-//                    i.clear();
                 try {
                     i.spawn();
                 }catch (Exception e){
@@ -591,10 +603,7 @@ public class GameRoom {
             }
             if (getLiveTeam().size() == 1) {
                 TeamInfo teamInfo = getLiveTeam().get(0);
-                teamInfo.echoVictory();
-                type = GameType.END;
-                worldInfo.setClose(true);
-                loadTime = 5;
+                gameEnd(teamInfo);
             }
         }else{
             //TODO 在房间倒计时结束
@@ -613,7 +622,7 @@ public class GameRoom {
                     info.setStop(true);
 
                 }
-                successInfo.echoVictory();
+                gameEnd(successInfo);
 
             }
             //TODO 当时间结束的一些逻辑

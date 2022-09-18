@@ -36,6 +36,9 @@ public class TopRunnable extends ThreadManager.AbstractBedWarRunnable {
                 isClose = true;
                 return;
             }
+            if(TotalManager.getTopManager() == null){
+                return;
+            }
             for (TopItemInfo topItem : TotalManager.getTopManager().topItemInfos) {
                 if (!TotalManager.getTopManager().dataList.contains(topItem.topItem)) {
                     topItem.floatText.toClose();
