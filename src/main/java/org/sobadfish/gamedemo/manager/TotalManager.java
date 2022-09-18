@@ -38,7 +38,6 @@ public class TotalManager {
         ThreadManager.init();
     }
 
-    public static GameDemoMain gameDemoMain;
 
     private static RoomManager roomManager;
 
@@ -67,11 +66,11 @@ public class TotalManager {
     }
 
     public static String getTitle(){
-        return TextFormat.colorize('&', gameDemoMain.getConfig().getString("title"));
+        return TextFormat.colorize('&', plugin.getConfig().getString("title"));
     }
 
     public static String getScoreBoardTitle(){
-        return TextFormat.colorize('&', gameDemoMain.getConfig().getString("scoreboard-title","&f[&a迷你战墙&f]"));
+        return TextFormat.colorize('&', plugin.getConfig().getString("scoreboard-title","&f[&a迷你战墙&f]"));
     }
 
     public static void sendTipMessageToObject(String msg,Object o){
@@ -84,7 +83,7 @@ public class TotalManager {
                 }
             }
         }
-        gameDemoMain.getLogger().info(message);
+        plugin.getLogger().info(message);
 
     }
 
@@ -137,9 +136,6 @@ public class TotalManager {
         return menuRoomManager;
     }
 
-    public static GameDemoMain getGameDemoMain() {
-        return gameDemoMain;
-    }
 
     public static void sendMessageToObject(String msg, Object o){
         String message = TextFormat.colorize('&',getTitle()+" &b>>&r "+msg);
@@ -157,7 +153,7 @@ public class TotalManager {
                 o.setSubtitle(message);
             }
         }else{
-            gameDemoMain.getLogger().info(message);
+            plugin.getLogger().info(message);
         }
     }
 
@@ -168,7 +164,7 @@ public class TotalManager {
                 o.sendTitle(message,null,0,time,0);
             }
         }else{
-            gameDemoMain.getLogger().info(message);
+            plugin.getLogger().info(message);
         }
     }
 
@@ -179,7 +175,7 @@ public class TotalManager {
                 o.sendTip(message);
             }
         }else{
-            gameDemoMain.getLogger().info(message);
+            plugin.getLogger().info(message);
         }
     }
 
