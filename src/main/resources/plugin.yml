@@ -1,5 +1,5 @@
 name: Gamedemo
-main: org.sobadfish.gamedemo.GameDemo
+main: org.sobadfish.gamedemo.GameDemoMain
 version: 1.0.0
 api:
   - 1.0.11
