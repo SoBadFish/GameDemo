@@ -248,16 +248,17 @@ public class PlayerInfo {
     }
 
     public void removeScoreBoard(){
-        if (gameRoom.getScoreboards().containsKey(this)) {
-            if(getPlayer() instanceof Player) {
-                ScoreboardAPI.removeScorebaord((Player) getPlayer(),
-                        gameRoom.getScoreboards().get(this));
-                gameRoom.getScoreboards().remove(this);
-            }
+        if(gameRoom != null) {
+            if (gameRoom.getScoreboards().containsKey(this)) {
+                if (getPlayer() instanceof Player) {
+                    ScoreboardAPI.removeScorebaord((Player) getPlayer(),
+                            gameRoom.getScoreboards().get(this));
+                    gameRoom.getScoreboards().remove(this);
+                }
 
+            }
         }
     }
-
     public boolean  isDeath(){
         return  playerType == PlayerType.DEATH;
     }
