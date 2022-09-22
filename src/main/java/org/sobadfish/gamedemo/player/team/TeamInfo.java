@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.player.team;
 
 import cn.nukkit.Server;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.event.PlayerChoseTeamEvent;
@@ -10,6 +11,7 @@ import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.GameRoom;
+import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 
 import java.util.ArrayList;
 
@@ -23,13 +25,14 @@ public class TeamInfo {
     //队伍基本配置
     private TeamInfoConfig teamConfig;
 
-
     //淘汰
     private boolean stop;
 
     private boolean close;
 
     private final GameRoom room;
+
+    private int spawnTeleportLocation = 0;
 
     //队伍的玩家
     private ArrayList<PlayerInfo> teamPlayers = new ArrayList<>();
@@ -81,6 +84,13 @@ public class TeamInfo {
     }
 
 
+    public Position getSpawnLocation(){
+        if(spawnTeleportLocation > teamConfig.getSpawnPosition().size()){
+           spawnTeleportLocation = 0;
+        }
+        return WorldInfoConfig.getPositionByString(teamConfig.getSpawnPosition().get(spawnTeleportLocation++));
+
+    }
 
 
 

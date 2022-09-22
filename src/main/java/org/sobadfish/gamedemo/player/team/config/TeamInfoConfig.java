@@ -1,11 +1,11 @@
 package org.sobadfish.gamedemo.player.team.config;
 
-import cn.nukkit.level.Position;
 import cn.nukkit.utils.BlockColor;
 import lombok.Data;
-import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -19,15 +19,19 @@ public class TeamInfoConfig {
     //队伍的配置
     private TeamConfig teamConfig;
 
-
     /**
      * 出生坐标
      * */
-    private String spawnPosition;
+    private List<String> spawnPosition;
+
+    /**
+     * 队伍内PVP
+     * */
+    private boolean canPvp;
 
 
 
-    public TeamInfoConfig(TeamConfig teamConfig, String spawnPosition){
+    public TeamInfoConfig(TeamConfig teamConfig, List<String> spawnPosition){
         this.teamConfig = teamConfig;
         this.spawnPosition = spawnPosition;
 
@@ -36,13 +40,14 @@ public class TeamInfoConfig {
 
     public static TeamInfoConfig getInfoByMap(TeamConfig teamConfig, Map<?,?> map){
 
-        return new TeamInfoConfig(teamConfig,map.get("position").toString());
+        List<?> l = (List<?>)map.get("position");
+        List<String> positions = new ArrayList<>();
+        for(Object ob: l){
+            positions.add(ob.toString());
+        }
+        return new TeamInfoConfig(teamConfig,positions);
     }
 
-
-    public Position getSpawnPosition() {
-        return WorldInfoConfig.getPositionByString(spawnPosition);
-    }
 
     public String getName(){
         return teamConfig.getName();

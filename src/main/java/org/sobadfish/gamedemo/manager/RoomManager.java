@@ -33,6 +33,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
+import cn.nukkit.utils.BlockColor;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.event.*;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
@@ -378,27 +379,55 @@ public class RoomManager implements Listener {
             room.sendTipMessage(Utils.getCentontString(s,line.length()));
         }
     }
-
     @EventHandler
     public void onLevelTransfer(EntityLevelChangeEvent event){
         Entity entity = event.getEntity();
         GameRoom room = getGameRoomByLevel(event.getTarget());
-        if(room != null){
-            if(room.getType() == GameRoom.GameType.START){
-                //防止错杀玩家
-                if(entity instanceof Player){
-                    PlayerInfo info = room.getPlayerInfo((Player) entity);
-                    if(info != null){
-                        return;
-                    }
+        if(entity instanceof EntityHuman) {
+            if (room != null) {
+                PlayerInfo info = getPlayerInfo((EntityHuman) entity);
+                if(info == null){
+                    info = new PlayerInfo((EntityHuman) entity);
+                }
+                GameRoom.JoinType type = room.joinPlayerInfo(info,true);
+                boolean isCancel = true;
+                switch (type) {
+                    case CAN_WATCH:
+                        if (!room.getRoomConfig().hasWatch) {
+                            info.sendForceMessage("&c该房间开始后不允许旁观");
+
+                        } else {
+                            if (info.getGameRoom() != null && !info.isWatch()) {
+                                info.sendForceMessage("&c你无法进入此房间");
+                                isCancel = false;
+                            } else {
+                                room.joinWatch(info);
+                            }
+                        }
+                        break;
+                    case NO_LEVEL:
+                        info.sendForceMessage("&c这个房间正在准备中，稍等一会吧");
+                        break;
+                    case NO_ONLINE:
+                        break;
+                    case NO_JOIN:
+                        info.sendForceMessage("&c该房间不允许加入");
+                        break;
+                    default:
+                        //可以加入
+                        isCancel = false;
+                        break;
+                }
+                if(isCancel){
+                    event.setCancelled();
+                    TotalManager.sendMessageToObject("&c你无法进入该地图",entity);
                 }
 
-                event.setCancelled();
-                TotalManager.sendMessageToObject("&c你无法进入该地图",entity);
             }
         }
 
     }
+
     @EventHandler(ignoreCancelled = true)
     public void onWeatherChange(WeatherChangeEvent event){
         for(GameRoomConfig gameRoomConfig: TotalManager.getRoomManager().roomConfig.values()){
@@ -481,8 +510,11 @@ public class RoomManager implements Listener {
                             TeamInfo t2 = damageInfo.getTeamInfo();
                             if (t1 != null && t2 != null) {
                                 if (t1.getTeamConfig().getName().equalsIgnoreCase(t2.getTeamConfig().getName())) {
-                                    event.setCancelled();
-                                    return;
+                                    if(!t1.getTeamConfig().getTeamConfig().isCanPvp()){
+                                        event.setCancelled();
+                                        return;
+                                    }
+
                                 }
                             }
                             ///////////////// 阻止队伍PVP///////////////
@@ -753,7 +785,10 @@ public class RoomManager implements Listener {
                         Item item;
                         if(entry.getValue() instanceof ItemColorArmor){
                             ItemColorArmor colorArmor = (ItemColorArmor) entry.getValue();
-                            colorArmor.setColor(teamInfo.getTeamConfig().getRgb());
+                            BlockColor rgb = teamInfo.getTeamConfig().getRgb();
+                            if(rgb != null) {
+                                colorArmor.setColor(rgb);
+                            }
                             item = colorArmor;
                         }else{
                             item = entry.getValue();

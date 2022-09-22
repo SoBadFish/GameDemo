@@ -14,7 +14,9 @@ import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.potion.Effect;
+import cn.nukkit.utils.BlockColor;
 import cn.nukkit.utils.TextFormat;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
@@ -70,14 +72,12 @@ public class PlayerInfo {
     //助攻
     public LinkedHashMap<PlayerInfo,Long> assistsPlayers = new LinkedHashMap<>();
 
-    public LinkedHashMap<Integer,Item> armor = new LinkedHashMap<Integer,Item>(){
-        {
-            put(0,new ItemHelmetLeather());
-            put(1,new ItemChestplateLeather());
-            put(2,new ItemLeggingsLeather());
-            put(3,new ItemBootsLeather());
-        }
-    };
+    public LinkedHashMap<Integer,Item> armor = new LinkedHashMap<>();
+
+    /**
+     * 背包初始物品
+     * */
+    public LinkedHashMap<Integer,Item> inventoryItem = new LinkedHashMap<>();
 
     public PlayerInfo(EntityHuman player){
         this.player = player;
@@ -139,6 +139,8 @@ public class PlayerInfo {
 
     public void setTeamInfo(TeamInfo teamInfo) {
         this.teamInfo = teamInfo;
+        this.armor = teamInfo.getTeamConfig().getTeamConfig().getInventoryArmor();
+        this.inventoryItem = teamInfo.getTeamConfig().getTeamConfig().getInventoryItem();
     }
 
     /**
@@ -404,7 +406,7 @@ public class PlayerInfo {
 
         boolean teleport;
         try {
-            teleport = player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
+            teleport = player.teleport(teamInfo.getSpawnLocation());
         }catch (Exception e){
             teleport = false;
         }
@@ -423,7 +425,10 @@ public class PlayerInfo {
             Item item;
             if(entry.getValue() instanceof ItemColorArmor){
                 ItemColorArmor colorArmor = (ItemColorArmor) entry.getValue();
-                colorArmor.setColor(getTeamInfo().getTeamConfig().getRgb());
+                BlockColor rgb = getTeamInfo().getTeamConfig().getRgb();
+                if(rgb != null) {
+                    colorArmor.setColor(rgb);
+                }
                 item = colorArmor;
             }else{
                 item = entry.getValue();
@@ -431,7 +436,10 @@ public class PlayerInfo {
 
             player.getInventory().setArmorItem(entry.getKey(), item);
         }
-        player.getInventory().addItem(new ItemSwordWood());
+        for (Map.Entry<Integer, Item> entry : inventoryItem.entrySet()) {
+            Item item = entry.getValue();
+            player.getInventory().setItem(entry.getKey(), item);
+        }
         playerType = PlayerType.START;
 
     }
@@ -721,7 +729,8 @@ public class PlayerInfo {
                 ((Player) getPlayer()).setGamemode(3);
             }
             player.teleport(getGameRoom().worldInfo.getConfig().getGameWorld().getSafeSpawn());
-            player.teleport(new Position(player.x, teamInfo.getTeamConfig().getSpawnPosition().y + 64, player.z, getLevel()));
+            Position position = teamInfo.getSpawnLocation();
+            player.teleport(new Position(player.x, position.y + 64, player.z, getLevel()));
             sendTitle("&c你死了",2);
             playerType = PlayerType.DEATH;
         }
@@ -729,7 +738,7 @@ public class PlayerInfo {
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
             return;
         }
-        player.teleport(teamInfo.getTeamConfig().getSpawnPosition());
+        player.teleport(teamInfo.getSpawnLocation());
         deathCount++;
         if(event != null) {
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
@@ -781,12 +790,18 @@ public class PlayerInfo {
         }
 //        playerType = PlayerType.DEATH;
         damageByInfo = null;
+        if(gameRoom != null){
+            if(gameRoom.getRoomConfig().isDeathDrop()){
+                for(Item item: player.getInventory().getContents().values()){
+                    player.level.dropItem(player,item,new Vector3(0,0.5,0));
+                }
+            }
+        }
         player.getInventory().clearAll();
         player.getOffhandInventory().clearAll();
         if(playerType == PlayerType.WATCH){
             getGameRoom().joinWatch(this);
         }
-
     }
 
 }

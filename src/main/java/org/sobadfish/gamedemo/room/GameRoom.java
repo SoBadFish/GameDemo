@@ -52,7 +52,6 @@ public class GameRoom {
     private boolean teamAll;
 
 
-
     private final ArrayList<FloatTextInfo> floatTextInfos = new ArrayList<>();
 
     //房间内的玩家
@@ -67,7 +66,6 @@ public class GameRoom {
     private GameType type;
 
     private final ArrayList<TeamInfo> teamInfos = new ArrayList<>();
-
 
     /**
      * 地图配置
@@ -157,7 +155,7 @@ public class GameRoom {
         info.getPlayer().getInventory().setHeldItemSlot(0);
         sendMessage("&7"+info+"&7 成为了旁观者 （"+getWatchPlayers().size()+"）");
         info.sendMessage("&e你可以等待游戏结束 也可以手动退出游戏房间");
-        Position position = getTeamInfos().get(0).getTeamConfig().getSpawnPosition();
+        Position position = getTeamInfos().get(0).getSpawnLocation();
         position.add(0,64,0);
         position.level = getWorldInfo().getConfig().getGameWorld();
         info.getPlayer().teleport(position);

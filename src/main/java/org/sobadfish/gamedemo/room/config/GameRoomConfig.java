@@ -47,6 +47,10 @@ public class GameRoomConfig {
      * 满人等待时长
      * */
     private int maxWaitTime;
+    /**
+     * 是否掉落物品
+     * */
+    public boolean deathDrop;
 
     /**
      * 最低人数
@@ -148,6 +152,10 @@ public class GameRoomConfig {
         return maxWaitTime;
     }
 
+    public boolean isDeathDrop() {
+        return deathDrop;
+    }
+
     public String getName() {
         return name;
     }
@@ -213,6 +221,7 @@ public class GameRoomConfig {
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
                 roomConfig.victoryCommand = new ArrayList<>(room.getStringList("victoryCmd"));
                 roomConfig.defeatCommand = new ArrayList<>(room.getStringList("defeatCmd"));
+                roomConfig.deathDrop = room.getBoolean("deathDrop",false);
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 if(room.exists("floatSpawnPos")){
                     for(Map<?,?> map: room.getMapList("floatSpawnPos")){
@@ -293,6 +302,7 @@ public class GameRoomConfig {
         config.set("hasWatch", hasWatch);
         config.set("AutomaticNextRound",isAutomaticNextRound);
         config.set("defeatCmd",defeatCommand);
+        config.set("deathDrop",deathDrop);
         config.set("victoryCmd",victoryCommand);
         config.set("roomStartMessage",gameStartMessage);
         List<Map<String,Object>> pos = new ArrayList<>();
