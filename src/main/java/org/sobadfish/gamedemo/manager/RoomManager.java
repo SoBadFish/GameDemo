@@ -379,22 +379,59 @@ public class RoomManager implements Listener {
         }
     }
 
+    /**
+     * 进入地图就传送到游戏房间
+     * */
     @EventHandler
     public void onLevelTransfer(EntityLevelChangeEvent event){
         Entity entity = event.getEntity();
-        GameRoom room = getGameRoomByLevel(event.getTarget());
-        if(room != null){
-            if(room.getType() == GameRoom.GameType.START){
-                //防止错杀玩家
-                if(entity instanceof Player){
-                    PlayerInfo info = room.getPlayerInfo((Player) entity);
-                    if(info != null){
+        Level level = event.getTarget();
+        GameRoom room = getGameRoomByLevel(level);
+        if(entity instanceof EntityHuman) {
+            PlayerInfo info = getPlayerInfo((EntityHuman) entity);
+            if(info == null){
+                info = new PlayerInfo((EntityHuman) entity);
+            }
+            if (room != null) {
+                //不能阻止正常进入游戏
+                if(info.getPlayerType() == PlayerInfo.PlayerType.WAIT){
+                    if(room.equals(info.getGameRoom())){
                         return;
                     }
+                }else if(room.equals(info.getGameRoom())){
+                    //断线重连
+                    return;
+                }
+                if(info.getGameRoom() != null){
+                    info.getGameRoom().quitPlayerInfo(info,false);
+                }
+                switch (room.joinPlayerInfo(info,true)){
+                    case CAN_WATCH:
+                        room.joinWatch(info);
+                        break;
+                    case NO_LEVEL:
+                    case NO_JOIN:
+                        event.setCancelled();
+                        TotalManager.sendMessageToObject("&c你无法进入该地图",entity);
+                        if(Server.getInstance().getDefaultLevel() != null) {
+                            info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
+                        }else{
+                            info.getPlayer().teleport(info.getPlayer().getLevel().getSafeSpawn());
+                        }
+                        break;
+                    default:break;
                 }
 
-                event.setCancelled();
-                TotalManager.sendMessageToObject("&c你无法进入该地图",entity);
+            }else{
+                if(info.getGameRoom() != null){
+                    if(info.isLeave()){
+                        return;
+                    }
+
+                    if(!info.getGameRoom().getWorldInfo().getConfig().getWaitPosition().getLevel().getFolderName().equalsIgnoreCase(level.getFolderName())) {
+                        info.getGameRoom().quitPlayerInfo(info, false);
+                    }
+                }
             }
         }
 
