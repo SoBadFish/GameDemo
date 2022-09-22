@@ -312,6 +312,8 @@ public class PlayerInfo {
     public GameRoom getGameRoom() {
         return gameRoom;
     }
+
+
     public boolean isLeave() {
         return isLeave;
     }
