@@ -200,7 +200,8 @@ public class GameRoom {
             if(event.isCancelled()){
                 return JoinType.NO_JOIN;
             }
-
+            info.sendForceTitle("",1);
+            info.sendForceSubTitle("");
             sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
             info.init();
             info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
@@ -453,7 +454,7 @@ public class GameRoom {
      * */
     public boolean quitPlayerInfo(PlayerInfo info,boolean teleport){
         if(info != null) {
-
+            info.isLeave = true;
             if (info.getPlayer() instanceof Player) {
                 if (playerInfos.contains(info)) {
                     PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info, this,TotalManager.getPlugin());
