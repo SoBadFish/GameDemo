@@ -697,6 +697,30 @@ public class RoomManager implements Listener {
         }
     }
 
+
+    //事件响应
+    @EventHandler
+    public void onQuitRoom(PlayerQuitRoomEvent event){
+        if(event.performCommand){
+            PlayerInfo info = event.getPlayerInfo();
+            PlayerData data = TotalManager.getDataManager().getData(info.getName());
+            data.setInfo(info);
+
+            GameRoom room = event.getRoom();
+            info.clear();
+
+            if(info.getPlayer() instanceof Player && ((Player) info.getPlayer()).isOnline()){
+                ((Player)info.getPlayer()).setFoodEnabled(false);
+                room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(((Player)info.getPlayer()),cmd));
+            }
+            if(info.isWatch()){
+                return;
+            }
+            room.sendMessage("&c玩家 "+event.getPlayerInfo().getPlayer().getName()+" 离开了游戏");
+        }
+    }
+
+
     @EventHandler
     public void onGetExp(PlayerGetExpEvent event){
         String playerName = event.getPlayerName();
