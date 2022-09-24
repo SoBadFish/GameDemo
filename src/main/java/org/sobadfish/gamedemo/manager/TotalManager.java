@@ -1,11 +1,9 @@
 package org.sobadfish.gamedemo.manager;
 
 import cn.nukkit.Player;
-import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
-import org.sobadfish.gamedemo.GameDemoMain;
 import org.sobadfish.gamedemo.manager.data.PlayerDataManager;
 import org.sobadfish.gamedemo.manager.data.PlayerTopManager;
 import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
@@ -20,9 +18,29 @@ import java.io.File;
  */
 public class TotalManager {
 
+
+    /**
+     * 游戏指令
+     * */
+    public static final String COMMAND_NAME = "gd";
+
+    /**
+     * 游戏管理员指令
+     * */
+    public static final String COMMAND_ADMIN_NAME = "gda";
+
+    /**
+     * 游戏内喊话指令
+     * */
+    public static final String COMMAND_MESSAGE_NAME = "gds";
+
+    /**
+     * 小游戏名称
+     * */
+    public static final String GAME_NAME = "GameDemo";
+
     public static PluginBase plugin = null;
 
-    public static final String GAME_NAME = "GameDemo";
 
 
     private static PlayerDataManager dataManager;

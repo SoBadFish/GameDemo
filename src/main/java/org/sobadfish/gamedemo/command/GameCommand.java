@@ -24,9 +24,9 @@ import org.sobadfish.gamedemo.room.config.GameRoomConfig;
  * @author SoBadFish
  * 2022/1/12
  */
-public class GameDemoCommand extends Command {
+public class GameCommand extends Command {
 
-    public GameDemoCommand(String name) {
+    public GameCommand(String name) {
         super(name,"游戏房间");
     }
 

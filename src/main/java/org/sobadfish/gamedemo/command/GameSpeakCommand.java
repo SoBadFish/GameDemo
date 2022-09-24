@@ -13,9 +13,9 @@ import org.sobadfish.gamedemo.player.PlayerInfo;
  * @author SoBadFish
  * 2022/1/15
  */
-public class GameDemoSpeakCommand extends Command {
+public class GameSpeakCommand extends Command {
 
-    public GameDemoSpeakCommand(String name) {
+    public GameSpeakCommand(String name) {
         super(name);
     }
 
@@ -32,7 +32,7 @@ public class GameDemoSpeakCommand extends Command {
                     info.getGameRoom().sendFaceMessage("&l&7(全体消息)&r "+info+"&r >> "+strings[0]);
 
                 }else{
-                    info.sendForceMessage("&c指令:/bws <你要说的内容> 全体消息");
+                    info.sendForceMessage("&c指令:/"+TotalManager.COMMAND_MESSAGE_NAME+" <你要说的内容> 全体消息");
                 }
             }
 

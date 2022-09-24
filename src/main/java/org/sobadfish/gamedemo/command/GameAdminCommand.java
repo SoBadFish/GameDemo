@@ -28,10 +28,10 @@ import java.util.LinkedHashMap;
  * @author Sobadfish
  * @date 2022/9/12
  */
-public class GameDemoAdminCommand extends Command {
-    public GameDemoAdminCommand(String name) {
+public class GameAdminCommand extends Command {
+    public GameAdminCommand(String name) {
         super(name);
-        this.usageMessage = "/gda help 查看指令帮助";
+        this.usageMessage = "/"+TotalManager.COMMAND_ADMIN_NAME+" help 查看指令帮助";
         this.setPermission("op");
     }
 
@@ -87,19 +87,19 @@ public class GameDemoAdminCommand extends Command {
             return true;
         }
         if (strings.length > 0 && "help".equalsIgnoreCase(strings[0])) {
-            commandSender.sendMessage("只需要输入/gda 就可以了");
+            commandSender.sendMessage("只需要输入/"+TotalManager.COMMAND_ADMIN_NAME+" 就可以了");
             commandSender.sendMessage("其他指令介绍:");
-            commandSender.sendMessage("/gda reload 重新载入配置");
-            commandSender.sendMessage("/gda set [名称] 创建一个自定义房间模板");
-            commandSender.sendMessage("/gda tsl 读取模板的队伍数据");
-            commandSender.sendMessage("/gda see 查看所有加载的房间");
-            commandSender.sendMessage("/gda close [名称] 关闭房间");
-            commandSender.sendMessage("/gda exp [玩家] [数量] <由来> 增加玩家经验");
-            commandSender.sendMessage("/gda status 查看线程状态");
-            commandSender.sendMessage("/gda end 停止模板预设");
-            commandSender.sendMessage("/gda float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
-            commandSender.sendMessage("/gda cancel 终止房间创建");
-            commandSender.sendMessage("/gda top add/remove [名称] [类型] [房间(可不填)] 创建/删除排行榜");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" reload 重新载入配置");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" set [名称] 创建一个自定义房间模板");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" tsl 读取模板的队伍数据");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" see 查看所有加载的房间");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" close [名称] 关闭房间");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" exp [玩家] [数量] <由来> 增加玩家经验");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" status 查看线程状态");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" end 停止模板预设");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" cancel 终止房间创建");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" top add/remove [名称] [类型] [房间(可不填)] 创建/删除排行榜");
             StringBuilder v = new StringBuilder("类型: ");
             for(PlayerData.DataType type: PlayerData.DataType.values()){
                 v.append(type.getName()).append(" , ");
@@ -124,7 +124,7 @@ public class GameDemoAdminCommand extends Command {
                         return false;
                     }
                 }else{
-                    commandSender.sendMessage(TextFormat.colorize('&',"/gda set [内容] &e首次创建为房间名称"));
+                    commandSender.sendMessage(TextFormat.colorize('&',"/"+TotalManager.COMMAND_ADMIN_NAME+" set [内容] &e首次创建为房间名称"));
                     return false;
                 }
             case "end":
@@ -139,7 +139,7 @@ public class GameDemoAdminCommand extends Command {
                 break;
             case "exp":
                 if(strings.length < 3){
-                    commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
+                    commandSender.sendMessage("指令参数错误 执行/"+TotalManager.COMMAND_ADMIN_NAME+" help 查看帮助");
                     return false;
                 }
                 String playerName = strings[1];
@@ -168,7 +168,7 @@ public class GameDemoAdminCommand extends Command {
             case "top":
                 if(commandSender instanceof Player) {
                     if (strings.length < 3) {
-                        commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
+                        commandSender.sendMessage("指令参数错误 执行/"+TotalManager.COMMAND_ADMIN_NAME+" help 查看帮助");
                         return false;
                     }
                     String name = strings[2];
@@ -176,7 +176,7 @@ public class GameDemoAdminCommand extends Command {
 
                     if ("add".equalsIgnoreCase(strings[1])) {
                         if(strings.length < 4){
-                            commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
+                            commandSender.sendMessage("指令参数错误 执行/"+TotalManager.COMMAND_ADMIN_NAME+" help 查看帮助");
                             return false;
                         }
                         PlayerData.DataType type = PlayerData.DataType.byName(strings[3]);
@@ -219,7 +219,7 @@ public class GameDemoAdminCommand extends Command {
             case "float":
                 if(strings.length < 4){
 
-                    commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
+                    commandSender.sendMessage("指令参数错误 执行/"+TotalManager.COMMAND_ADMIN_NAME+" help 查看帮助");
                     return false;
                 }
                 if(commandSender instanceof Player) {
@@ -238,7 +238,7 @@ public class GameDemoAdminCommand extends Command {
 
                     }else{
                         if(strings.length < 5){
-                            commandSender.sendMessage("指令参数错误 执行/gda help 查看帮助");
+                            commandSender.sendMessage("指令参数错误 执行/"+TotalManager.COMMAND_ADMIN_NAME+" help 查看帮助");
                             return false;
                         }
                         if(roomConfig.notHasFloatText(strings[3])){

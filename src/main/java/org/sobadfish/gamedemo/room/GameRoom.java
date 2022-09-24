@@ -132,7 +132,7 @@ public class GameRoom {
         watchPlayer.forEach(dp -> dp.sendMessage(msg));
     }
 
-    public void joinWatch(PlayerInfo info) {
+    public void joinWatch(PlayerInfo info,boolean isTeleport){
         //TODO 欢迎加入观察者大家庭
         if(!playerInfos.contains(info)){
 
@@ -155,10 +155,16 @@ public class GameRoom {
         info.getPlayer().getInventory().setHeldItemSlot(0);
         sendMessage("&7"+info+"&7 成为了旁观者 （"+getWatchPlayers().size()+"）");
         info.sendMessage("&e你可以等待游戏结束 也可以手动退出游戏房间");
-        Position position = getTeamInfos().get(0).getSpawnLocation();
-        position.add(0,64,0);
-        position.level = getWorldInfo().getConfig().getGameWorld();
-        info.getPlayer().teleport(position);
+        if(isTeleport) {
+            Position position = getTeamInfos().get(0).getSpawnLocation();
+            position.add(0, 64, 0);
+            position.level = getWorldInfo().getConfig().getGameWorld();
+            info.getPlayer().teleport(position);
+        }
+    }
+
+    public void joinWatch(PlayerInfo info) {
+       joinWatch(info,true);
 
     }
 

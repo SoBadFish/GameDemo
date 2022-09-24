@@ -880,101 +880,101 @@ public class RoomManager implements Listener {
         }
     }
 
-        @EventHandler
-        public void onTeamDefeat(TeamDefeatEvent event){
+    @EventHandler
+    public void onTeamDefeat(TeamDefeatEvent event){
 
-            final GameRoom room = event.getRoom();
-            for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
+        final GameRoom room = event.getRoom();
+        for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
 
-                room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
-                if(event.getRoom().getRoomConfig().isAutomaticNextRound){
-                    info.sendMessage("&7即将自动进行下一局");
-                    RandomJoinManager.joinManager.nextJoin(info);
-    //                ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,info,event.getRoom(),null));
-
-                }
+            room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
+            if(event.getRoom().getRoomConfig().isAutomaticNextRound){
+                info.sendMessage("&7即将自动进行下一局");
+                RandomJoinManager.joinManager.nextJoin(info);
+                //                ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,info,event.getRoom(),null));
 
             }
-        }
 
-        @EventHandler
-        public void onExecuteCommand(PlayerCommandPreprocessEvent event){
-            PlayerInfo info = getPlayerInfo(event.getPlayer());
-            if(info != null){
-                GameRoom room = info.getGameRoom();
-                if(room != null) {
-                    for(String cmd: room.getRoomConfig().banCommand){
-                        if(event.getMessage().contains(cmd)){
-                            event.setCancelled();
-                        }
+        }
+    }
+
+    @EventHandler
+    public void onExecuteCommand(PlayerCommandPreprocessEvent event){
+        PlayerInfo info = getPlayerInfo(event.getPlayer());
+        if(info != null){
+            GameRoom room = info.getGameRoom();
+            if(room != null) {
+                for(String cmd: room.getRoomConfig().banCommand){
+                    if(event.getMessage().contains(cmd)){
+                        event.setCancelled();
                     }
                 }
             }
-
         }
 
+    }
 
-        @EventHandler
-        public void onTeamVictory(TeamVictoryEvent event){
-            event.getTeamInfo().sendTitle("&e&l胜利!",5);
-            String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■";
-            event.getRoom().sendTipMessage("&a"+line);
-            event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",line.length()));
-            event.getRoom().sendTipMessage("");
-            for(PlayerInfo playerInfo: event.getTeamInfo().getInRoomPlayer()){
-                event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount())+" 助攻: "+playerInfo.getAssists(),line.length()));
-            }
-            event.getRoom().sendTipMessage("&a"+line);
-            for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
-                event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
-            }
 
-            event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
-
+    @EventHandler
+    public void onTeamVictory(TeamVictoryEvent event){
+        event.getTeamInfo().sendTitle("&e&l胜利!",5);
+        String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■";
+        event.getRoom().sendTipMessage("&a"+line);
+        event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",line.length()));
+        event.getRoom().sendTipMessage("");
+        for(PlayerInfo playerInfo: event.getTeamInfo().getInRoomPlayer()){
+            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount())+" 助攻: "+playerInfo.getAssists(),line.length()));
+        }
+        event.getRoom().sendTipMessage("&a"+line);
+        for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
+            event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
         }
 
+        event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
 
-        @EventHandler
-        public void onCraft(CraftItemEvent event){
-            Player player = event.getPlayer();
-            GameRoom room = getGameRoomByLevel(player.getLevel());
-            if(room != null) {
-                PlayerInfo info = room.getPlayerInfo(player);
-                if (info != null) {
-                    event.setCancelled();
-                }
+    }
+
+
+    @EventHandler
+    public void onCraft(CraftItemEvent event){
+        Player player = event.getPlayer();
+        GameRoom room = getGameRoomByLevel(player.getLevel());
+        if(room != null) {
+            PlayerInfo info = room.getPlayerInfo(player);
+            if (info != null) {
+                event.setCancelled();
             }
         }
+    }
 
     /**
      * 限制玩家放置方块事件
 
      * */
-        @EventHandler
-        public void onPlaceBlock(BlockPlaceEvent event){
-            Level level = event.getBlock().level;
+    @EventHandler
+    public void onPlaceBlock(BlockPlaceEvent event){
+        Level level = event.getBlock().level;
 
-            Block block = event.getBlock();
-            Item item = event.getItem();
-            if(item.hasCompoundTag() && (item.getNamedTag().contains(TotalManager.GAME_NAME)
-            )){
-                event.setCancelled();
-                return;
-            }
-            GameRoom room = getGameRoomByLevel(level);
-            if(room != null){
-                PlayerInfo info = room.getPlayerInfo(event.getPlayer());
-                if(info != null) {
-                    if (info.isWatch()) {
-                        info.sendMessage("&c观察状态下不能放置方块");
-                        event.setCancelled();
-
-                    }
+        Block block = event.getBlock();
+        Item item = event.getItem();
+        if(item.hasCompoundTag() && (item.getNamedTag().contains(TotalManager.GAME_NAME)
+        )){
+            event.setCancelled();
+            return;
+        }
+        GameRoom room = getGameRoomByLevel(level);
+        if(room != null){
+            PlayerInfo info = room.getPlayerInfo(event.getPlayer());
+            if(info != null) {
+                if (info.isWatch()) {
+                    info.sendMessage("&c观察状态下不能放置方块");
+                    event.setCancelled();
 
                 }
-            }
 
+            }
         }
+
+    }
 
     /**
      * 修改玩家聊天信息事件
@@ -1063,9 +1063,6 @@ public class RoomManager implements Listener {
         }
 
     }
-
-
-
 
 
 }

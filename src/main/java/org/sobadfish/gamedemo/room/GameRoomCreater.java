@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.room;
 
 
+import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
@@ -64,19 +65,19 @@ public class GameRoomCreater {
         switch (setFlag){
             case 1:
                 creater.sendForceMessage("&2正在创建 名称为 &r"+value+" &2的房间模板");
-                creater.sendForceMessage("&e继续执行 &r/gda set &a[最低玩家数]&e 执行下一步操作");
+                creater.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" set &a[最低玩家数]&e 执行下一步操作");
                 roomName = value;
                 setFlag++;
                 break;
             case 2:
                 creater.sendForceMessage("&2设置最低人数 "+value);
-                creater.sendForceMessage("&e继续执行 &r/gda set &2[出生点数量]&e 执行下一步操作");
+                creater.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" set &2[出生点数量]&e 执行下一步操作");
                 min = Integer.parseInt(value);
                 setFlag++;
                 break;
             case 3:
                 creater.sendForceMessage("&2设置每个队伍的出生点数量 "+value);
-                creater.sendForceMessage("&e继续执行 &r/gda set &2[最大玩家数]&e 执行下一步操作");
+                creater.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" set &2[最大玩家数]&e 执行下一步操作");
                 spawnSize = Integer.parseInt(value);
                 setFlag++;
                 break;
@@ -115,23 +116,23 @@ public class GameRoomCreater {
                     roomConfig = GameRoomConfig.createGameRoom("测试房间", 4, 16);
                     isRoomCreate = true;
                     creater.sendForceMessage("&2成功创建一个 名字已经固定为 &r“测试房间”&2的游戏房间模板 已设定最低玩家为 &b4&2 最大玩家为 &b16&r");
-                    creater.sendForceMessage("继续执行/gda 进行下一步 [进入游戏地图设置]");
+                    creater.sendForceMessage("继续执行/"+ TotalManager.COMMAND_ADMIN_NAME+" 进行下一步 [进入游戏地图设置]");
                 }else{
                     creater.sendForceMessage("&2成功预设房间设置");
-                    creater.sendForceMessage("&e继续执行 &r/gda &r进行下一步 &b[进入游戏地图设置]");
+                    creater.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &r进行下一步 &b[进入游戏地图设置]");
                 }
                 flag++;
                 break;
             case 2:
                 worldInfoConfig = WorldInfoConfig.createWorldConfig(creater.getLevel().getFolderName());
                 creater.sendForceMessage("&2成功设定游戏地图");
-                creater.sendForceMessage("&e继续执行 &r/gda &e进行下一步 &b[设置等待大厅]");
+                creater.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &b[设置等待大厅]");
                 flag++;
                 break;
             case 3:
                 worldInfoConfig.setWaitPosition(creater.getPosition());
                 creater.sendForceMessage("&2成功等待大厅");
-                creater.sendForceMessage("&e继续执行 &r/gda &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"出生点 &21&b /&d "+roomConfig.teamCfg.size()+"&r]");
+                creater.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"出生点 &21&b /&d "+roomConfig.teamCfg.size()+"&r]");
                 flag++;
                 break;
             case 6:
@@ -158,11 +159,11 @@ public class GameRoomCreater {
             positions.add(WorldInfoConfig.positionToString(creater.getPosition()));
             creater.sendForceMessage("&2设置&r "+teamName+" &2出生点坐标&r [&2"+positions.size()+" &b/&d "+spawnSize+"&r]");
             if(positions.size() != spawnSize) {
-                creater.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置队伍出生点&r " + teamName + " [&2" + (positions.size() + 1) + " &b/&d "+spawnSize+"&r]");
+                creater.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &r[&b设置队伍出生点&r " + teamName + " [&2" + (positions.size() + 1) + " &b/&d "+spawnSize+"&r]");
             }else{
                 if(positions.size() > spawnFlag+1){
                     creater.sendForceMessage("&2设置 &r" + teamName + " &2出生点坐标完成");
-                    creater.sendForceMessage("&e继续执行 &r/bd &e进行下一步 &r[&b设置 &r"+ new ArrayList<>(roomConfig.teamCfg.keySet()).get(spawnFlag + 1) + " &2出生点 &r [&21 &b/&d "+spawnSize+"&r]");
+                    creater.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &r[&b设置 &r"+ new ArrayList<>(roomConfig.teamCfg.keySet()).get(spawnFlag + 1) + " &2出生点 &r [&21 &b/&d "+spawnSize+"&r]");
                 }
                 spawnFlag++;
                 if (spawnFlag >= new ArrayList<>(roomConfig.teamCfg.keySet()).size()) {
