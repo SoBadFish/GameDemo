@@ -38,6 +38,7 @@ public class TotalManager {
      * 小游戏名称
      * */
     public static final String GAME_NAME = "GameDemo";
+    
 
     public static PluginBase plugin = null;
 

@@ -375,7 +375,7 @@ public class RoomManager implements Listener {
         GameRoom room = event.getRoom();
         String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■";
         for(String s: room.getRoomConfig().gameStartMessage){
-            room.sendTipMessage(Utils.getCentontString(s,line.length()));
+            room.sendTipMessage(FunctionManager.getCentontString(s,line.length()));
         }
     }
 
@@ -737,13 +737,13 @@ public class RoomManager implements Listener {
                 String line = String.format("%20s","");
                 player.sendMessage(line);
                 String inputTitle = "&b&l小游戏经验\n";
-                TotalManager.sendTipMessageToObject(Utils.getCentontString(inputTitle,30),player);
-                TotalManager.sendTipMessageToObject(Utils.getCentontString("&b等级 "+data.getLevel()+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.getLevel() + 1)+"\n",30),player);
+                TotalManager.sendTipMessageToObject(FunctionManager.getCentontString(inputTitle,30),player);
+                TotalManager.sendTipMessageToObject(FunctionManager.getCentontString("&b等级 "+data.getLevel()+String.format("%"+inputTitle.length()+"s","")+" 等级 "+(data.getLevel() + 1)+"\n",30),player);
 
                 TotalManager.sendTipMessageToObject("&7["+data.getExpLine(20)+"&7]\n",player);
 
                 String d = String.format("%.1f",data.getExpPercent() * 100.0);
-                TotalManager.sendTipMessageToObject(Utils.getCentontString("&b"+data.getExpString(data.getExp())+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
+                TotalManager.sendTipMessageToObject(FunctionManager.getCentontString("&b"+data.getExpString(data.getExp())+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
                 TotalManager.sendTipMessageToObject("&l&m"+Utils.writeLine(5,"&a▁▁▁"),player);
                 TotalManager.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
 
@@ -919,10 +919,10 @@ public class RoomManager implements Listener {
         event.getTeamInfo().sendTitle("&e&l胜利!",5);
         String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■";
         event.getRoom().sendTipMessage("&a"+line);
-        event.getRoom().sendTipMessage(Utils.getCentontString("&b游戏结束",line.length()));
+        event.getRoom().sendTipMessage(FunctionManager.getCentontString("&b游戏结束",line.length()));
         event.getRoom().sendTipMessage("");
         for(PlayerInfo playerInfo: event.getTeamInfo().getInRoomPlayer()){
-            event.getRoom().sendTipMessage(Utils.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount())+" 助攻: "+playerInfo.getAssists(),line.length()));
+            event.getRoom().sendTipMessage(FunctionManager.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount())+" 助攻: "+playerInfo.getAssists(),line.length()));
         }
         event.getRoom().sendTipMessage("&a"+line);
         for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {

@@ -3,6 +3,7 @@ package org.sobadfish.gamedemo.player;
 import cn.nukkit.Server;
 import org.sobadfish.gamedemo.event.PlayerGetExpEvent;
 import org.sobadfish.gamedemo.event.PlayerLevelChangeEvent;
+import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 
 import java.util.ArrayList;
@@ -105,22 +106,7 @@ public class PlayerData {
      * 获取等级条
      * */
     public String getExpLine(int size){
-        double r = getExpPercent();
-        int l = (int) (size * r);
-        int other = size - l;
-        StringBuilder ls = new StringBuilder();
-        if(l > 0){
-            for(int i = 0;i < l;i++){
-                ls.append("&b■");
-            }
-        }
-        StringBuilder others = new StringBuilder();
-        if(other > 0){
-            for(int i = 0;i < other;i++){
-                others.append("&7■");
-            }
-       }
-        return ls +others.toString();
+        return FunctionManager.drawLine((float) getExpPercent(),size,"&b■","&7■");
     }
 
     /**
