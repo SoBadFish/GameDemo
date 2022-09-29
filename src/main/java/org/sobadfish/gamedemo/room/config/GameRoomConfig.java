@@ -117,6 +117,19 @@ public class GameRoomConfig {
      * 游戏开始的一些介绍
      * */
     public ArrayList<String> gameStartMessage = new ArrayList<>();
+    /**
+     * 可以破坏的一些方块
+     * 在阻止破坏的时候允许破坏的方块
+     * */
+    public ArrayList<String> canBreak = new ArrayList<>();
+
+    /**
+     * 不能破坏的一些方块
+     * 如果这个数量大于0 则全地图可破坏
+     * 除了列表内的方块
+     * */
+    public ArrayList<String> banBreak = new ArrayList<>();
+
 
 
 
@@ -222,6 +235,8 @@ public class GameRoomConfig {
                 roomConfig.victoryCommand = new ArrayList<>(room.getStringList("victoryCmd"));
                 roomConfig.defeatCommand = new ArrayList<>(room.getStringList("defeatCmd"));
                 roomConfig.deathDrop = room.getBoolean("deathDrop",false);
+                roomConfig.canBreak = new ArrayList<>(room.getStringList("can-break"));
+                roomConfig.banBreak = new ArrayList<>(room.getStringList("ban-break"));
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 if(room.exists("floatSpawnPos")){
                     for(Map<?,?> map: room.getMapList("floatSpawnPos")){

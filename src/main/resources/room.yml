@@ -15,7 +15,11 @@ QuitRoom: []
 AutomaticNextRound: true
 victoryCmd: []
 defeatCmd: []
-
+# 禁止破坏的方块
+ban-break:
+  - "241"
+  - "20"
+can-break: []
 floatSpawnPos: []
 
 roomStartMessage:

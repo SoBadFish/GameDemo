@@ -207,7 +207,7 @@ public class TeamInfo {
 
         if(d == getTeamPlayers().size()){
             //被淘汰了
-            room.sendMessage("&r团灭 > "+toString()+"&c已被淘汰!");
+            room.sendMessage("&r团灭 > "+this+"&c已被淘汰!");
             defeatPlayers.addAll(getTeamPlayers());
             echoDefeat();
             stop = true;
