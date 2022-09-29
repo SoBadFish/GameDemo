@@ -554,14 +554,18 @@ public class GameRoom {
 
     }
 
+
     /**
      * 执行这个可以将游戏直接结束
      * 传入胜利的队伍
      * */
-    public void gameEnd(TeamInfo... teamInfo){
-        for(TeamInfo teamInfo1:teamInfo){
-            teamInfo1.echoVictory();
+    public void gameEnd(TeamInfo teamInfo,boolean more){
+        if(!more){
+            teamInfo.echoDefeat();
         }
+        teamInfo.echoVictory();
+
+
         type = GameType.END;
         worldInfo.setClose(true);
         loadTime = 5;
@@ -602,33 +606,71 @@ public class GameRoom {
         }
         if(loadTime > 0) {
             //TODO 在房间倒计时内
-
             for (TeamInfo teamInfo : teamInfos) {
                 teamInfo.onUpdate();
             }
-            if (getLiveTeam().size() == 1) {
-                TeamInfo teamInfo = getLiveTeam().get(0);
-                gameEnd(teamInfo);
+            if(getRoomConfig().teamConfigs.size() > 1) {
+                if (getLiveTeam().size() == 1) {
+                    TeamInfo teamInfo = getLiveTeam().get(0);
+                    teamInfo.getVictoryPlayers().addAll(teamInfo.getTeamPlayers());
+                    gameEnd(teamInfo,true);
+                }
+            }else{
+                TeamInfo teamInfo = getTeamInfos().get(0);
+                ArrayList<PlayerInfo> pl = teamInfo.getLivePlayer();
+                if(pl.size() == 1){
+                    teamInfo.getVictoryPlayers().add(pl.get(0));
+                    gameEnd(teamInfo,false);
+                }
             }
         }else{
             //TODO 在房间倒计时结束
-            TeamInfo successInfo = null;
-            ArrayList<TeamInfo> teamInfos = getLiveTeam();
-            if(teamInfos.size() > 0) {
-                int pl = 0;
-                for (TeamInfo info : teamInfos) {
-                    if (pl == 0) {
-                        pl++;
-                        successInfo = info;
-                        continue;
+            TeamInfo successInfo;
+            if(getRoomConfig().teamConfigs.size() > 1) {
+                ArrayList<TeamInfo> teamInfos = getLiveTeam();
+                if (teamInfos.size() > 0) {
+                    int pl = 0;
+                    double dh = 0;
+                    successInfo = teamInfos.get(0);
+
+                    for (TeamInfo info : teamInfos) {
+                        ArrayList<PlayerInfo> successInfos = info.getLivePlayer();
+                        if (successInfos.size() > pl) {
+                            pl = successInfos.size();
+                            successInfo = info;
+                            dh = info.getAllHealth();
+
+                        }else if(successInfos.size() == pl && pl > 0){
+                            double dh2 = info.getAllHealth();
+                            if(dh2 > dh){
+                                successInfo = info;
+                                dh = dh2;
+                            }
+                        }
                     }
-
-                    info.onUpdate();
-                    info.setStop(true);
-
+                    successInfo.getVictoryPlayers().addAll(successInfo.getTeamPlayers());
+                    gameEnd(successInfo,true);
                 }
-                gameEnd(successInfo);
-
+            }else{
+                double h = 0;
+                PlayerInfo successPlayerInfo = null;
+                TeamInfo teamInfo = getTeamInfos().get(0);
+                for(PlayerInfo info: teamInfo.getLivePlayer()){
+                    if(info.player.getHealth() > h){
+                        successPlayerInfo = info;
+                        h = info.player.getHealth();
+                    }
+                }
+                if(successPlayerInfo == null){
+                    successPlayerInfo = teamInfo.getLivePlayer().get(0);
+                }
+                teamInfo.getVictoryPlayers().add(successPlayerInfo);
+                for(PlayerInfo info: teamInfo.getLivePlayer()){
+                    if(!info.equals(successPlayerInfo)){
+                        teamInfo.getDefeatPlayers().add(info);
+                    }
+                }
+                gameEnd(teamInfo,false);
             }
             //TODO 当时间结束的一些逻辑
             type = GameType.END;

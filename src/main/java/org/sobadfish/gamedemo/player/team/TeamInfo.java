@@ -37,6 +37,11 @@ public class TeamInfo {
     //队伍的玩家
     private ArrayList<PlayerInfo> teamPlayers = new ArrayList<>();
 
+    private ArrayList<PlayerInfo> defeatPlayers = new ArrayList<>();
+
+    private ArrayList<PlayerInfo> victoryPlayers = new ArrayList<>();
+
+
     public TeamInfo(GameRoom room,TeamInfoConfig teamConfig){
         this.teamConfig = teamConfig;
         this.room = room;
@@ -65,8 +70,26 @@ public class TeamInfo {
         return teamConfig;
     }
 
+
+
+    public ArrayList<PlayerInfo> getVictoryPlayers() {
+        return victoryPlayers;
+    }
+
+    public ArrayList<PlayerInfo> getDefeatPlayers() {
+        return defeatPlayers;
+    }
+
     public void setTeamConfig(TeamInfoConfig teamConfig) {
         this.teamConfig = teamConfig;
+    }
+
+    public void setVictoryPlayers(ArrayList<PlayerInfo> victoryPlayers) {
+        this.victoryPlayers = victoryPlayers;
+    }
+
+    public void setDefeatPlayers(ArrayList<PlayerInfo> defeatPlayers) {
+        this.defeatPlayers = defeatPlayers;
     }
 
     public void setTeamPlayers(ArrayList<PlayerInfo> teamPlayers) {
@@ -98,6 +121,7 @@ public class TeamInfo {
         teamPlayers.removeIf((p)->p.disable);
         return teamPlayers;
     }
+
 
 
     public ArrayList<PlayerInfo> getInRoomPlayer(){
@@ -181,10 +205,10 @@ public class TeamInfo {
         }
 
 
-
         if(d == getTeamPlayers().size()){
             //被淘汰了
             room.sendMessage("&r团灭 > "+toString()+"&c已被淘汰!");
+            defeatPlayers.addAll(getTeamPlayers());
             echoDefeat();
             stop = true;
         }
@@ -218,6 +242,14 @@ public class TeamInfo {
     public void quit(PlayerInfo info){
         info.setTeamInfo(null);
         teamPlayers.remove(info);
+    }
+
+    public double getAllHealth(){
+        double dh = 0;
+        for(PlayerInfo info: getLivePlayer()){
+            dh += info.getPlayer().getHealth();
+        }
+        return dh;
     }
 
     @Override

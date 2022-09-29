@@ -90,6 +90,7 @@ public class GameAdminCommand extends Command {
             commandSender.sendMessage("只需要输入/"+TotalManager.COMMAND_ADMIN_NAME+" 就可以了");
             commandSender.sendMessage("其他指令介绍:");
             commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" reload 重新载入配置");
+            commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" back 重新回到上一步设置");
             commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" set [名称] 创建一个自定义房间模板");
             commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" tsl 读取模板的队伍数据");
             commandSender.sendMessage("/"+TotalManager.COMMAND_ADMIN_NAME+" see 查看所有加载的房间");
@@ -136,6 +137,28 @@ public class GameAdminCommand extends Command {
                     commandSender.sendMessage("请不要在控制台执行");
                     return false;
                 }
+                break;
+            case "back":
+                if(commandSender instanceof Player) {
+                    if (create.containsKey(commandSender.getName())) {
+                        GameRoomCreater creater = create.get(commandSender.getName());
+                        if(creater.spawnSizeFlag > 0){
+                            creater.spawnSizeFlag--;
+                            TotalManager.sendMessageToObject("&a成功回退出生点的设置",commandSender);
+                        }else if(creater.spawnFlag > 0){
+                            creater.spawnFlag--;
+                            TotalManager.sendMessageToObject("&a成功回退队伍出生点的设置",commandSender);
+                        }else if(creater.setFlag > 1){
+                            creater.setFlag--;
+                            TotalManager.sendMessageToObject("&a成功回退预设的设置",commandSender);
+                        }
+
+                    }
+                }else{
+                    commandSender.sendMessage("请不要在控制台执行");
+                    return false;
+                }
+
                 break;
             case "exp":
                 if(strings.length < 3){

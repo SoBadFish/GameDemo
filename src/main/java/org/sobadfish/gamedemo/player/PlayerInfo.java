@@ -139,8 +139,10 @@ public class PlayerInfo {
 
     public void setTeamInfo(TeamInfo teamInfo) {
         this.teamInfo = teamInfo;
-        this.armor = teamInfo.getTeamConfig().getTeamConfig().getInventoryArmor();
-        this.inventoryItem = teamInfo.getTeamConfig().getTeamConfig().getInventoryItem();
+        if(teamInfo != null) {
+            this.armor = teamInfo.getTeamConfig().getTeamConfig().getInventoryArmor();
+            this.inventoryItem = teamInfo.getTeamConfig().getTeamConfig().getInventoryItem();
+        }
     }
 
     /**
@@ -736,6 +738,14 @@ public class PlayerInfo {
             player.teleport(new Position(player.x, position.y + 64, player.z, getLevel()));
             sendTitle("&c你死了",2);
             playerType = PlayerType.DEATH;
+        }else{
+            if (getPlayer() instanceof Player) {
+                ((Player) getPlayer()).setGamemode(3);
+            }
+            playerType = PlayerType.WATCH;
+            if(gameRoom.getRoomConfig().teamConfigs.size() == 1) {
+                teamInfo.getDefeatPlayers().add(this);
+            }
         }
 
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){

@@ -884,7 +884,7 @@ public class RoomManager implements Listener {
     public void onTeamDefeat(TeamDefeatEvent event){
 
         final GameRoom room = event.getRoom();
-        for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
+        for (PlayerInfo info:event.getTeamInfo().getDefeatPlayers()) {
 
             room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
             if(event.getRoom().getRoomConfig().isAutomaticNextRound){
@@ -921,13 +921,12 @@ public class RoomManager implements Listener {
         event.getRoom().sendTipMessage("&a"+line);
         event.getRoom().sendTipMessage(FunctionManager.getCentontString("&b游戏结束",line.length()));
         event.getRoom().sendTipMessage("");
-        for(PlayerInfo playerInfo: event.getTeamInfo().getInRoomPlayer()){
+        for(PlayerInfo playerInfo: event.getTeamInfo().getVictoryPlayers()){
             event.getRoom().sendTipMessage(FunctionManager.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount())+" 助攻: "+playerInfo.getAssists(),line.length()));
+            event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",playerInfo.getName())));
         }
         event.getRoom().sendTipMessage("&a"+line);
-        for (PlayerInfo info:event.getTeamInfo().getInRoomPlayer()) {
-            event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
-        }
+
 
         event.getRoom().sendMessage("&a恭喜 "+event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()+" &a 获得了胜利!");
 
