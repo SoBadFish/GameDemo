@@ -589,14 +589,20 @@ public class PlayerInfo {
         }else{
 
             lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
-
-            for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
-                String me = "";
-                if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
-                    me = "&7(我)";
+            if(gameRoom.roomConfig.teamConfigs.size() > 0){
+                for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
+                    String me = "";
+                    if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
+                        me = "&7(我)";
+                    }
+                    lore.add("◎ "+ teamInfo +": &r  &c"+teamInfo.getLivePlayer().size()+" "+me);
                 }
-                lore.add("◎ "+ teamInfo +": &r  &c"+teamInfo.getLivePlayer().size()+" "+me);
+            }else{
+                TeamInfo teamInfo = gameRoom.getTeamInfos().get(0);
+                lore.add("   ");
+                lore.add(" 存活人数: &a "+teamInfo.getLivePlayer().size() +" &7/&a "+teamInfo.getTeamPlayers().size());
             }
+
             lore.add("      ");
             lore.add("&b击杀数: &a"+killCount);
             lore.add("&e助攻数: &a"+assists);
@@ -613,6 +619,7 @@ public class PlayerInfo {
         }
         return lore;
     }
+
     private int loadTime = 0;
 
     private boolean isSendkey = false;
