@@ -2,8 +2,10 @@ package org.sobadfish.gamedemo.room;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
+import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
@@ -24,15 +26,13 @@ import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
+import org.sobadfish.gamedemo.room.config.ItemConfig;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfo;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.gamedemo.room.world.WorldInfo;
 import org.sobadfish.gamedemo.tools.Utils;
 
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -101,6 +101,13 @@ public class GameRoom {
 
     public GameRoomConfig getRoomConfig() {
         return roomConfig;
+    }
+
+    public ItemConfig getRandomItemConfig(Block block){
+        if(roomConfig.items.containsKey(block.getId()+"")){
+            return roomConfig.items.get(block.getId()+"");
+        }
+        return null;
     }
 
 
@@ -210,7 +217,10 @@ public class GameRoom {
             info.sendForceSubTitle("");
             sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
             info.init();
-            info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(),TeamChoseItem.get());
+            if(roomConfig.teamConfigs.size() > 1) {
+                info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(), TeamChoseItem.get());
+
+            }
             info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
             info.setPlayerType(PlayerInfo.PlayerType.WAIT);
             info.setGameRoom(this);
@@ -790,6 +800,36 @@ public class GameRoom {
             RoomManager.LOCK_GAME.remove(getRoomConfig());
         }
 
+    }
+
+    /**
+     * 设置资源箱的物品
+     * */
+    public LinkedHashMap<Integer, Item> getRandomItem(int size, Block block){
+        LinkedHashMap<Integer,Item> itemLinkedHashMap = new LinkedHashMap<>();
+        if(worldInfo == null){
+            return itemLinkedHashMap;
+        }
+        if(!worldInfo.clickChest.contains(block)){
+            List<Item> list = getRoundItems(block);
+            if(list.size() > 0) {
+                for (int i = 0; i < size; i++) {
+                    if (Utils.rand(0, 100) <= getRoomConfig().getRound()) {
+                        itemLinkedHashMap.put(i, list.get(new Random().nextInt(list.size())));
+                    }
+                }
+                worldInfo.clickChest.add(block);
+            }
+        }
+        return itemLinkedHashMap;
+
+    }
+
+    public List<Item> getRoundItems(Block block){
+        if(roomConfig.items.containsKey(block.getId()+"")){
+            return roomConfig.items.get(block.getId()+"").items;
+        }
+        return new ArrayList<>();
     }
 
 

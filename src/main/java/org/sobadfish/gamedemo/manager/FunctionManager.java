@@ -1,8 +1,10 @@
 package org.sobadfish.gamedemo.manager;
 
+import cn.nukkit.item.Item;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.room.config.ItemConfig;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * 这个方法封装着一些算法功能
@@ -127,4 +129,65 @@ public class FunctionManager {
         return sb2.toString();
 
     }
+
+    /**
+     * 将加载箱子内随机物品的配置文件
+     *
+     *
+     * */
+    public static Map<String, ItemConfig> buildItem(List<Map> itemList){
+        LinkedHashMap<String,ItemConfig> configLinkedHashMap = new LinkedHashMap<>();
+        for(Map<?,?> map: itemList){
+            if(map.containsKey("block")) {
+                String block = map.get("block").toString().split(":")[0];
+
+                List<Item> items = new ArrayList<>();
+                String name = "未命名";
+                if(map.containsKey("items")) {
+                    List<?> list = (List<?>) map.get("items");
+                    for (Object s : list) {
+                        items.addAll(stringToItemList(s.toString()));
+                    }
+                    Collections.shuffle(items);
+                }
+                if(map.containsKey("name")){
+                    name = map.get("name").toString();
+                }
+                TotalManager.sendMessageToConsole("&e物品读取完成 &7("+block+")&r》"+items.size()+"《");
+                configLinkedHashMap.put(block,new ItemConfig(block,name,items));
+            }
+        }
+        TotalManager.sendMessageToConsole("&a物品加载完成: &r》"+configLinkedHashMap.size()+"《");
+        return configLinkedHashMap;
+
+    }
+
+    public static List<Item> stringToItemList(String str){
+        ArrayList<Item> items = new ArrayList<>();
+        String[] sl = str.split("-");
+        if(sl.length > 1){
+            for(int i = 0;i < Integer.parseInt(sl[1]);i++){
+                items.add(stringToItem(sl[0]));
+            }
+        }else{
+            items.add(stringToItem(sl[0]));
+        }
+        return items;
+    }
+
+    public static Item stringToItem(String s){
+        String[] sList = s.split(":");
+        Item item = Item.get(Integer.parseInt(sList[0]));
+        if(sList.length > 1){
+            item.setDamage(Integer.parseInt(sList[1]));
+            if(sList.length > 2){
+                item.setCount(Integer.parseInt(sList[2]));
+            }else{
+                item.setCount(1);
+            }
+        }
+        return item;
+
+    }
+
 }

@@ -2,6 +2,7 @@ package org.sobadfish.gamedemo.room.world;
 
 
 import cn.nukkit.block.Block;
+import cn.nukkit.level.Position;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 
@@ -23,6 +24,8 @@ public class WorldInfo {
     public boolean isStart;
 
     private WorldInfoConfig config;
+
+    public List<Position> clickChest = new ArrayList<>();
 
     public List<Block> placeBlock = new ArrayList<>();
 

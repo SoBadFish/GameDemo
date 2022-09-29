@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.room.config;
 
 import cn.nukkit.utils.Config;
+import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.team.config.TeamConfig;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
@@ -130,6 +131,15 @@ public class GameRoomConfig {
      * */
     public ArrayList<String> banBreak = new ArrayList<>();
 
+    /**
+     * 箱子物品
+     * */
+    public Map<String,ItemConfig> items = new LinkedHashMap<>();
+    /**
+     * 刷新箱子物品概率
+     * */
+    private int round = 15;
+
 
 
 
@@ -177,6 +187,10 @@ public class GameRoomConfig {
         return maxPlayerSize;
     }
 
+    public int getRound() {
+        return round;
+    }
+
     public void setWorldInfo(WorldInfoConfig worldInfo) {
         this.worldInfo = worldInfo;
     }
@@ -209,6 +223,8 @@ public class GameRoomConfig {
                     TotalManager.sendMessageToConsole("&a成功清除未完成的房间模板");
                     return null;
                 }
+
+
                 Config room = new Config(file+"/room.yml",Config.YAML);
                 WorldInfoConfig worldInfoConfig = WorldInfoConfig.getInstance(name,room);
                 if(worldInfoConfig == null){
@@ -237,6 +253,22 @@ public class GameRoomConfig {
                 roomConfig.deathDrop = room.getBoolean("deathDrop",false);
                 roomConfig.canBreak = new ArrayList<>(room.getStringList("can-break"));
                 roomConfig.banBreak = new ArrayList<>(room.getStringList("ban-break"));
+
+                //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
+                //////////////////////////////////////////////////////////
+                if(!new File(file+"/items.yml").exists()){
+                    TotalManager.saveResource("items.yml","/rooms/"+name+"/items.yml",false);
+                }
+
+                Config item = new Config(file + "/items.yml", Config.YAML);
+                List<Map> strings = item.getMapList("chests");
+                Map<String,ItemConfig> buildItem = FunctionManager.buildItem(strings);
+                roomConfig.items = buildItem;
+                roomConfig.round = room.getInt("round",15);
+
+                ////////////////////////////////////////////////////////////////
+
+
                 List<FloatTextInfoConfig> configs = new ArrayList<>();
                 if(room.exists("floatSpawnPos")){
                     for(Map<?,?> map: room.getMapList("floatSpawnPos")){
