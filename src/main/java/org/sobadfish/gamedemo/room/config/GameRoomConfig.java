@@ -139,6 +139,10 @@ public class GameRoomConfig {
      * 刷新箱子物品概率
      * */
     private int round = 15;
+    /**
+     * 箱子物品
+     * */
+    public boolean roundChest = false;
 
 
 
@@ -253,18 +257,21 @@ public class GameRoomConfig {
                 roomConfig.deathDrop = room.getBoolean("deathDrop",false);
                 roomConfig.canBreak = new ArrayList<>(room.getStringList("can-break"));
                 roomConfig.banBreak = new ArrayList<>(room.getStringList("ban-break"));
+                roomConfig.roundChest = room.getBoolean("roundChest",false);
 
-                //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
-                //////////////////////////////////////////////////////////
-                if(!new File(file+"/items.yml").exists()){
-                    TotalManager.saveResource("items.yml","/rooms/"+name+"/items.yml",false);
+                if(roomConfig.roundChest) {
+                    //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
+                    //////////////////////////////////////////////////////////
+                    if (!new File(file + "/items.yml").exists()) {
+                        TotalManager.saveResource("items.yml", "/rooms/" + name + "/items.yml", false);
+                    }
+
+                    Config item = new Config(file + "/items.yml", Config.YAML);
+                    List<Map> strings = item.getMapList("chests");
+                    Map<String, ItemConfig> buildItem = FunctionManager.buildItem(strings);
+                    roomConfig.items = buildItem;
+                    roomConfig.round = room.getInt("round", 15);
                 }
-
-                Config item = new Config(file + "/items.yml", Config.YAML);
-                List<Map> strings = item.getMapList("chests");
-                Map<String,ItemConfig> buildItem = FunctionManager.buildItem(strings);
-                roomConfig.items = buildItem;
-                roomConfig.round = room.getInt("round",15);
 
                 ////////////////////////////////////////////////////////////////
 
@@ -343,6 +350,7 @@ public class GameRoomConfig {
         }
         config.set("teamSpawn",teamSpawn);
 
+
         config.set("waitPosition",WorldInfoConfig.positionToString(worldInfo.getWaitPosition()));
         config.set("ban-command",banCommand);
         config.set("QuitRoom",quitRoomCommand);
@@ -351,6 +359,7 @@ public class GameRoomConfig {
         config.set("defeatCmd",defeatCommand);
         config.set("deathDrop",deathDrop);
         config.set("victoryCmd",victoryCommand);
+        config.set("roundChest",roundChest);
         config.set("roomStartMessage",gameStartMessage);
         List<Map<String,Object>> pos = new ArrayList<>();
         for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){

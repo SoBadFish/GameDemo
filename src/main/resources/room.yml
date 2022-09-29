@@ -15,6 +15,7 @@ QuitRoom: []
 AutomaticNextRound: true
 victoryCmd: []
 defeatCmd: []
+roundChest: false
 # 禁止破坏的方块
 ban-break:
   - "241"

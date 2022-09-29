@@ -616,7 +616,7 @@ public class RoomManager implements Listener {
                     }
                     Block block = event.getBlock();
 
-                    if(room.roomConfig.items.size() > 0) {
+                    if(room.roomConfig.items.size() > 0 && room.roomConfig.roundChest) {
                         if (room.getType() == GameType.START) {
                             ItemConfig config = room.getRandomItemConfig(block);
                             if (config != null) {
