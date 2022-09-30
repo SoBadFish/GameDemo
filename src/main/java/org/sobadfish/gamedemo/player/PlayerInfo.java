@@ -589,7 +589,7 @@ public class PlayerInfo {
         }else{
 
             lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
-            if(gameRoom.roomConfig.teamConfigs.size() > 0){
+            if(gameRoom.roomConfig.teamConfigs.size() > 1){
                 for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                     String me = "";
                     if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
