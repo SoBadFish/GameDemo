@@ -588,12 +588,7 @@ public class RoomManager implements Listener {
         Player player = event.getPlayer();
         if(event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.getAction() == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
             Item item = event.getItem();
-            if(event.getBlock() instanceof BlockCraftingTable || event.getBlock() instanceof BlockBed){
-                if(TotalManager.getRoomManager().getPlayerInfo(event.getPlayer()) != null){
-                    event.setCancelled();
-                    return;
-                }
-            }
+
             if (playerJoin.containsKey(player.getName())) {
                 String roomName = playerJoin.get(player.getName());
                 GameRoom room = getRoom(roomName);
