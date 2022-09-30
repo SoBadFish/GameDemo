@@ -164,7 +164,7 @@ public class GameRoomCreater {
             if(spawnSizeFlag != spawnSize) {
                 creater.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &r[&b设置队伍出生点&r " + teamName + " [&2" + (positions.size() + 1) + " &b/&d "+spawnSize+"&r]");
             }else{
-                if(positions.size() > spawnFlag+1){
+                if(new ArrayList<>(roomConfig.teamCfg.keySet()).size() > spawnFlag+1){
                     creater.sendForceMessage("&2设置 &r" + teamName + " &2出生点坐标完成");
                     creater.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &r[&b设置 &r"+ new ArrayList<>(roomConfig.teamCfg.keySet()).get(spawnFlag + 1) + " &2出生点 &r [&21 &b/&d "+spawnSize+"&r]");
                 }
