@@ -1026,22 +1026,28 @@ public class RoomManager implements Listener {
                     if(room.roomConfig.banBreak.contains(block.getId()+"")){
                         if(!room.roomConfig.canBreak.contains(block.getId()+"")){
                             event.setCancelled();
+                        }else{
+                            room.addSound(Sound.BLOCK_END_PORTAL_FRAME_FILL);
                         }
                     }
                     room.worldInfo.onChangeBlock(block, false);
 
                 }else {
+
                     if (room.worldInfo.getPlaceBlock().contains(block) || room.roomConfig.canBreak.contains(block.getId()+"")) {
                         room.worldInfo.onChangeBlock(block, false);
                     } else {
-                        info.sendMessage("&c无法破坏地图方块");
-                        event.setCancelled();
+                        if(!room.roomConfig.canBreak.contains(block.getId()+"")){
+                            info.sendMessage("&c无法破坏地图方块");
+                            event.setCancelled();
+                        }else{
+                            room.addSound(Sound.BLOCK_END_PORTAL_FRAME_FILL);
+                        }
                     }
                 }
             }
         }
     }
-
     /**
      * 修改玩家聊天信息事件
 
