@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * 事件控制器
+ * @author Sobadfish
  * */
 public class EventControl {
 

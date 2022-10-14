@@ -7,7 +7,9 @@ import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author Sobadfish
+ */
 public class EffectEvent extends IGameRoomEvent {
 
     public EffectEvent(GameRoomEventConfig.GameRoomEventItem item) {

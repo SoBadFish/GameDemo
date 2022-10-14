@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @author Sobadfish
+ */
 public class CustomEvent extends IGameRoomEvent {
 
     public int position = 0;

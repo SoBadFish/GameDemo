@@ -8,6 +8,9 @@ import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.config.GameRoomEventConfig;
 import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
 
+/**
+ * @author Sobadfish
+ */
 public class CommandEvent extends IGameRoomEvent {
 
     public CommandEvent(GameRoomEventConfig.GameRoomEventItem item) {
