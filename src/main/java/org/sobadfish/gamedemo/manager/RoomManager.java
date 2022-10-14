@@ -477,6 +477,7 @@ public class RoomManager implements Listener {
                     return;
                 }
 
+                /////////////
                 //会重复
                 if (playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT) {
                     event.setCancelled();

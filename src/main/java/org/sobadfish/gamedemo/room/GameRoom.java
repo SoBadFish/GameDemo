@@ -36,7 +36,7 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * 战桥房间信息
+ * 小游戏房间信息
  * @author Sobadfish
  * @date 2022/9/9
  */

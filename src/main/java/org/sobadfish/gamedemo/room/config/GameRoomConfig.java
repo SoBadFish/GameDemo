@@ -40,6 +40,7 @@ public class GameRoomConfig {
      * 等待时长
      * */
     public int waitTime;
+
     /**
      * 复活时长
      * */
@@ -140,7 +141,7 @@ public class GameRoomConfig {
      * */
     private int round = 15;
     /**
-     * 箱子物品
+     * 打开箱子是否刷新物品
      * */
     public boolean roundChest = false;
 
