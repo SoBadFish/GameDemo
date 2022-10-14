@@ -27,6 +27,7 @@ import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.ItemConfig;
+import org.sobadfish.gamedemo.room.event.EventControl;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfo;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.gamedemo.room.world.WorldInfo;
@@ -74,6 +75,11 @@ public class GameRoom {
 
     public boolean close;
 
+    /**
+     * 事件控制器
+     * */
+    private final EventControl eventControl;
+
     private GameRoom(GameRoomConfig roomConfig){
         this.roomConfig = roomConfig;
         this.worldInfo = new WorldInfo(this,roomConfig.worldInfo);
@@ -84,7 +90,8 @@ public class GameRoom {
         }
 
         //启动事件
-
+        eventControl = new EventControl(this,roomConfig.eventConfig);
+        eventControl.initAll(this);
     }
 
     public ArrayList<FloatTextInfo> getFloatTextInfos() {
@@ -108,6 +115,14 @@ public class GameRoom {
             return roomConfig.items.get(block.getId()+"");
         }
         return null;
+    }
+
+    /**
+     * 获取事件控制器
+     *
+     * */
+    public EventControl getEventControl() {
+        return eventControl;
     }
 
 
@@ -515,7 +530,7 @@ public class GameRoom {
                 onWait();
                 break;
             case START:
-
+                eventControl.enable = true;
                 worldInfo.isStart = true;
                 try {
                     onStart();
@@ -582,6 +597,7 @@ public class GameRoom {
 
     private void onStart() {
         hasStart = true;
+        eventControl.run();
         if(loadTime == -1 && teamAll){
             //TODO 房间首次重置
             for(FloatTextInfoConfig config: roomConfig.floatTextInfoConfigs){

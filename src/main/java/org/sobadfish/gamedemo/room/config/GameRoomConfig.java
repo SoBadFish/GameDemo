@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.room.config;
 
 import cn.nukkit.utils.Config;
+import org.sobadfish.gamedemo.GameDemoMain;
 import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.team.config.TeamConfig;
@@ -131,6 +132,17 @@ public class GameRoomConfig {
      * 除了列表内的方块
      * */
     public ArrayList<String> banBreak = new ArrayList<>();
+
+    /**
+     * 游戏的事件
+     * */
+    public GameRoomEventConfig eventConfig;
+
+    /**
+     * 游戏备选事件列表
+     * */
+    public GameRoomEventConfig eventListConfig;
+
 
     /**
      * 箱子物品
@@ -292,6 +304,17 @@ public class GameRoomConfig {
                 }else{
                     roomConfig.gameStartMessage = defaultGameStartMessage();
                 }
+                if (!new File(file + "/event.yml").exists()) {
+                    TotalManager.saveResource("event.yml", "/rooms/" + name + "/event.yml", false);
+                }
+                if (!new File(file + "/roomEventList.yml").exists()) {
+                    TotalManager.saveResource("roomEventList.yml", "/rooms/" + name + "/roomEventList.yml", false);
+                }
+                TotalManager.sendMessageToConsole("&e开始加载 房间主事件");
+                roomConfig.eventConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/event.yml"));
+                TotalManager.sendMessageToConsole("&e开始加载 房间备选事件");
+                roomConfig.eventListConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/roomEventList.yml"));
+
                 return roomConfig;
 
             }catch (Exception e){

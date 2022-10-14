@@ -27,6 +27,7 @@ import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.message.ScoreBoardMessage;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
+import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -589,8 +590,15 @@ public class PlayerInfo {
             lore.add("   ");
 
         }else{
+            IGameRoomEvent event = getGameRoom().getEventControl().getNextEvent();
+            if(event != null){
+                lore.add(event.display()+" &a"+formatTime1(event.getEventTime() - getGameRoom().getEventControl().loadTime));
+                lore.add("    ");
+            }else{
 
-            lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
+                lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
+            }
+//            lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
             if(gameRoom.roomConfig.teamConfigs.size() > 1){
                 for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                     String me = "";

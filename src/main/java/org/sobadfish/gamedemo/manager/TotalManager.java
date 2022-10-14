@@ -8,6 +8,9 @@ import org.sobadfish.gamedemo.manager.data.PlayerDataManager;
 import org.sobadfish.gamedemo.manager.data.PlayerTopManager;
 import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
+import org.sobadfish.gamedemo.room.event.defaults.CommandEvent;
+import org.sobadfish.gamedemo.room.event.defaults.CustomEvent;
+import org.sobadfish.gamedemo.room.event.defaults.EffectEvent;
 
 import java.io.File;
 
@@ -55,6 +58,9 @@ public class TotalManager {
         TotalManager.plugin = pluginBase;
         checkServer();
         loadConfig();
+        RoomEventManager.register("custom", CustomEvent.class);
+        RoomEventManager.register("effect", EffectEvent.class);
+        RoomEventManager.register("command", CommandEvent.class);
         ThreadManager.init();
     }
 
