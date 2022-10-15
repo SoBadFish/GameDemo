@@ -19,7 +19,8 @@ public class GameDemoMain extends PluginBase {
     @Override
     public void onEnable() {
 
-
+        //字符生成地址 http://www.network-science.de/ascii/
+        //Font: small
         this.getLogger().info(TextFormat.colorize('&',"&e  ___                ___                "));
         this.getLogger().info(TextFormat.colorize('&',"&e / __|__ _ _ __  ___|   \\ ___ _ __  ___ "));
         this.getLogger().info(TextFormat.colorize('&',"&e| (_ / _` | '  \\/ -_) |) / -_) '  \\/ _ \\"));
