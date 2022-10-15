@@ -165,9 +165,5 @@ public class ThreadManager {
                 }
             }
         }
-
     }
-
-
-
 }
