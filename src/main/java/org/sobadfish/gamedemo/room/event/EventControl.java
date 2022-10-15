@@ -57,6 +57,13 @@ public class EventControl {
 
     public boolean enable;
 
+    /**
+     * 事件控制器流程
+     * 本方法已封装好，无需任何更改
+     * 如果想让一个事件在结束后继续执行，只需要
+     * 将那个事件继承接口{@link IEventProcess}
+     *
+     * */
     public void run(){
         if(enable){
             loadTime++;
@@ -82,7 +89,7 @@ public class EventControl {
                     }else{
                         if(loadTime >= event.getEventTime()) {
                             loadTime = 0;
-                            if(((IEventProcess) event).enable()){
+                            if(((IEventProcess) event).onEnable()){
                                 ((IEventProcess) event).doNextEvent(room);
                                 status.successCount++;
                             }else{

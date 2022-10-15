@@ -90,7 +90,7 @@ public class CustomEvent extends IGameRoomEvent implements IEventProcess {
 
 
     @Override
-    public boolean enable() {
+    public boolean onEnable() {
         isEnable = true;
         return true;
     }
