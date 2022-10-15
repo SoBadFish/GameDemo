@@ -4,6 +4,7 @@ package org.sobadfish.gamedemo.room.event.defaults;
 import org.sobadfish.gamedemo.manager.RoomEventManager;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.config.GameRoomEventConfig;
+import org.sobadfish.gamedemo.room.event.IEventProcess;
 import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Random;
 /**
  * @author Sobadfish
  */
-public class CustomEvent extends IGameRoomEvent {
+public class CustomEvent extends IGameRoomEvent implements IEventProcess {
 
     public int position = 0;
 
@@ -88,6 +89,18 @@ public class CustomEvent extends IGameRoomEvent {
     public boolean isEnable;
 
 
+    @Override
+    public boolean enable() {
+        isEnable = true;
+        return true;
+    }
+
+    @Override
+    public boolean isEnable() {
+        return isEnable;
+    }
+
+    @Override
     public IGameRoomEvent nextEvent(){
         IGameRoomEvent event = null;
         switch (runType){
@@ -111,10 +124,16 @@ public class CustomEvent extends IGameRoomEvent {
                     event = gameRoomEvents.get(position);
                 }
                 break;
-                default:break;
+            default:break;
         }
         return event;
 
+    }
+
+    @Override
+    public void doNextEvent(GameRoom room) {
+        onStart(room);
+        this.position++;
     }
 
     @Override

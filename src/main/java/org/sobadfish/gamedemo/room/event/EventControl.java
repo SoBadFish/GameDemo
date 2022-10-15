@@ -4,7 +4,6 @@ package org.sobadfish.gamedemo.room.event;
 import org.sobadfish.gamedemo.manager.RoomEventManager;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.config.GameRoomEventConfig;
-import org.sobadfish.gamedemo.room.event.defaults.CustomEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +22,8 @@ public class EventControl {
 
     private final GameRoom room;
 
-    private IGameRoomEvent lastEvent;
+    public EventStatus status;
 
-    private IGameRoomEvent thisEvent;
-
-    //常驻事件
-    private List<IGameRoomEvent> residentEvent = new ArrayList<>();
 
     /**
      * 备选事件
@@ -42,6 +37,7 @@ public class EventControl {
     public EventControl(GameRoom room, GameRoomEventConfig eventConfig){
         this.eventConfig = eventConfig;
         this.room = room;
+        status = new EventStatus();
         for(GameRoomEventConfig.GameRoomEventItem item : eventConfig.getItems()){
             IGameRoomEvent event = RoomEventManager.getEventByType(item);
             if(event != null){
@@ -66,40 +62,45 @@ public class EventControl {
             loadTime++;
             if(position < events.size()){
                 IGameRoomEvent event = events.get(position);
-                if(event instanceof CustomEvent){
-                    if(((CustomEvent) event).isEnable){
-                        IGameRoomEvent event1 = ((CustomEvent) event).nextEvent();
+                if(event instanceof IEventProcess){
+
+                    if(((IEventProcess) event).isEnable()){
+                        IGameRoomEvent event1 = ((IEventProcess) event).nextEvent();
                         if(event1 == null ){
                             loadTime = 0;
-                            lastEvent = event;
+                            status.lastEvent = event;
                             position++;
-                            thisEvent = null;
+                            status.thisEvent = null;
                         }else{
                             if(loadTime >= event.getEventTime()){
                                 loadTime = 0;
-                                event.onStart(room);
-                                ((CustomEvent) event).position++;
-                                thisEvent = null;
+                                ((IEventProcess) event).doNextEvent(room);
+                                status.thisEvent = null;
+                                status.successCount++;
                             }
-
                         }
-
                     }else{
                         if(loadTime >= event.getEventTime()) {
                             loadTime = 0;
-                            ((CustomEvent) event).isEnable = true;
-                            event.onStart(room);
-                            ((CustomEvent) event).position++;
-                            thisEvent = null;
+                            if(((IEventProcess) event).enable()){
+                                ((IEventProcess) event).doNextEvent(room);
+                                status.successCount++;
+                            }else{
+                                //事件没有成功启动，跳过执行下一个事件
+                                position++;
+                                status.defeatCount++;
+                            }
+                            status.thisEvent = null;
                         }
                     }
                 }else{
                     if(loadTime >= event.getEventTime()){
                         loadTime = 0;
-                        lastEvent = event;
+                        status.lastEvent = event;
                         position++;
-                        thisEvent = null;
+                        status.thisEvent = null;
                         event.onStart(room);
+                        status.successCount++;
                     }
 
                 }
@@ -107,17 +108,17 @@ public class EventControl {
             }else{
                 loadTime = 0;
             }
-            if(thisEvent != null && thisEvent instanceof IEventDurationTime){
-                ((IEventDurationTime) thisEvent).update();
-                if(((IEventDurationTime) thisEvent).isOutTime()){
-                    thisEvent = null;
+            if(status.thisEvent != null && status.thisEvent instanceof IEventDurationTime){
+                ((IEventDurationTime) status.thisEvent).update();
+                if(((IEventDurationTime) status.thisEvent).isOutTime()){
+                    status.thisEvent = null;
                 }
             }
-            for(IGameRoomEvent event: new ArrayList<>(residentEvent)){
+            for(IGameRoomEvent event: new ArrayList<>(status.residentEvent)){
                 if(event instanceof IEventDurationTime){
                     ((IEventDurationTime) event).update();
                     if(((IEventDurationTime) event).isOutTime()){
-                        residentEvent.remove(event);
+                        status.residentEvent.remove(event);
                     }
                 }
             }
@@ -131,9 +132,7 @@ public class EventControl {
         return eventItems;
     }
 
-    public IGameRoomEvent getLastEvent() {
-        return lastEvent;
-    }
+
 
     public IGameRoomEvent getNextEvent() {
         if(hasEvent()){
@@ -159,19 +158,87 @@ public class EventControl {
     }
 
     public void addResidentEvent(IGameRoomEvent event){
-        residentEvent.add(event);
+        status.residentEvent.add(event);
     }
 
     public void removeResidentEvent(IGameRoomEvent event){
-        residentEvent.remove(event);
+        status.residentEvent.remove(event);
     }
 
     public boolean hasResidentEvent(String name){
-        for(IGameRoomEvent event: residentEvent){
+        for(IGameRoomEvent event: status.residentEvent){
             if(event.getEventItem().eventType.equalsIgnoreCase(name)){
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * 事件控制器状态
+     * */
+    private static class EventStatus{
+        /**
+         * 成功执行的事件数量
+         * */
+        public int successCount;
+        /**
+         * 成功失败的事件数量
+         * */
+        public int defeatCount;
+        /**
+         * 上次执行的事件
+         * */
+        private IGameRoomEvent lastEvent;
+
+        /**
+         * 当前正在倒计时的事件
+         * */
+        private IGameRoomEvent thisEvent;
+
+        /**
+         * 长时间保持的事件
+         * */
+        private List<IGameRoomEvent> residentEvent = new ArrayList<>();
+
+        public void setLastEvent(IGameRoomEvent lastEvent) {
+            this.lastEvent = lastEvent;
+        }
+
+        public void setDefeatCount(int defeatCount) {
+            this.defeatCount = defeatCount;
+        }
+
+        public void setSuccessCount(int successCount) {
+            this.successCount = successCount;
+        }
+
+        public void setThisEvent(IGameRoomEvent thisEvent) {
+            this.thisEvent = thisEvent;
+        }
+
+        public IGameRoomEvent getThisEvent() {
+            return thisEvent;
+        }
+
+        public int getDefeatCount() {
+            return defeatCount;
+        }
+
+        public int getSuccessCount() {
+            return successCount;
+        }
+
+        public IGameRoomEvent getLastEvent() {
+            return lastEvent;
+        }
+
+        public List<IGameRoomEvent> getResidentEvent() {
+            return residentEvent;
+        }
+
+        public void setResidentEvent(List<IGameRoomEvent> residentEvent) {
+            this.residentEvent = residentEvent;
+        }
     }
 }
