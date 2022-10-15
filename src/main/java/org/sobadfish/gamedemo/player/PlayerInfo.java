@@ -72,6 +72,8 @@ public class PlayerInfo {
 
     public PlayerEnderChestInventory eInventory;
 
+    public float speed;
+
     //助攻
     public LinkedHashMap<PlayerInfo,Long> assistsPlayers = new LinkedHashMap<>();
 
@@ -82,9 +84,15 @@ public class PlayerInfo {
      * */
     public LinkedHashMap<Integer,Item> inventoryItem = new LinkedHashMap<>();
 
+
+    /**
+     * 实例化
+     * */
     public PlayerInfo(EntityHuman player){
         this.player = player;
+        this.speed = player.getMovementSpeed();
     }
+
 
     public LinkedHashMap<PlayerInfo, Long> getAssistsPlayers() {
         return assistsPlayers;
@@ -490,11 +498,16 @@ public class PlayerInfo {
         }
     }
 
+    public void setMoveSpeed(float speed){
+        player.setMovementSpeed(speed);
+    }
+
     public void clear(){
         if(player instanceof Player){
             if(((Player) player).isOnline()){
                 player.setNameTag(player.getName());
                 player.getInventory().clearAll();
+                player.setMovementSpeed(speed);
                 player.getEnderChestInventory().clearAll();
                 ((Player) player).getFoodData().reset();
                 player.setHealth(player.getMaxHealth());
