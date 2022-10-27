@@ -12,6 +12,8 @@ import java.util.Objects;
 
 /**
  * 玩家数据
+ *
+ * @author Sobadfish
  * */
 public class PlayerData {
 
