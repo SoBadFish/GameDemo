@@ -6,9 +6,8 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.inventory.PlayerEnderChestInventory;
-import cn.nukkit.inventory.PlayerInventory;
-import cn.nukkit.item.*;
+import cn.nukkit.item.Item;
+import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
@@ -68,9 +67,9 @@ public class PlayerInfo {
 
     private PlayerInfo damageByInfo = null;
 
-    public PlayerInventory inventory;
+    public Map<Integer,Item> inventory;
 
-    public PlayerEnderChestInventory eInventory;
+    public  Map<Integer,Item> eInventory;
 
     public float speed;
 
@@ -161,8 +160,8 @@ public class PlayerInfo {
      * */
     public void init(){
         if(TotalManager.getConfig().getBoolean("save-playerInventory",true)){
-            inventory = getPlayer().getInventory();
-            eInventory = getPlayer().getEnderChestInventory();
+            inventory = getPlayer().getInventory().getContents();
+            eInventory = getPlayer().getEnderChestInventory().getContents();
         }
         getPlayer().setHealth(getPlayer().getMaxHealth());
         if(getPlayer() instanceof Player) {
@@ -513,8 +512,8 @@ public class PlayerInfo {
                 player.setHealth(player.getMaxHealth());
                 ((Player) player).setExperience(0,0);
                 if(inventory != null && eInventory != null){
-                    player.getInventory().setContents(inventory.getContents());
-                    player.getEnderChestInventory().setContents(eInventory.getContents());
+                    player.getInventory().setContents(inventory);
+                    player.getEnderChestInventory().setContents(eInventory);
                 }
                 if(getPlayer() instanceof Player) {
                     ((Player) getPlayer()).setGamemode(0);

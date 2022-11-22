@@ -2,7 +2,6 @@ package org.sobadfish.gamedemo.manager;
 
 
 
-
 import org.sobadfish.gamedemo.entity.GameFloatText;
 
 import java.util.List;
