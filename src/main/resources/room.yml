@@ -5,6 +5,10 @@ reSpawnTime: 5
 deathDrop: true
 hasWatch: true
 waitTime: 120
+#游戏内等待 当游戏开始后会有一段时间的等待
+gameInWait: 10
+
+
 max-player-waitTime: 20
 minPlayerSize: 4
 maxPlayerSize: 16
@@ -13,15 +17,23 @@ waitPosition: ""
 ban-command: []
 QuitRoom: []
 AutomaticNextRound: true
+
 victoryCmd: []
 defeatCmd: []
 roundChest: false
 # 禁止破坏的方块
+# 当禁止破坏的方块大于0时，全地图可破坏
 ban-break:
   - "241"
   - "20"
+
+# 当可破坏的方法数大于0时，地图禁止破坏
 can-break: []
+
 floatSpawnPos: []
+# 弓箭可破坏的方块
+arrow-break:
+  - "35"
 
 roomStartMessage:
   - "&a■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
