@@ -407,9 +407,10 @@ public class PlayerInfo {
             isSendkey = false;
         }
         if (player instanceof Player) {
-            ((Player) player).setFoodEnabled(true);
-            ((Player) player).getFoodData().reset();
-
+            if(gameRoom.getRoomConfig().enableFood){
+                ((Player) player).setFoodEnabled(true);
+                ((Player) player).getFoodData().reset();
+            }
             if (!((Player) player).isOnline()) {
                 playerType = PlayerType.LEAVE;
                 return;
@@ -533,6 +534,7 @@ public class PlayerInfo {
     }
     @Override
     public String toString(){
+        PlayerData data = TotalManager.getDataManager().getData(getName());
         String teamName = "&r";
         String playerName = "&7"+player.getName();
         if(teamInfo != null && !isWatch()){
@@ -542,7 +544,7 @@ public class PlayerInfo {
             teamName = "&7[旁观] ";
         }
 
-        return teamName+playerName;
+        return "&7["+data.getLevelString()+"&7]&r "+teamName+playerName;
     }
 
     public TeamInfo getTeamInfo() {
@@ -551,6 +553,10 @@ public class PlayerInfo {
 
     private int spawnTime = 0;
 
+    /**
+     * 表现形式不好看
+     * */
+    @Deprecated
     public static String formatTime(int s){
         int min = s / 60;
         int ss = s % 60;
@@ -608,7 +614,7 @@ public class PlayerInfo {
                 lore.add("    ");
             }else{
 
-                lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
+                lore.add("游戏结束: &a"+formatTime1(getGameRoom().loadTime));
             }
 //            lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
             if(gameRoom.roomConfig.teamConfigs.size() > 1){

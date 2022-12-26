@@ -5,6 +5,9 @@ scoreboard-title: "&a小游戏"
 # 是否保存玩家背包
 save-playerInventory:  true
 
+# 递增经验
+# 每下一级的经验为 up-exp * 等级
+up-exp: 500
 
 
 game-logo: "author: sobadfish "

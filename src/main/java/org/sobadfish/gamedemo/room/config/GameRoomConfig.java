@@ -1,7 +1,6 @@
 package org.sobadfish.gamedemo.room.config;
 
 import cn.nukkit.utils.Config;
-import org.sobadfish.gamedemo.GameDemoMain;
 import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.team.config.TeamConfig;
@@ -84,6 +83,11 @@ public class GameRoomConfig {
      * 是否允许旁观
      * */
     public boolean hasWatch = true;
+
+    /**
+     * 是否减少饥饿值
+     * */
+    public boolean enableFood = false;
 
 
     /**
@@ -271,7 +275,7 @@ public class GameRoomConfig {
                 roomConfig.canBreak = new ArrayList<>(room.getStringList("can-break"));
                 roomConfig.banBreak = new ArrayList<>(room.getStringList("ban-break"));
                 roomConfig.roundChest = room.getBoolean("roundChest",false);
-
+                roomConfig.enableFood = room.getBoolean("enable-food",false);
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
@@ -368,6 +372,7 @@ public class GameRoomConfig {
         config.set("callbackY",callbackY);
         config.set("waitTime",waitTime);
         config.set("reSpawnTime",reSpawnTime);
+        config.set("enable-food",enableFood);
         config.set("max-player-waitTime",maxWaitTime);
         config.set("minPlayerSize",minPlayerSize);
         config.set("maxPlayerSize",maxPlayerSize);
