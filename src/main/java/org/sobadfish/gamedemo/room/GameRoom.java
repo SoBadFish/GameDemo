@@ -630,6 +630,18 @@ public class GameRoom {
             Server.getInstance().getPluginManager().callEvent(event);
 
         }
+        //TODO 可以在这里实现胜利的条件
+        ////////////////////////// 示例算法 ///////////////////////////
+        demoGameEnd();
+        ////////////////////////// 示例算法 ///////////////////////////
+    }
+
+    /**
+     * 游戏结束的条件示例代码
+     * 可参考实现自己的逻辑
+     * 这个方法的主要实现逻辑为 PVP，存活到最后为胜利条件
+     * */
+    private void demoGameEnd(){
         if(loadTime > 0) {
             //TODO 在房间倒计时内
             for (TeamInfo teamInfo : teamInfos) {
@@ -637,28 +649,32 @@ public class GameRoom {
             }
             if(getRoomConfig().teamConfigs.size() > 1) {
                 if (getLiveTeam().size() == 1) {
+                    //当有多个队伍的时候 只剩余一个队伍时将这个队伍中所有的玩家都扔进 胜利的玩家列表。
                     TeamInfo teamInfo = getLiveTeam().get(0);
                     teamInfo.getVictoryPlayers().addAll(teamInfo.getTeamPlayers());
                     gameEnd(teamInfo,true);
                 }
             }else{
+                //当仅有一个队伍时，把最终存活的玩家放到胜利列表中
                 TeamInfo teamInfo = getTeamInfos().get(0);
                 ArrayList<PlayerInfo> pl = teamInfo.getLivePlayer();
+                //判断是否为唯一幸存者
                 if(pl.size() == 1){
                     teamInfo.getVictoryPlayers().add(pl.get(0));
                     gameEnd(teamInfo,false);
                 }
             }
-        }else{
+        } else{
             //TODO 在房间倒计时结束
             TeamInfo successInfo;
             if(getRoomConfig().teamConfigs.size() > 1) {
+                //在这个判断条件下为多队伍状态
+                //TODO 倒计时结束后 找到血量最高的队伍判胜
                 ArrayList<TeamInfo> teamInfos = getLiveTeam();
                 if (teamInfos.size() > 0) {
                     int pl = 0;
                     double dh = 0;
                     successInfo = teamInfos.get(0);
-
                     for (TeamInfo info : teamInfos) {
                         ArrayList<PlayerInfo> successInfos = info.getLivePlayer();
                         if (successInfos.size() > pl) {
@@ -678,6 +694,8 @@ public class GameRoom {
                     gameEnd(successInfo,true);
                 }
             }else{
+                //在这个判断条件下为单队伍状态
+                //TODO 倒计时结束后 找到血量最高的玩家判胜，其余玩家均失败
                 double h = 0;
                 PlayerInfo successPlayerInfo = null;
                 TeamInfo teamInfo = getTeamInfos().get(0);
@@ -696,14 +714,14 @@ public class GameRoom {
                         teamInfo.getDefeatPlayers().add(info);
                     }
                 }
+                //游戏结束
                 gameEnd(teamInfo,false);
             }
-            //TODO 当时间结束的一些逻辑
-            type = GameType.END;
-            worldInfo.setClose(true);
-            loadTime = -1;
+
+
         }
     }
+
 
     private void onWait() {
         if(getPlayerInfos().size() >= getRoomConfig().minPlayerSize){
@@ -754,6 +772,7 @@ public class GameRoom {
 
     /**
      * 关闭房间
+     * 已设计好算法，不建议修改
      * */
     public void onDisable(){
         if(close){
