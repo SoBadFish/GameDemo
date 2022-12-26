@@ -287,7 +287,7 @@ public class PlayerData {
          * */
         GAME("游戏次数");
 
-        protected String name;
+        private final String name;
 
         DataType(String name){
             this.name = name;
