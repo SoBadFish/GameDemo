@@ -10,7 +10,7 @@ import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
-import org.sobadfish.gamedemo.room.GameRoomCreater;
+import org.sobadfish.gamedemo.room.GameRoomCreator;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
  * 游戏管理主命令
  * 这个命令仅限管理员执行
  * 可以根据游戏的具体需求修改
- * 创建游戏房间的类参考{@link GameRoomCreater}
+ * 创建游戏房间的类参考{@link GameRoomCreator}
  *
  * @author Sobadfish
  * @date 2022/9/12
@@ -45,35 +45,35 @@ public class GameAdminCommand extends Command {
      * @param value 创建时传入的参数
      * */
     private boolean createSetRoom(CommandSender commandSender, String value){
-        GameRoomCreater creater;
+        GameRoomCreator creator;
         if (create.containsKey(commandSender.getName())) {
-            creater = create.get(commandSender.getName());
+            creator = create.get(commandSender.getName());
         } else {
-            creater = new GameRoomCreater(new PlayerInfo((Player) commandSender));
-            create.put(commandSender.getName(), creater);
+            creator = new GameRoomCreator(new PlayerInfo((Player) commandSender));
+            create.put(commandSender.getName(), creator);
         }
-        creater.onCreatePreset(value);
+        creator.onCreatePreset(value);
         return true;
     }
 
     /**
      * 创建房间方法
-     * 具体的创建流程参考{@link GameRoomCreater}
+     * 具体的创建流程参考{@link GameRoomCreator}
      * 当onCreateNext 为false的时候就代表创建流程结束，执行文件的写入
      * @param commandSender 执行指令的用户
      * @return 是否创建成功
      *
      * */
     private boolean createRoom(CommandSender commandSender){
-        GameRoomCreater creater;
+        GameRoomCreator creator;
         if(create.containsKey(commandSender.getName())){
-            creater = create.get(commandSender.getName());
+            creator = create.get(commandSender.getName());
         }else{
-            creater = new GameRoomCreater(new PlayerInfo((Player) commandSender));
-            create.put(commandSender.getName(),creater);
+            creator = new GameRoomCreator(new PlayerInfo((Player) commandSender));
+            create.put(commandSender.getName(),creator);
         }
-        if(!creater.onCreateNext()){
-            if(!creater.createRoom()){
+        if(!creator.onCreateNext()){
+            if(!creator.createRoom()){
                 commandSender.sendMessage("房间创建失败");
             }
         }
@@ -141,15 +141,15 @@ public class GameAdminCommand extends Command {
             case "back":
                 if(commandSender instanceof Player) {
                     if (create.containsKey(commandSender.getName())) {
-                        GameRoomCreater creater = create.get(commandSender.getName());
-                        if(creater.spawnSizeFlag > 0){
-                            creater.spawnSizeFlag--;
+                        GameRoomCreator creator = create.get(commandSender.getName());
+                        if(creator.spawnSizeFlag > 0){
+                            creator.spawnSizeFlag--;
                             TotalManager.sendMessageToObject("&a成功回退出生点的设置",commandSender);
-                        }else if(creater.spawnFlag > 0){
-                            creater.spawnFlag--;
+                        }else if(creator.spawnFlag > 0){
+                            creator.spawnFlag--;
                             TotalManager.sendMessageToObject("&a成功回退队伍出生点的设置",commandSender);
-                        }else if(creater.setFlag > 1){
-                            creater.setFlag--;
+                        }else if(creator.setFlag > 1){
+                            creator.setFlag--;
                             TotalManager.sendMessageToObject("&a成功回退预设的设置",commandSender);
                         }
 
@@ -338,7 +338,7 @@ public class GameAdminCommand extends Command {
             commandSender.sendMessage("请先创建房间模板");
             return;
         }
-       GameRoomCreater creater = create.get(commandSender.getName());
+       GameRoomCreator creater = create.get(commandSender.getName());
         GameRoomConfig roomConfig = creater.getRoomConfig();
         if(roomConfig != null) {
             GameRoomConfig.loadTeamConfig(roomConfig);
@@ -350,5 +350,5 @@ public class GameAdminCommand extends Command {
     }
 
 
-    private final LinkedHashMap<String, GameRoomCreater> create = new LinkedHashMap<>();
+    private final LinkedHashMap<String, GameRoomCreator> create = new LinkedHashMap<>();
 }
