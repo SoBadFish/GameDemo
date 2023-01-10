@@ -173,7 +173,6 @@ public class GameCommand extends Command {
                     }else{
                         playerInfo.sendForceMessage("&a你已加入 "+roomConfig.getName()+" 房间");
                     }
-//                    if (BedWarMain.getRoomManager().hasRoom(roomConfig.name)) {
                     DisPlayWindowsFrom.FROM.remove(player.getName());
 
                 }

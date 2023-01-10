@@ -8,6 +8,7 @@ import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
 import org.sobadfish.gamedemo.panel.ChestInventoryPanel;
 import org.sobadfish.gamedemo.panel.from.GameFrom;
+import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 
@@ -51,7 +52,7 @@ public class PlayerItem extends BasePlayPanelItemInstance{
         lore.add(TextFormat.colorize('&',"&r "));
         lore.add(TextFormat.colorize('&',"&r&7血量 &a"+this.info.getPlayer().getHealth()+" / "+this.info.getPlayer().getMaxHealth()));
         lore.add(TextFormat.colorize('&',"&r  "));
-        lore.add(TextFormat.colorize('&',"&r&7击杀 &a"+this.info.getKillCount()));
+        lore.add(TextFormat.colorize('&',"&r&7击杀 &a"+this.info.getData(PlayerData.DataType.KILL)));
         lore.add(TextFormat.colorize('&',"&r   "));
         String status = "&a存活";
 

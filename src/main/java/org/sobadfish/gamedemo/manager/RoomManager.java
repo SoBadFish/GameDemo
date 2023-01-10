@@ -804,7 +804,6 @@ public class RoomManager implements Listener {
     @EventHandler
     public void onFrom(PlayerFormRespondedEvent event){
         if(event.wasClosed()){
-            DisPlayWindowsFrom.FROM.remove(event.getPlayer().getName());
             return;
         }
         Player player = event.getPlayer();
@@ -941,7 +940,7 @@ public class RoomManager implements Listener {
         event.getRoom().sendTipMessage(FunctionManager.getCentontString("&b游戏结束",line.length()));
         event.getRoom().sendTipMessage("");
         for(PlayerInfo playerInfo: event.getTeamInfo().getVictoryPlayers()){
-            event.getRoom().sendTipMessage(FunctionManager.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getKillCount())+" 助攻: "+playerInfo.getAssists(),line.length()));
+            event.getRoom().sendTipMessage(FunctionManager.getCentontString("&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getData(PlayerData.DataType.KILL))+" 助攻: "+playerInfo.getData(PlayerData.DataType.ASSISTS),line.length()));
             event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",playerInfo.getName())));
         }
         event.getRoom().sendTipMessage("&a"+line);
