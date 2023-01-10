@@ -30,7 +30,8 @@ public class TeamChoseItem {
      * */
     public static Item get(){
         Item item = Item.get(69);
-        item.setCustomName(TextFormat.colorize('&',"&r&l&e点我选择队伍"));
+        item.setCustomName(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("chose-team-button",
+                "&r&l&e点我选择队伍")));
         CompoundTag tag = item.getNamedTag();
         tag.putString(TotalManager.GAME_NAME,"choseTeam");
         item.setNamedTag(tag);

@@ -60,7 +60,7 @@ public class RandomJoinManager {
         iPlayerInfo.playerInfo = info;
         iPlayerInfo.isNext = isNext;
         if(playerInfos.contains(iPlayerInfo)){
-            info.sendForceMessage("&c取消匹配");
+            info.sendForceMessage(TotalManager.getLanguage().getLanguage("matching-cancel","&c取消匹配"));
             playerInfos.remove(iPlayerInfo);
             return;
         }

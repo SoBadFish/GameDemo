@@ -6,7 +6,7 @@
 
     <groupId>org.sobadfish</groupId>
     <artifactId>GameDemo</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
 
     <dependencies>
         <dependency>
@@ -45,6 +45,7 @@
             <scope>system</scope>
             <systemPath> ${project.basedir}/lib/Sakura-1.0.4-Release.jar</systemPath>
         </dependency>
+
         <dependency>
             <groupId>com.smallaswater.npc</groupId>
             <artifactId>RsNPCX</artifactId>

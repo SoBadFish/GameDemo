@@ -7,6 +7,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.manager.LanguageManager;
 import org.sobadfish.gamedemo.manager.RandomJoinManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
@@ -26,8 +27,10 @@ import org.sobadfish.gamedemo.room.config.GameRoomConfig;
  */
 public class GameCommand extends Command {
 
+    public LanguageManager language = TotalManager.getLanguage();
+
     public GameCommand(String name) {
-        super(name,"游戏房间");
+        super(name,TotalManager.getLanguage().getLanguage("command-room","游戏房间"));
     }
 
 
@@ -40,9 +43,9 @@ public class GameCommand extends Command {
                 if(i != null){
                     info = i;
                 }
-                GameFrom simple = new GameFrom(TotalManager.getTitle(), "请选择地图", DisPlayWindowsFrom.getId(51530, 99810));
+                GameFrom simple = new GameFrom(TotalManager.getTitle(), language.getLanguage("command-from-chose-world","请选择地图"), DisPlayWindowsFrom.getId(51530, 99810));
                 PlayerInfo finalInfo = info;
-                simple.add(new BaseIButton(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
+                simple.add(new BaseIButton(new ElementButton(language.getLanguage("command-from-random","随机匹配"),new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
                     @Override
                     public void onClick(Player player) {
                         RandomJoinManager.joinManager.join(finalInfo,null);
@@ -78,7 +81,7 @@ public class GameCommand extends Command {
                         if (player != null) {
                             GameRoom room = player.getGameRoom();
                             if (room.quitPlayerInfo(player,true)) {
-                                playerInfo.sendForceMessage("&a你成功离开房间: &r" + room.getRoomConfig().getName());
+                                playerInfo.sendForceMessage(language.getLanguage("command-player-quit-room","&a你成功离开房间: &r[1]",room.getRoomConfig().getName()));
 
                                 room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(commandSender,cmd));
                             }
@@ -88,10 +91,10 @@ public class GameCommand extends Command {
                         if (strings.length > 1) {
                             String name = strings[1];
                             if (TotalManager.getRoomManager().joinRoom(playerInfo, name)) {
-                                playerInfo.sendForceMessage("&a成功加入房间: &r"+name);
+                                playerInfo.sendForceMessage(language.getLanguage("command-player-join-room","&a成功加入房间: &r[1]",name));
                             }
                         } else {
-                            playerInfo.sendForceMessage("&c请输入房间名");
+                            playerInfo.sendForceMessage(language.getLanguage("command-player-join-room-unknown","&c请输入房间名"));
                         }
                         break;
                     case "rjoin":
@@ -115,7 +118,7 @@ public class GameCommand extends Command {
                             RandomJoinManager.joinManager.join(info,finalName);
 
                         }else{
-                            commandSender.sendMessage("请在控制台执行");
+                            commandSender.sendMessage(language.getLanguage("do-not-console","请不要在控制台执行"));
                         }
 
                         break;
@@ -123,7 +126,7 @@ public class GameCommand extends Command {
                 }
             }
         }else{
-            commandSender.sendMessage("请不要在控制台执行");
+            commandSender.sendMessage(language.getLanguage("do-not-console","请不要在控制台执行"));
             return false;
         }
         return true;
@@ -137,10 +140,10 @@ public class GameCommand extends Command {
      * */
     private void disPlayRoomsFrom(Player player, String name){
         DisPlayWindowsFrom.FROM.remove(player.getName());
-        GameFrom simple = new GameFrom(TotalManager.getTitle(), "请选择房间",DisPlayWindowsFrom.getId(515,1199810));
+        GameFrom simple = new GameFrom(TotalManager.getTitle(),  language.getLanguage("command-from-chose-room","请选择房间"),DisPlayWindowsFrom.getId(515,1199810));
         WorldRoom worldRoom = TotalManager.getMenuRoomManager().getRoom(name);
         PlayerInfo info = new PlayerInfo(player);
-        simple.add(new BaseIButton(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
+        simple.add(new BaseIButton(new ElementButton(language.getLanguage("command-from-random","随机匹配"),new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
             @Override
             public void onClick(Player player) {
                 RandomJoinManager.joinManager.join(info,null);
@@ -149,29 +152,32 @@ public class GameCommand extends Command {
         });
         for (GameRoomConfig roomConfig: worldRoom.getRoomConfigs()) {
             int size = 0;
-            String type = "&a空闲";
+            String type = language.getLanguage("room-status-unstarted","&a空闲");
             GameRoom room = TotalManager.getRoomManager().getRoom(roomConfig.name);
             if(room != null){
                 size = room.getPlayerInfos().size();
                 switch (room.getType()){
                     case START:
-                        type = "&c已开始";
+                        type = language.getLanguage("room-status-started","&c已开始");
                         break;
                     case END:
-                        type = "&c等待房间结束";
+                        type = language.getLanguage("room-status-waitend","&c等待房间结束");
                         break;
                         default:break;
                 }
             }
 
-            simple.add(new BaseIButton(new ElementButton(TextFormat.colorize('&',roomConfig.name+" &r状态:"+type + "&r\n人数: "+size+" / " + roomConfig.getMaxPlayerSize()), worldRoom.getImageData())) {
+//            roomConfig.name+" &r状态:"+type + "&r\n人数: "+size+" / " + roomConfig.getMaxPlayerSize())
+            simple.add(new BaseIButton(new ElementButton(TextFormat.colorize('&',
+                    language.getLanguage("command-from-button-title","[1] &r状态:[2] &r[n]人数: [3] / [4]",
+                    roomConfig.name,type,size+"",roomConfig.getMaxPlayerSize()+"")), worldRoom.getImageData())) {
                 @Override
                 public void onClick(Player player) {
                     PlayerInfo playerInfo = new PlayerInfo(player);
                     if (!TotalManager.getRoomManager().joinRoom(info,roomConfig.name)) {
-                        playerInfo.sendForceMessage("&c无法加入房间");
+                        playerInfo.sendForceMessage(language.getLanguage("command-from-join-room-error","&c无法加入房间"));
                     }else{
-                        playerInfo.sendForceMessage("&a你已加入 "+roomConfig.getName()+" 房间");
+                        playerInfo.sendForceMessage(language.getLanguage("command-from-join-room-success","&a你已加入 [1] 房间",roomConfig.getName()));
                     }
                     DisPlayWindowsFrom.FROM.remove(player.getName());
 

@@ -243,7 +243,7 @@ public class PlayerData {
         /**
          * 击杀
          * */
-        KILL("击杀"),
+        KILL(TotalManager.getLanguage().getLanguage("type-kill","击杀")),
         /**
          * 死亡
          * */

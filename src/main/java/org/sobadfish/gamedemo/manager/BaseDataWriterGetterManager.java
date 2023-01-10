@@ -44,7 +44,7 @@ public class BaseDataWriterGetterManager<T>{
 
 
         } catch (IOException  e) {
-            TotalManager.sendMessageToConsole("&c无法读取 "+file.getName()+" 配置文件");
+            TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("config-load-error","&c无法读取 [1] 配置文件"));
             e.printStackTrace();
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             e.printStackTrace();
@@ -65,10 +65,10 @@ public class BaseDataWriterGetterManager<T>{
         if(!file.exists()){
             try {
                 if(!file.createNewFile()){
-                    TotalManager.sendMessageToConsole("&c创建文件失败");
+                    TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("file-create-error","&c创建文件失败"));
                 }
             } catch (IOException e) {
-                TotalManager.sendMessageToConsole("未知错误 无法保存玩家数据");
+                TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("save-player-unknown-error","未知错误 无法保存玩家数据"));
             }
         }
         try {

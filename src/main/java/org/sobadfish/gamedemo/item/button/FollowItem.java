@@ -34,7 +34,7 @@ public class FollowItem {
         CompoundTag tag = item.getNamedTag();
         tag.putString(TotalManager.GAME_NAME,"follow");
         item.setNamedTag(tag);
-        item.setCustomName(TextFormat.colorize('&',"&r&l&e点我传送到玩家"));
+        item.setCustomName(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("teleport-player-button","&r&l&e点我传送到玩家")));
         return item;
 
     }

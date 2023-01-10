@@ -51,6 +51,8 @@ public class TotalManager {
 
     private static PlayerTopManager topManager;
 
+    public static LanguageManager language;
+
 
     public static int upExp;
 
@@ -62,6 +64,10 @@ public class TotalManager {
         RoomEventManager.register("effect", EffectEvent.class);
         RoomEventManager.register("command", CommandEvent.class);
         ThreadManager.init();
+    }
+
+    public static void initLanguage(PluginBase plugin) {
+        language = new LanguageManager(plugin);
     }
 
 
@@ -99,7 +105,11 @@ public class TotalManager {
         return TextFormat.colorize('&', plugin.getConfig().getString("scoreboard-title","&f[&a迷你战墙&f]"));
     }
 
-    public static void sendTipMessageToObject(String msg,Object o){
+    public static LanguageManager getLanguage() {
+        return language;
+    }
+
+    public static void sendTipMessageToObject(String msg, Object o){
         String message = TextFormat.colorize('&',msg);
         if(o != null){
             if(o instanceof Player){
