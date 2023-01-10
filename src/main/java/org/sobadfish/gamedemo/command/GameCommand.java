@@ -137,7 +137,7 @@ public class GameCommand extends Command {
      * */
     private void disPlayRoomsFrom(Player player, String name){
         DisPlayWindowsFrom.FROM.remove(player.getName());
-        GameFrom simple = new GameFrom(TotalManager.getTitle(), "请选择房间",DisPlayWindowsFrom.getId(51530,99810));
+        GameFrom simple = new GameFrom(TotalManager.getTitle(), "请选择房间",DisPlayWindowsFrom.getId(515,1199810));
         WorldRoom worldRoom = TotalManager.getMenuRoomManager().getRoom(name);
         PlayerInfo info = new PlayerInfo(player);
         simple.add(new BaseIButton(new ElementButton("随机匹配",new ElementButtonImageData("path","textures/ui/dressing_room_skins"))) {
