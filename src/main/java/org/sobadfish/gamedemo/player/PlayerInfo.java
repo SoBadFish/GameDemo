@@ -52,18 +52,14 @@ public class PlayerInfo {
 
     public boolean isLeave;
 
-    public int killCount = 0;
+    public LinkedHashMap<PlayerData.DataType,Integer> statistics = new LinkedHashMap<>();
 
     //小游戏强制等待的时间
     public int waitTime = 0;
 
     public int damageTime = 0;
 
-    public int deathCount = 0;
-
     public int updateTime = 0;
-
-    public int assists = 0;
 
     private PlayerInfo damageByInfo = null;
 
@@ -92,14 +88,34 @@ public class PlayerInfo {
         this.speed = player.getMovementSpeed();
     }
 
+    public int getData(PlayerData.DataType type){
+        if(statistics.containsKey(type)){
+            return statistics.get(type);
+        }
+        return 0;
+    }
+
+    public void addData(PlayerData.DataType type,int value){
+        if(statistics.containsKey(type)){
+            statistics.put(type,statistics.get(type) + value);
+        }else{
+            statistics.put(type,value);
+        }
+    }
+
+    public void addData(PlayerData.DataType type){
+        if(statistics.containsKey(type)){
+            statistics.put(type,statistics.get(type) + 1);
+        }else{
+            statistics.put(type,1);
+        }
+    }
+
 
     public LinkedHashMap<PlayerInfo, Long> getAssistsPlayers() {
         return assistsPlayers;
     }
 
-    public int getAssists() {
-        return assists;
-    }
 
     public EntityHuman getPlayer() {
         return player;
@@ -113,9 +129,6 @@ public class PlayerInfo {
         return player.getLevel();
     }
 
-    public int getKillCount() {
-        return killCount;
-    }
 
     public Location getLocation(){
         return player.getLocation();
@@ -179,13 +192,13 @@ public class PlayerInfo {
 
     private void addKill(PlayerInfo info){
 
-        info.killCount++;
+        info.addData(PlayerData.DataType.KILL);
         //助攻累计
         for(PlayerInfo playerInfo: assistsPlayers.keySet()){
             if(playerInfo.equals(info)){
                 continue;
             }
-            playerInfo.assists++;
+            info.addData(PlayerData.DataType.ASSISTS);
         }
     }
 
@@ -532,6 +545,9 @@ public class PlayerInfo {
         }
         return false;
     }
+
+
+
     @Override
     public String toString(){
         PlayerData data = TotalManager.getDataManager().getData(getName());
@@ -616,7 +632,6 @@ public class PlayerInfo {
 
                 lore.add("游戏结束: &a"+formatTime1(getGameRoom().loadTime));
             }
-//            lore.add("游戏结束: &a"+formatTime(getGameRoom().loadTime));
             if(gameRoom.roomConfig.teamConfigs.size() > 1){
                 for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                     String me = "";
@@ -632,8 +647,8 @@ public class PlayerInfo {
             }
 
             lore.add("      ");
-            lore.add("击杀数: &a"+killCount);
-            lore.add("助攻数: &a"+assists);
+            lore.add("击杀数: &a"+getData(PlayerData.DataType.KILL));
+            lore.add("助攻数: &a"+getData(PlayerData.DataType.ASSISTS));
 
             lore.add("        ");
         }
@@ -787,7 +802,7 @@ public class PlayerInfo {
             return;
         }
         player.teleport(teamInfo.getSpawnLocation());
-        deathCount++;
+        addData(PlayerData.DataType.DEATH);
         if(event != null) {
             if(gameRoom != null){
                 if(gameRoom.getRoomConfig().isDeathDrop()){
@@ -843,7 +858,6 @@ public class PlayerInfo {
                 }
             }
         }
-//        playerType = PlayerType.DEATH;
         damageByInfo = null;
 
         player.getInventory().clearAll();

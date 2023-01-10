@@ -7,6 +7,7 @@ import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -169,22 +170,16 @@ public class PlayerData {
 
         public String roomName = "";
 
-        //击杀数量
-        public int killCount = 0;
+        public LinkedHashMap<DataType,Integer> sourceData = new LinkedHashMap<>();
 
-        //死亡数量
-        public int deathCount = 0;
-        //游戏次数
-        public int gameCount = 0;
+        public void addSource(DataType dataType, int source) {
+            if(sourceData.containsKey(dataType)){
+                sourceData.put(dataType,sourceData.get(dataType) + source);
+            }
+            sourceData.put(dataType, source);
+        }
 
-        //失败次数
-        public int defeatCount = 0;
 
-        //胜利次数
-        public int victoryCount = 0;
-
-        //助攻次数
-        public int assist = 0;
 
         @Override
         public boolean equals(Object o) {
@@ -205,29 +200,9 @@ public class PlayerData {
 
         public int getInt(DataType type){
             int c = 0;
-            switch (type){
-                case VICTORY:
-                    c += victoryCount;
-                    break;
-                case DEFEAT:
-                    c += defeatCount;
-                    break;
-                case DEATH:
-                    c += deathCount;
-                    break;
-                case KILL:
-                    c += killCount;
-                    break;
-                case GAME:
-                    c += gameCount;
-                    break;
-                case ASSISTS:
-                    c += assist;
-                    break;
-                default:break;
-
+            if(sourceData.containsKey(type)){
+                c += sourceData.get(type);
             }
-
             return c;
 
 
@@ -245,11 +220,15 @@ public class PlayerData {
         return roomData;
     }
 
+    /**
+     * 将缓存数据存储到PlayerData中
+     * @param info PlayerInfo数据信息
+     * */
     public void setInfo(PlayerInfo info){
         RoomData data = getRoomData(info.getGameRoom().getRoomConfig().name);
-        data.deathCount += info.deathCount;
-        data.killCount += info.killCount;
-        data.assist += info.assists;
+        for (DataType entry : info.statistics.keySet()) {
+            data.addSource(DataType.DEATH,info.getData(entry));
+        }
     }
 
     @Override
