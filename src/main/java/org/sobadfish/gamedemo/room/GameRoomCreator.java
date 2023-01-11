@@ -59,34 +59,39 @@ public class GameRoomCreator {
 
     public void onCreatePreset(String value){
         if(flag !=  1){
-            creator.sendForceMessage("&c你正在进行默认创建，无法使用预设");
+            creator.sendForceMessage(TotalManager.getLanguage().getLanguage("go-on-default-create-not-use","&c你正在进行默认创建，无法使用预设"));
             return;
         }
         switch (setFlag){
             case 1:
                 String name = getRoomName(value);
-                creator.sendForceMessage("&2正在创建 名称为 &r"+name+" &2的房间模板");
-                creator.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" set &a[最低玩家数]&e 执行下一步操作");
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-template","&2正在创建 名称为 &r[1] &2的房间模板",name));
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-min-player",
+                        "&e继续执行 &r/[1] set &a[最低玩家数]&e 执行下一步操作",
+                        TotalManager.COMMAND_ADMIN_NAME));
                 roomName = name;
                 setFlag++;
                 break;
             case 2:
-                creator.sendForceMessage("&2设置最低人数 "+value);
-                creator.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" set &2[出生点数量]&e 执行下一步操作");
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-setting-min-player","&2设置最低人数 [1]",value));
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-spawn-size",
+                        "&e继续执行 &r/[1] set &2[出生点数量]&e 执行下一步操作",
+                        TotalManager.COMMAND_ADMIN_NAME));
                 min = Integer.parseInt(value);
                 setFlag++;
                 break;
             case 3:
-                creator.sendForceMessage("&2设置每个队伍的出生点数量 "+value);
-                creator.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" set &2[最大玩家数]&e 执行下一步操作");
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-setting-team-spawn-size","&2设置每个队伍的出生点数量 [1]",value+""));
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-max-player","&e继续执行 &r/[1] set &2[最大玩家数]&e 执行下一步操作",
+                        TotalManager.COMMAND_ADMIN_NAME));
                 spawnSize = Integer.parseInt(value);
                 setFlag++;
                 break;
             case 4:
                 int max = Integer.parseInt(value);
                 roomConfig = GameRoomConfig.createGameRoom(roomName,min, max);
-                creator.sendForceMessage("&2设置最大人数:&b "+value);
-                creator.sendForceMessage("&a预设完成");
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-setting-max-player","&2设置最大人数:&b [1]",value));
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-default-setting-success","&a预设完成"));
                 //TODO 到这了模板创建完成
                 isRoomCreate = true;
                 setFlag = 1;
@@ -99,24 +104,24 @@ public class GameRoomCreator {
     public void stopInit(){
         if(setFlag >= 4) {
             setFlag = 1;
-            creator.sendForceMessage("&c终止预设");
+            creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-default-setting-cancel","&c终止预设"));
         }else{
-            creator.sendForceMessage("&c无法终止预设");
+            creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-default-setting-cancel-error","&c无法终止预设"));
         }
     }
 
     public boolean onCreateNext(){
         if(setFlag != 1){
-            creator.sendForceMessage("&c请先完成预设");
+            creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-must-success-setting","&c请先完成预设"));
             return true;
         }
         //测试创建
         switch (flag) {
             case 1:
                 if(roomConfig == null) {
-                    roomConfig = GameRoomConfig.createGameRoom(getRoomName("游戏房间"), 4, 16);
+                    roomConfig = GameRoomConfig.createGameRoom(getRoomName(TotalManager.getLanguage().getLanguage("create-room=default-room-name","游戏房间")), 4, 16);
                     isRoomCreate = true;
-                    creator.sendForceMessage("&2成功创建一个 名字已经固定为 &r“"+roomConfig.name+"”&2的游戏房间模板 已设定最低玩家为 &b4&2 最大玩家为 &b16&r");
+                    creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-default-success","&2成功创建一个 名字已经固定为 &r“[1]”&2的游戏房间模板 已设定最低玩家为 &b4&2 最大玩家为 &b16&r",roomConfig.name));
                     creator.sendForceMessage("继续执行/"+ TotalManager.COMMAND_ADMIN_NAME+" 进行下一步 [进入游戏地图设置]");
                 }else{
                     creator.sendForceMessage("&2成功预设房间设置");

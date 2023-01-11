@@ -78,17 +78,21 @@ public class WorldInfoConfig {
         if(world.exists() && world.isDirectory()){
             if(toPathWorld(roomName, levelName)){
                 Server.getInstance().loadLevel(levelName);
-                TotalManager.sendMessageToConsole("&a地图 &e"+levelName+" &a初始化完成");
+                TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("world-init-success","&a地图 &e[1] &a初始化完成",
+                        levelName));
             }else{
-                TotalManager.sendMessageToConsole("&c地图 &e"+levelName+" &c初始化失败,无法完成房间的加载");
+                TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("world-init-error","&c地图 &e[1] &c初始化失败,无法完成房间的加载",
+                        levelName));
                 return false;
             }
         }
         if(!world.exists()){
             if(toBackUpWorld(roomName, levelName)){
-                TotalManager.sendMessageToConsole("&a地图 &e"+levelName+" &a备份完成");
+                TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("world-backup-success","&a地图 &e[1] &a备份完成",
+                        levelName));
             }else{
-                TotalManager.sendMessageToConsole("&c地图 &e"+levelName+" &c备份失败,无法完成房间的加载");
+                TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("world-backup-success","&a地图 &e[1] &a备份完成",
+                        levelName));
                 return false;
             }
         }
@@ -101,7 +105,7 @@ public class WorldInfoConfig {
         File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
         if(!world.exists()){
             if(!world.mkdirs()){
-                TotalManager.sendMessageToConsole("&c创建地图文件夹失败");
+                TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("world-create-folder-error","&c创建地图文件夹失败"));
             }
         }
 
@@ -129,7 +133,7 @@ public class WorldInfoConfig {
             File f2 = new File(Server.getInstance().getFilePath() + File.separator + "worlds" + File.separator + levelName);
             if (!f2.exists()) {
                 if(!f2.mkdirs()){
-                    TotalManager.sendMessageToConsole("&c创建地图文件夹失败");
+                    TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("world-create-folder-error","&c创建地图文件夹失败"));
                 }
             }
             if (files != null && files.length > 0) {

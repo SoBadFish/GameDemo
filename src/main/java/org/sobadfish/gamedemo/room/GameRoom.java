@@ -176,8 +176,10 @@ public class GameRoom {
         info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
         info.getPlayer().getInventory().setItem(FollowItem.getIndex(), FollowItem.get());
         info.getPlayer().getInventory().setHeldItemSlot(0);
-        sendMessage("&7"+info+"&7 成为了旁观者 （"+getWatchPlayers().size()+"）");
-        info.sendMessage("&e你可以等待游戏结束 也可以手动退出游戏房间");
+        sendMessage(TotalManager.getLanguage().getLanguage("watcher-join-room-message",
+                "&7[1]&7 成为了旁观者 （[2]）",
+                info.toString(),getWatchPlayers().size()+""));
+        info.sendMessage(TotalManager.getLanguage().getLanguage("display-to-watcher-join-room","&e你可以等待游戏结束 也可以手动退出游戏房间"));
         if(isTeleport) {
             Position position = getTeamInfos().get(0).getSpawnLocation();
             position.add(0, 64, 0);
@@ -231,7 +233,11 @@ public class GameRoom {
             }
             info.sendForceTitle("",1);
             info.sendForceSubTitle("");
-            sendMessage(info+"&e加入了游戏 &7("+(playerInfos.size()+1)+"/"+getRoomConfig().getMaxPlayerSize()+")");
+            sendMessage(TotalManager.getLanguage().getLanguage("player-join-room",
+                    "[1]&e加入了游戏 &7([2]/[3])"
+                    ,info.toString()
+                    ,(playerInfos.size()+1)+""
+                    ,(getRoomConfig().getMaxPlayerSize())+""));
             info.init();
             if(roomConfig.teamConfigs.size() > 1) {
                 info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(), TeamChoseItem.get());
@@ -534,7 +540,7 @@ public class GameRoom {
                 }catch (Exception e){
                     e.printStackTrace();
                     for(PlayerInfo playerInfo: new ArrayList<>(playerInfos)){
-                        playerInfo.sendForceMessage("房间出现异常 请联系服主/管理员修复");
+                        playerInfo.sendForceMessage(TotalManager.getLanguage().getLanguage("room-error","房间出现异常 请联系服主/管理员修复"));
                     }
                     onDisable();
                     return;
@@ -609,16 +615,16 @@ public class GameRoom {
                 try {
                     i.spawn();
                 }catch (Exception e){
-                    i.sendForceMessage("&c出现未知原因影响导致无法正常传送 正在重新将你移动中");
+                    i.sendForceMessage(TotalManager.getLanguage().getLanguage("room-start-game-teleport-error","&c出现未知原因影响导致无法正常传送 正在重新将你移动中"));
                     try {
                         i.spawn();
                     }catch (Exception e1){
-                        i.sendForceMessage("&c移动失败 请尝试重新进入游戏");
+                        i.sendForceMessage(TotalManager.getLanguage().getLanguage("room-start-game-teleport-error-back","&c移动失败 请尝试重新进入游戏"));
                         quitPlayerInfo(i,true);
                     }
                 }
             }
-            sendTitle("&c游戏开始");
+            sendTitle(TotalManager.getLanguage().getLanguage("room-start-game","&c游戏开始"));
 
             loadTime = getRoomConfig().time;
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
@@ -723,7 +729,8 @@ public class GameRoom {
         if(getPlayerInfos().size() >= getRoomConfig().minPlayerSize){
             if(loadTime == -1){
                 loadTime = getRoomConfig().waitTime;
-                sendMessage("&2到达最低人数限制&e "+loadTime+" &2秒后开始游戏");
+                sendMessage(TotalManager.getLanguage().getLanguage("room-wait-player-min","&2到达最低人数限制&e [1] &2秒后开始游戏",
+                        loadTime+""));
 
             }
         }else {
@@ -736,14 +743,15 @@ public class GameRoom {
             }
         }
         if(loadTime >= 1) {
-            sendTip("&e距离开始还剩 &a " + loadTime + " &e秒");
+            sendTip(TotalManager.getLanguage().getLanguage("room-wait-start","&e距离开始还剩 &a [1] &e秒",
+                    loadTime+""));
             if(loadTime <= 5){
                 switch (loadTime){
-                    case 5: sendTitle("&a5");break;
-                    case 4: sendTitle("&e4");break;
-                    case 3: sendTitle("&63");break;
-                    case 2: sendTitle("&42");break;
-                    case 1: sendTitle("&41");break;
+                    case 5: sendTitle(TotalManager.getLanguage().getLanguage("room-wait-time-5","&a5"));break;
+                    case 4: sendTitle(TotalManager.getLanguage().getLanguage("room-wait-time-4","&e4"));break;
+                    case 3: sendTitle(TotalManager.getLanguage().getLanguage("room-wait-time-3","&63"));break;
+                    case 2: sendTitle(TotalManager.getLanguage().getLanguage("room-wait-time-2","&42"));break;
+                    case 1: sendTitle(TotalManager.getLanguage().getLanguage("room-wait-time-1","&41"));break;
                     default:
                         sendTitle("");break;
 
@@ -755,6 +763,7 @@ public class GameRoom {
             if(loadTime == 1){
                 type = GameType.START;
                 loadTime = -1;
+                //分配玩家算法
                 if(allotOfAverage()){
                     teamAll = true;
                 }
@@ -762,7 +771,7 @@ public class GameRoom {
 
             }
         }else{
-            sendTip("&a等待中");
+            sendTip(TotalManager.getLanguage().getLanguage("room-waiting","&a等待中"));
         }
     }
 
@@ -783,7 +792,7 @@ public class GameRoom {
             worldInfo.setClose(true);
             //房间结束后的执行逻辑
             if(getRoomConfig().isAutomaticNextRound){
-                sendMessage("&7即将自动进行下一局");
+                sendMessage(TotalManager.getLanguage().getLanguage("player-auto-join-next-room","&7即将自动进行下一局"));
                 for(PlayerInfo playerInfo: getInRoomPlayers()){
                     RandomJoinManager.joinManager.nextJoin(playerInfo);
                 }

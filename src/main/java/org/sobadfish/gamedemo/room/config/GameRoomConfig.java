@@ -239,9 +239,9 @@ public class GameRoomConfig {
                     teamConfigs.put(teamConfig.getName(), teamConfig);
                 }
                 if(!new File(file+"/room.yml").exists()){
-                    TotalManager.sendMessageToConsole("&e检测到未完成房间模板");
+                    TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("chunk-room-template-unfinished","&e检测到未完成房间模板"));
                     Utils.toDelete(file);
-                    TotalManager.sendMessageToConsole("&a成功清除未完成的房间模板");
+                    TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("chunk-room-template-clean-success","&a成功清除未完成的房间模板"));
                     return null;
                 }
 
@@ -249,7 +249,7 @@ public class GameRoomConfig {
                 Config room = new Config(file+"/room.yml",Config.YAML);
                 WorldInfoConfig worldInfoConfig = WorldInfoConfig.getInstance(name,room);
                 if(worldInfoConfig == null){
-                    TotalManager.sendMessageToConsole("&c未成功加载 &a"+name+"&c 的游戏地图");
+                    TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("load-game-room-world-error","&c未成功加载 &a"+name+"&c 的游戏地图"));
                     return null;
                 }
 
@@ -314,15 +314,15 @@ public class GameRoomConfig {
                 if (!new File(file + "/roomEventList.yml").exists()) {
                     TotalManager.saveResource("roomEventList.yml", "/rooms/" + name + "/roomEventList.yml", false);
                 }
-                TotalManager.sendMessageToConsole("&e开始加载 房间主事件");
+                TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("load-game-room-master-event","&e开始加载 房间主事件"));
                 roomConfig.eventConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/event.yml"));
-                TotalManager.sendMessageToConsole("&e开始加载 房间备选事件");
+                TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("load-game-room-reserve-event","&e开始加载 房间备选事件"));
                 roomConfig.eventListConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/roomEventList.yml"));
 
                 return roomConfig;
 
             }catch (Exception e){
-                TotalManager.sendMessageToConsole("加载房间出错: "+e.getMessage());
+                TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("load-room-error","加载房间出错: ")+e.getMessage());
 
                 return null;
 

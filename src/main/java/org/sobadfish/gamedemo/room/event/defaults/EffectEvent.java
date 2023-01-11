@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.room.event.defaults;
 
 import cn.nukkit.potion.Effect;
+import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.config.GameRoomEventConfig;
 import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
@@ -36,7 +37,8 @@ public class EffectEvent extends IGameRoomEvent {
             }
         }
         effects.forEach(room::addEffect);
-        room.sendMessage("&r获得 "+display());
+        room.sendMessage(TotalManager.getLanguage().getLanguage("room-event-effect-getting-info","&r获得 [1]",
+                display()));
     }
 
     public Effect stringToEffect(String s){
