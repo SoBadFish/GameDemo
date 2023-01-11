@@ -122,23 +122,32 @@ public class GameRoomCreator {
                     roomConfig = GameRoomConfig.createGameRoom(getRoomName(TotalManager.getLanguage().getLanguage("create-room=default-room-name","游戏房间")), 4, 16);
                     isRoomCreate = true;
                     creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-default-success","&2成功创建一个 名字已经固定为 &r“[1]”&2的游戏房间模板 已设定最低玩家为 &b4&2 最大玩家为 &b16&r",roomConfig.name));
-                    creator.sendForceMessage("继续执行/"+ TotalManager.COMMAND_ADMIN_NAME+" 进行下一步 [进入游戏地图设置]");
+                    creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-game-world",
+                            "继续执行/[1] 进行下一步 [进入游戏地图设置]",
+                             TotalManager.COMMAND_ADMIN_NAME));
                 }else{
-                    creator.sendForceMessage("&2成功预设房间设置");
-                    creator.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &r进行下一步 &b[进入游戏地图设置]");
+                    creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-default-setting-room-success","&2成功预设房间设置"));
+                    creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-game-world",
+                            "继续执行/[1] 进行下一步 [进入游戏地图设置]",
+                            TotalManager.COMMAND_ADMIN_NAME));
                 }
                 flag++;
                 break;
             case 2:
                 worldInfoConfig = WorldInfoConfig.createWorldConfig(creator.getLevel().getFolderName());
-                creator.sendForceMessage("&2成功设定游戏地图");
-                creator.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &b[设置等待大厅]");
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-setting-game-world-success","&2成功设定游戏地图"));
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-game-wait","&e继续执行 &r/[1] &e进行下一步 &b[设置等待大厅]",
+                        TotalManager.COMMAND_ADMIN_NAME));
                 flag++;
                 break;
             case 3:
                 worldInfoConfig.setWaitPosition(creator.getPosition());
-                creator.sendForceMessage("&2成功等待大厅");
-                creator.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &r[&b设置"+(new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"出生点 &21&b /&d "+roomConfig.teamCfg.size()+"&r]");
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-setting-game-wait-success","&2成功设置等待大厅"));
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-spawn","&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]出生点 &21&b /&d [3]&r]",
+                        TotalManager.COMMAND_ADMIN_NAME,
+                        (new ArrayList<>(roomConfig.teamCfg.keySet()).get(team.size()))+"",
+                        roomConfig.teamCfg.size()+""
+                        ));
                 flag++;
                 break;
             case 4:
@@ -148,13 +157,14 @@ public class GameRoomCreator {
                  * 可根据自身需求更改
                  * 如有其他功能需要创建，增加case并修改提示即可
                  * */
-                creator.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &b[结束房间设置]");
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-end-room-setting","&e继续执行 &r/[1] &e进行下一步 &b[结束房间设置]",
+                        TotalManager.COMMAND_ADMIN_NAME));
                 break;
             default:
                 //TODO 到这里房间创建完成
                 flag = 1;
                 isCreate = true;
-                creator.sendForceMessage("&a游戏房间创建完成 &c(重启生效配置)");
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-success","&a游戏房间创建完成 &c(重启生效配置)"));
                 return false;
         }
 
@@ -180,18 +190,25 @@ public class GameRoomCreator {
                 positions.add(WorldInfoConfig.positionToString(creator.getPosition()));
             }
 
-            creator.sendForceMessage("&2设置&r "+teamName+" &2出生点坐标&r [&2"+spawnSizeFlag+" &b/&d "+spawnSize+"&r]");
+            creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-setting-team-spawn","&2设置&r [1] &2出生点坐标&r [&2[2] &b/&d [3]&r]",
+                    teamName,spawnSizeFlag+"",spawnSize+""));
             if(spawnSizeFlag != spawnSize) {
-                creator.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &r[&b设置队伍出生点&r " + teamName + " [&2" + (positions.size() + 1) + " &b/&d "+spawnSize+"&r]");
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-team-spawn","&e继续执行 &r/[1] &e进行下一步 &r[&b设置队伍出生点&r [2] [&2[3] &b/&d [4]&r]",
+                        TotalManager.COMMAND_ADMIN_NAME,teamName,(positions.size() + 1)+"",spawnSize+""));
             }else{
                 if(new ArrayList<>(roomConfig.teamCfg.keySet()).size() > spawnFlag+1){
-                    creator.sendForceMessage("&2设置 &r" + teamName + " &2出生点坐标完成");
-                    creator.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &r[&b设置 &r"+ new ArrayList<>(roomConfig.teamCfg.keySet()).get(spawnFlag + 1) + " &2出生点 &r [&21 &b/&d "+spawnSize+"&r]");
+                    creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-setting-team-spawn-success","&2设置 &r[1] &2出生点坐标完成",teamName));
+                    creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-spawn","&e继续执行 &r/[1] &e进行下一步 &r[&b设置[2]出生点 &21&b /&d [3]&r]",
+                            TotalManager.COMMAND_ADMIN_NAME,
+                            new ArrayList<>(roomConfig.teamCfg.keySet()).get(spawnFlag + 1)+"",
+                            spawnSize+""
+                            ));
+//                    creator.sendForceMessage("&e继续执行 &r/"+ TotalManager.COMMAND_ADMIN_NAME+" &e进行下一步 &r[&b设置 &r"+ + " &2出生点 &r [&21 &b/&d "+spawnSize+"&r]");
                 }
                 spawnSizeFlag = 0;
                 spawnFlag++;
                 if (spawnFlag >= new ArrayList<>(roomConfig.teamCfg.keySet()).size()) {
-                    creator.sendForceMessage("&2设置所有出生点坐标完成");
+                    creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-setting-all-spawn-success","&2设置所有出生点坐标完成"));
                     spawnFlag = 0;
                     ArrayList<TeamInfoConfig> teamInfoConfigs = new ArrayList<>();
                     for(String ta : team.keySet()){
@@ -235,10 +252,10 @@ public class GameRoomCreator {
     public boolean createRoom(){
         if(isCreate) {
             roomConfig.save();
-            creator.sendForceMessage("&a游戏已创建");
+            creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-success","&a游戏已创建"));
             return true;
         }else{
-            creator.sendForceMessage("&c游戏未创建");
+            creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-error","&c游戏未创建"));
         }
         return false;
     }
