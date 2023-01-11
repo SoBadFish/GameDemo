@@ -20,6 +20,9 @@ public class LanguageManager {
     public LanguageManager(PluginBase plugin){
         ini = new HashMap<>();
         File iniFile = new File(plugin.getDataFolder()+"/language.ini");
+        if(!iniFile.exists()){
+            plugin.saveResource("language.ini",false);
+        }
         BufferedReader br;
         try {
             InputStream in = new FileInputStream(iniFile);
