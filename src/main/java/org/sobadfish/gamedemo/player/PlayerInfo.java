@@ -709,7 +709,7 @@ public class PlayerInfo {
         //死亡倒计时
         if(playerType == PlayerType.DEATH){
             if(gameRoom != null){
-                if(gameRoom.roomConfig.reSpawnTime > 0){
+                if(gameRoom.roomConfig.reSpawnTime >= 0){
                     if(spawnTime >= gameRoom.roomConfig.reSpawnTime){
                         sendTitle(TotalManager.getLanguage().getLanguage("player-respawn-info","&a你复活了"),1);
                         sendSubTitle("");
@@ -799,7 +799,7 @@ public class PlayerInfo {
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
             return;
         }
-        if(gameRoom != null && gameRoom.roomConfig.reSpawnTime > 0) {
+        if(gameRoom != null && gameRoom.roomConfig.reSpawnTime >= 0) {
             if (getPlayer() instanceof Player) {
                 ((Player) getPlayer()).setGamemode(3);
             }
