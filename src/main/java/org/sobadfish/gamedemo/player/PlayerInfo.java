@@ -440,7 +440,7 @@ public class PlayerInfo {
             teleport = false;
         }
         if(!teleport){
-            throw new NullPointerException("无法将玩家传送到队伍出生点");
+            throw new NullPointerException(TotalManager.getLanguage().getLanguage("player-teleport-team-spawn-error","无法将玩家传送到队伍出生点"));
         }
         if (getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(0);
@@ -557,10 +557,12 @@ public class PlayerInfo {
             teamName = "&7[&r"+teamInfo.getTeamConfig().getNameColor()+teamInfo.getTeamConfig().getName()+"&7]&r";
             playerName = teamInfo.getTeamConfig().getNameColor()+" &7"+player.getName();
         }else if(isWatch()){
-            teamName = "&7[旁观] ";
+            teamName = TotalManager.getLanguage().getLanguage("player-watch-title","&7[旁观] ");
         }
 
-        return "&7["+data.getLevelString()+"&7]&r "+teamName+playerName;
+//        "&7["+data.getLevelString()+"&7]&r "+teamName+playerName
+        return TotalManager.getLanguage().getLanguage("player-info-title","&7[[1]&7]&r [2][3]",
+                data.getLevelString(),teamName,playerName);
     }
 
     public TeamInfo getTeamInfo() {
@@ -615,12 +617,15 @@ public class PlayerInfo {
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         lore.add("&7"+format.format(new Date()));
-        lore.add("游戏模式: &a"+levelName);
+        lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-game-world","游戏模式: &a[1]",levelName));
 
         lore.add(" ");
         if(isWait){
-            lore.add("玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize());
-            lore.add("等待中....");
+//            "玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize()
+            lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-wait-player","玩家数: &a[1] &r/&a [2]",
+                    gameRoom.getPlayerInfos().size()+"",gameRoom.getRoomConfig().getMaxPlayerSize()+""
+            ));
+            lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-waiting","等待中...."));
             lore.add("   ");
 
         }else{
@@ -630,25 +635,34 @@ public class PlayerInfo {
                 lore.add("    ");
             }else{
 
-                lore.add("游戏结束: &a"+formatTime1(getGameRoom().loadTime));
+                lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-game-end","游戏结束: &a[1]",
+                        formatTime1(getGameRoom().loadTime)));
             }
             if(gameRoom.roomConfig.teamConfigs.size() > 1){
                 for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                     String me = "";
                     if(getTeamInfo() != null && getTeamInfo().equals(teamInfo)){
-                        me = "&7(我)";
+                        me = TotalManager.getLanguage().getLanguage("scoreboard-line-myself","&7(我)");
                     }
-                    lore.add("◎ "+ teamInfo +": &r  &c"+teamInfo.getLivePlayer().size()+" "+me);
+//                    ""◎ "+ teamInfo +": &r  &c"+teamInfo.getLivePlayer().size()+" "+me
+                    lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-team-info","◎ [1]: &r  &c[2] [3]",
+                           teamInfo.toString(),teamInfo.getLivePlayer().size()+"",me));
                 }
             }else{
                 TeamInfo teamInfo = gameRoom.getTeamInfos().get(0);
                 lore.add("   ");
-                lore.add(" 存活人数: &a "+teamInfo.getLivePlayer().size() +" &7/&a "+teamInfo.getTeamPlayers().size());
+//                " 存活人数: &a "+teamInfo.getLivePlayer().size() +" &7/&a "+teamInfo.getTeamPlayers().size()
+                lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-no-team-live-player"," 存活人数: &a [1] &7/&a [2]",
+                        teamInfo.getLivePlayer().size()+"",
+                        teamInfo.getTeamPlayers().size()+""));
             }
 
             lore.add("      ");
-            lore.add("击杀数: &a"+getData(PlayerData.DataType.KILL));
-            lore.add("助攻数: &a"+getData(PlayerData.DataType.ASSISTS));
+            lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-kill","击杀数: &a[1]",
+                    getData(PlayerData.DataType.KILL)+""));
+            lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-kill",
+                    "助攻数: &a[1]",
+                    getData(PlayerData.DataType.ASSISTS)+""));
 
             lore.add("        ");
         }
@@ -686,7 +700,10 @@ public class PlayerInfo {
             damageByInfo = null;
         }
         if(damageByInfo != null){
-            sendTip(damageByInfo+"  &a"+damageByInfo.getPlayer().getHealth()+" / "+damageByInfo.getPlayer().getMaxHealth());
+//            damageByInfo+"  &a"+damageByInfo.getPlayer().getHealth()+" / "+damageByInfo.getPlayer().getMaxHealth()
+            sendTip(TotalManager.getLanguage().getLanguage("player-attack-player-msg","[1]  &a[2] / [3]",
+                    damageByInfo.toString(),damageByInfo.getPlayer().getHealth()+"",
+                    damageByInfo.getPlayer().getMaxHealth()+""));
         }
 
         //死亡倒计时
@@ -694,17 +711,18 @@ public class PlayerInfo {
             if(gameRoom != null){
                 if(gameRoom.roomConfig.reSpawnTime > 0){
                     if(spawnTime >= gameRoom.roomConfig.reSpawnTime){
-                        sendTitle("&a你复活了",1);
+                        sendTitle(TotalManager.getLanguage().getLanguage("player-respawn-info","&a你复活了"),1);
                         sendSubTitle("");
                         spawn();
                         spawnTime = 0;
                     }else{
                         if(spawnTime == 0 && !isSendkey){
                             isSendkey = true;
-                            sendTitle("&c你死了", gameRoom.roomConfig.reSpawnTime);
+                            sendTitle(TotalManager.getLanguage().getLanguage("player-death-info","&c你死了"), gameRoom.roomConfig.reSpawnTime);
                         }
                         if(gameRoom != null) {
-                            sendSubTitle((gameRoom.roomConfig.reSpawnTime - spawnTime) + " 秒后复活");
+                            sendSubTitle(TotalManager.getLanguage().getLanguage("player-death-respawn-info-title","[1] 秒后复活",
+                                    (gameRoom.roomConfig.reSpawnTime - spawnTime)+""));
                         }
                         spawnTime++;
                     }
@@ -718,7 +736,9 @@ public class PlayerInfo {
         //TODO 玩家更新线程
         if(playerType == PlayerType.START){
             //TODO 游戏开始后 可以弄一些buff
-            player.setNameTag(TextFormat.colorize('&',teamInfo.getTeamConfig().getNameColor()+player.getName()+" \n&c❤&7"+String.format("%.1f",player.getHealth())));
+//            teamInfo.getTeamConfig().getNameColor()+player.getName()+" \n&c❤&7"+String.format("%.1f",player.getHealth())
+            player.setNameTag(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("player-nametag-info","[1] [n]&c❤&7[2]",teamInfo.getTeamConfig().getNameColor()+player.getName(),
+                    String.format("%.1f",player.getHealth()))));
 
 
         }else if(playerType == PlayerType.WAIT){
@@ -726,7 +746,7 @@ public class PlayerInfo {
                 if(getGameRoom().getRoomConfig().getWorldInfo().getWaitPosition() == null){
                     if(getGameRoom() != null){
                         getGameRoom().quitPlayerInfo(this,true);
-                        sendMessage("&c房间出现了错误 （未识别到等待大厅）已将你送回出生点");
+                        sendMessage(TotalManager.getLanguage().getLanguage("player-teleport-room-error","&c房间出现了错误 （未识别到等待大厅）已将你送回出生点"));
                     }
                     return;
                 }
@@ -786,7 +806,7 @@ public class PlayerInfo {
             player.teleport(getGameRoom().worldInfo.getConfig().getGameWorld().getSafeSpawn());
             Position position = teamInfo.getSpawnLocation();
             player.teleport(new Position(player.x, position.y + 64, player.z, getLevel()));
-            sendTitle("&c你死了",2);
+            sendTitle(TotalManager.getLanguage().getLanguage("player-death-info-title","&c你死了"),2);
             playerType = PlayerType.DEATH;
         }else{
             if (getPlayer() instanceof Player) {
@@ -813,44 +833,51 @@ public class PlayerInfo {
             }
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                 if(damageByInfo != null){
-                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 推入虚空。");
+                    gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-death-by-player-void","[1] &e被 &r[2] 推入虚空。",
+                            this.toString(),damageByInfo.toString()));
                     addKill(damageByInfo);
                 }
-                gameRoom.sendMessage(this + "&e掉入虚空");
+                gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-death-by-void","[1]&e掉入虚空",this.toString()));
 
             } else if (event instanceof EntityDamageByEntityEvent) {
                 Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
                 if (entity instanceof Player) {
                     PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo((Player) entity);
-                    String killInfo = "击杀";
+                    String killInfo = TotalManager.getLanguage().getLanguage("death-by-damage","击杀");
                     if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
-                        killInfo = "射杀";
+                        killInfo = TotalManager.getLanguage().getLanguage("death-by-arrow","射杀");
                     }
                     if (info != null) {
                         addKill(info);
-                        gameRoom.sendMessage(this + " &e被 &r" + info + " "+killInfo+"了。");
+//                        this + " &e被 &r" + info + " "+killInfo+"了。"
+                        gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-kill-player-info",
+                                "[1] &e被 &r[2] [3]了。",
+                                this.toString(),info.toString(),killInfo));
                     }
                 } else {
-                    gameRoom.sendMessage(this + " &e被 &r" + entity.getName() + " 击败了");
+                    gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-death-by-player-kill","[1] &e被 &r[2] 击败了",
+                            this.toString(),entity.getName()));
                 }
             } else {
                 if(damageByInfo != null){
                     addKill(damageByInfo);
-                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了");
+                    gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-death-by-player-kill","[1] &e被 &r[2] 击败了",
+                            this.toString(),damageByInfo.toString()));
+//                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了");
                 }else {
-                    String deathInfo = "&e死了";
+                    String deathInfo = TotalManager.getLanguage().getLanguage("player-death-info-unknown","&e死了");
                     switch (event.getCause()){
                         case LAVA:
-                            deathInfo = "&e被岩浆烧死了";
+                            deathInfo = TotalManager.getLanguage().getLanguage("player-death-info-lava","&e被岩浆烧死了");
                             break;
                         case FALL:
-                            deathInfo = "&e摔死了";
+                            deathInfo = TotalManager.getLanguage().getLanguage("player-death-info-fall","&e摔死了");
                             break;
                         case FIRE:
-                            deathInfo = "&e被烧了";
+                            deathInfo = TotalManager.getLanguage().getLanguage("player-death-info-fire","&e被烧了");
                             break;
                         case HUNGER:
-                            deathInfo = "&e饿死了";
+                            deathInfo = TotalManager.getLanguage().getLanguage("player-death-info-hunger","&e饿死了");
                             break;
                         default:break;
                     }

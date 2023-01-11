@@ -1099,7 +1099,7 @@ public class RoomManager implements Listener {
             String roomName = TotalManager.getRoomManager().playerJoin.get(info.getPlayer().getName());
             if (roomName.equalsIgnoreCase(event.getRoom().getRoomConfig().name) && gameRoom.getPlayerInfos().contains(info)) {
                 if(event.isSend()) {
-                    info.sendForceMessage("&c你已经在这个房间内了");
+                    info.sendForceMessage(language.getLanguage("player-join-in-room","&c你已经在游戏房间内了"));
                 }
                 event.setCancelled();
                 return;
@@ -1110,7 +1110,7 @@ public class RoomManager implements Listener {
                     if (room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.WATCH ||
                             room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.LEAVE) {
                         if(event.isSend()) {
-                            info.sendForceMessage("&c你已经在游戏房间内了");
+                            info.sendForceMessage(language.getLanguage("player-join-in-room","&c你已经在游戏房间内了"));
                         }
                         event.setCancelled();
 
@@ -1128,14 +1128,14 @@ public class RoomManager implements Listener {
 
             }
             if(event.isSend()) {
-                info.sendForceMessage("&c游戏已经开始了");
+                info.sendForceMessage(language.getLanguage("player-join-in-room-started","&c游戏已经开始了"));
             }
             event.setCancelled();
             return;
         }
         if(gameRoom.getPlayerInfos().size() == gameRoom.getRoomConfig().getMaxPlayerSize()){
             if(event.isSend()) {
-                info.sendForceMessage("&c房间满了");
+                info.sendForceMessage(language.getLanguage("player-join-in-room-max","&c房间满了"));
             }
             event.setCancelled();
         }

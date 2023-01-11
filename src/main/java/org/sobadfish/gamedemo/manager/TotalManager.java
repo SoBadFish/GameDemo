@@ -138,12 +138,12 @@ public class TotalManager {
         File mainFileDir = new File(plugin.getDataFolder()+File.separator+"rooms");
         if(!mainFileDir.exists()){
             if(!mainFileDir.mkdirs()){
-                sendMessageToConsole("&c创建文件夹 rooms失败");
+                sendMessageToConsole(language.getLanguage("plugin-room-folder-create-error","&c创建文件夹 rooms失败"));
             }
         }
 
         roomManager = RoomManager.initGameRoomConfig(mainFileDir);
-        sendMessageToConsole("&a房间数据全部加载完成");
+        sendMessageToConsole(language.getLanguage("plugin-room-load-success","&a房间数据全部加载完成"));
         plugin.getServer().getPluginManager().registerEvents(roomManager,plugin);
         if(plugin.getConfig().getAll().size() == 0) {
             plugin.saveResource("config.yml", true);
@@ -269,9 +269,9 @@ public class TotalManager {
 
         AbstractFakeInventory.IS_PM1E = ver;
         if(ver){
-            sendMessageToConsole("&e当前核心为 Nukkit PM1E");
+            sendMessageToConsole(language.getLanguage("plugin-load-server-pm1e","&e当前核心为 Nukkit PM1E"));
         }else{
-            sendMessageToConsole("&e当前核心为 Nukkit");
+            sendMessageToConsole(language.getLanguage("plugin-load-server-nukkit","&e当前核心为 Nukkit"));
         }
     }
 

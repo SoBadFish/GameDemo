@@ -6,6 +6,7 @@ import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
+import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.panel.ChestInventoryPanel;
 import org.sobadfish.gamedemo.panel.from.GameFrom;
 import org.sobadfish.gamedemo.player.PlayerData;
@@ -73,6 +74,12 @@ public class PlayerItem extends BasePlayPanelItemInstance{
             img = ItemIDSunName.getIDByPath(i.getId(),i.getDamage());
         }
 
-        return new ElementButton(TextFormat.colorize('&', this.info.toString()+"\n&r生命 &c"+ this.info.getPlayer().getHealth()+" / "+ this.info.getPlayer().getMaxHealth()),new ElementButtonImageData("path",img));
+//        this.info.toString()+"\n&r生命 &c"+ this.info.getPlayer().getHealth()+" / "+ this.info.getPlayer().getMaxHealth()
+        return new ElementButton(TextFormat.colorize('&', TotalManager.getLanguage().getLanguage("player-watch-from-button",
+                        "[1][n]&r生命 &c[2] / [3]",
+                        this.info.toString(),
+                        this.info.getPlayer().getHealth()+"",
+                        this.info.getPlayer().getMaxHealth()+"")
+                ),new ElementButtonImageData("path",img));
     }
 }

@@ -247,24 +247,24 @@ public class PlayerData {
         /**
          * 死亡
          * */
-        DEATH("死亡"),
+        DEATH(TotalManager.getLanguage().getLanguage("type-death","死亡")),
         /**
          * 胜利
          * */
-        VICTORY("胜利"),
+        VICTORY(TotalManager.getLanguage().getLanguage("type-victory","胜利")),
         /**
          * 失败
          * */
-        DEFEAT("失败"),
+        DEFEAT(TotalManager.getLanguage().getLanguage("type-defeat","失败")),
         /**
          * 助攻
          * */
-        ASSISTS("助攻"),
+        ASSISTS(TotalManager.getLanguage().getLanguage("type-assists","助攻")),
 
         /**
          * 游戏次数
          * */
-        GAME("游戏次数");
+        GAME(TotalManager.getLanguage().getLanguage("type-game","游戏次数"));
 
         private final String name;
 
