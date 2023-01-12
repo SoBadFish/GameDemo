@@ -866,6 +866,8 @@ public class PlayerInfo {
             ((Player) getPlayer()).setGamemode(3);
         }
         playerType = PlayerType.WATCH;
+        //当队伍仅有一个的时候，玩家死亡后就列入失败列表
+
         if(gameRoom.getRoomConfig().teamConfigs.size() == 1) {
             teamInfo.getDefeatPlayers().add(this);
         }
