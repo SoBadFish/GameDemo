@@ -56,6 +56,9 @@ defeatCmd: []
 
 roundChest: false
 
+# 是否允许箱子重置
+chest-can-reset: true
+
 # 箱子重置时间(秒)
 chest-reset-time: 120
 

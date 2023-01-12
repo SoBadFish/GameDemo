@@ -165,6 +165,15 @@ public class GameRoomConfig {
      * 打开箱子是否刷新物品
      * */
     public boolean roundChest = false;
+    /**
+     * 箱子刷新时间
+     * */
+    public int chestResetTime = 120;
+
+    /**
+     * 箱子是否允许重置
+     * */
+    public boolean chestCanReset = true;
 
 
 
@@ -282,6 +291,8 @@ public class GameRoomConfig {
                 roomConfig.banBreak = new ArrayList<>(room.getStringList("ban-break"));
                 roomConfig.roundChest = room.getBoolean("roundChest",false);
                 roomConfig.enableFood = room.getBoolean("enable-food",false);
+                roomConfig.chestResetTime = room.getInt("chest-reset-time",120);
+                roomConfig.chestCanReset = room.getBoolean("chest-can-reset",true);
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
@@ -399,6 +410,8 @@ public class GameRoomConfig {
         config.set("deathDrop",deathDrop);
         config.set("victoryCmd",victoryCommand);
         config.set("roundChest",roundChest);
+        config.set("chest-reset-time",chestResetTime);
+        config.set("chest-can-reset",chestCanReset);
         config.set("roomStartMessage",gameStartMessage);
         List<Map<String,Object>> pos = new ArrayList<>();
         for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){
