@@ -1,10 +1,13 @@
 package org.sobadfish.gamedemo.player;
 
+import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.event.PlayerGetExpEvent;
 import org.sobadfish.gamedemo.event.PlayerLevelChangeEvent;
 import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.tools.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -69,6 +72,18 @@ public class PlayerData {
 
 
     public void addExp(int exp,String cause,boolean event){
+        if(event){
+            PlayerGetExpEvent expEvent = new PlayerGetExpEvent(name, exp,this.exp + exp,cause);
+            Server.getInstance().getPluginManager().callEvent(expEvent);
+            if(!expEvent.isCancelled()){
+                exp = expEvent.getExp();
+                displayExpMessage(expEvent);
+            }else{
+                return;
+            }
+
+        }
+
         if(this.exp < 0){
             this.exp = 0;
         }
@@ -88,9 +103,37 @@ public class PlayerData {
                 addExp(nExp,null,false);
             }
         }
-        if(event) {
-            PlayerGetExpEvent expEvent = new PlayerGetExpEvent(name, exp,this.exp,cause);
-            Server.getInstance().getPluginManager().callEvent(expEvent);
+
+    }
+
+    /**
+     * 当玩家获得经验时展示的信息
+     * */
+    private void displayExpMessage(PlayerGetExpEvent expEvent){
+        Player player = Server.getInstance().getPlayer(name);
+        if(player != null){
+            player.sendMessage(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("player-getting-level-exp","&b[1] 经验([2])",expEvent.getExp()+"",expEvent.getCause())));
+            PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo(player);
+            PlayerData data = TotalManager.getDataManager().getData(name);
+
+            if(info == null || info.getGameRoom() == null){
+
+                TotalManager.sendTipMessageToObject("&l&m"+ Utils.writeLine(5,"&a▁▁▁"),player);
+                TotalManager.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
+                String line = String.format("%20s","");
+                player.sendMessage(line);
+                String inputTitle = TotalManager.getLanguage().getLanguage("player-getting-level-exp-title","&b&l小游戏经验")+"\n";
+                TotalManager.sendTipMessageToObject(FunctionManager.getCentontString(inputTitle,30),player);
+                TotalManager.sendTipMessageToObject(FunctionManager.getCentontString(TotalManager.getLanguage().getLanguage("level-title","&b等级 ")+data.getLevel()+String.format("%"+inputTitle.length()+"s","")+TotalManager.language.getLanguage("level-title","&b等级 ")+(data.getLevel() + 1)+"\n",30),player);
+
+                TotalManager.sendTipMessageToObject("&7["+data.getExpLine(20)+"&7]\n",player);
+
+                String d = String.format("%.1f",data.getExpPercent() * 100.0);
+                TotalManager.sendTipMessageToObject(FunctionManager.getCentontString("&b"+data.getExpString(data.getExp())+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
+                TotalManager.sendTipMessageToObject("&l&m"+Utils.writeLine(5,"&a▁▁▁"),player);
+                TotalManager.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
+
+            }
         }
     }
 

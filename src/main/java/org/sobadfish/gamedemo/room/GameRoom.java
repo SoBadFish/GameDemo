@@ -18,10 +18,8 @@ import org.sobadfish.gamedemo.event.PlayerQuitRoomEvent;
 import org.sobadfish.gamedemo.item.button.FollowItem;
 import org.sobadfish.gamedemo.item.button.RoomQuitItem;
 import org.sobadfish.gamedemo.item.button.TeamChoseItem;
-import org.sobadfish.gamedemo.manager.RandomJoinManager;
-import org.sobadfish.gamedemo.manager.RoomManager;
-import org.sobadfish.gamedemo.manager.TotalManager;
-import org.sobadfish.gamedemo.manager.WorldResetManager;
+import org.sobadfish.gamedemo.manager.*;
+import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
@@ -228,9 +226,11 @@ public class GameRoom {
             PlayerJoinRoomEvent event = new PlayerJoinRoomEvent(info,this,TotalManager.getPlugin());
             event.setSend(sendMessage);
             Server.getInstance().getPluginManager().callEvent(event);
+            eventToJoinPlayer(event);
             if(event.isCancelled()){
                 return JoinType.NO_JOIN;
             }
+
             info.sendForceTitle("",1);
             info.sendForceSubTitle("");
             sendMessage(TotalManager.getLanguage().getLanguage("player-join-room",
@@ -267,6 +267,63 @@ public class GameRoom {
             }
         }
         return JoinType.CAN_JOIN;
+
+    }
+
+    /**
+     * 玩家加入房间的一些监听
+     * */
+    private void eventToJoinPlayer(PlayerJoinRoomEvent event) {
+        PlayerInfo info = event.getPlayerInfo();
+        GameRoom gameRoom = event.getRoom();
+        if (TotalManager.getRoomManager().playerJoin.containsKey(info.getPlayer().getName())) {
+            String roomName = TotalManager.getRoomManager().playerJoin.get(info.getPlayer().getName());
+            if (roomName.equalsIgnoreCase(event.getRoom().getRoomConfig().name) && gameRoom.getPlayerInfos().contains(info)) {
+                if(event.isSend()) {
+                    info.sendForceMessage(TotalManager.language.getLanguage("player-join-in-room","&c你已经在游戏房间内了"));
+                }
+                event.setCancelled();
+                return;
+            }
+            if (TotalManager.getRoomManager().hasGameRoom(roomName)) {
+                GameRoom room = TotalManager.getRoomManager().getRoom(roomName);
+                if (room.getType() != GameRoom.GameType.END && room.getPlayerInfos().contains(info)) {
+                    if (room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.WATCH ||
+                            room.getPlayerInfo(info.getPlayer()).getPlayerType() != PlayerInfo.PlayerType.LEAVE) {
+                        if(event.isSend()) {
+                            info.sendForceMessage(TotalManager.language.getLanguage("player-join-in-room","&c你已经在游戏房间内了"));
+                        }
+                        event.setCancelled();
+
+                    }
+                }
+            }
+        }
+        if(gameRoom.getType() != GameRoom.GameType.WAIT){
+            if(GameType.END != gameRoom.getType()){
+                //TODO 或许还能旁观
+                if(gameRoom.getRoomConfig().hasWatch){
+                    event.setCancelled();
+                    return;
+                }
+
+            }
+            if(event.isSend()) {
+                info.sendForceMessage(TotalManager.language.getLanguage("player-join-in-room-started","&c游戏已经开始了"));
+            }
+            event.setCancelled();
+            return;
+        }
+        if(gameRoom.getPlayerInfos().size() == gameRoom.getRoomConfig().getMaxPlayerSize()){
+            if(event.isSend()) {
+                info.sendForceMessage(TotalManager.language.getLanguage("player-join-in-room-max","&c房间满了"));
+            }
+            event.setCancelled();
+        }
+        if(info.getPlayer() instanceof Player) {
+            ((Player) info.getPlayer()).setFoodEnabled(false);
+            ((Player) info.getPlayer()).setGamemode(2);
+        }
 
     }
 
@@ -493,6 +550,7 @@ public class GameRoom {
                 if (playerInfos.contains(info)) {
                     PlayerQuitRoomEvent event = new PlayerQuitRoomEvent(info, this,TotalManager.getPlugin());
                     Server.getInstance().getPluginManager().callEvent(event);
+                    executeQuitCommand(event);
                     if(((Player) info.getPlayer()).isOnline()) {
                         if (teleport) {
                             info.getPlayer().teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
@@ -516,6 +574,26 @@ public class GameRoom {
             onDisable();
         }
         return true;
+    }
+
+    private void executeQuitCommand(PlayerQuitRoomEvent event) {
+        if(event.performCommand){
+            PlayerInfo info = event.getPlayerInfo();
+            PlayerData data = TotalManager.getDataManager().getData(info.getName());
+            data.setInfo(info);
+
+            GameRoom room = event.getRoom();
+            info.clear();
+
+            if(info.getPlayer() instanceof Player && ((Player) info.getPlayer()).isOnline()){
+                ((Player)info.getPlayer()).setFoodEnabled(false);
+                room.getRoomConfig().quitRoomCommand.forEach(cmd-> Server.getInstance().dispatchCommand(((Player)info.getPlayer()),cmd));
+            }
+            if(info.isWatch()){
+                return;
+            }
+            room.sendMessage(TotalManager.language.getLanguage("player-quit-room-echo-message","&c玩家 [1] 离开了游戏",event.getPlayerInfo().getPlayer().getName()));
+        }
     }
 
     /** 房间被实例化后 */
@@ -630,6 +708,7 @@ public class GameRoom {
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
             GameRoomStartEvent event = new GameRoomStartEvent(this,TotalManager.getPlugin());
             Server.getInstance().getPluginManager().callEvent(event);
+            displayGameStartMsg();
 
         }
         //TODO 可以在这里实现胜利的条件
@@ -637,6 +716,16 @@ public class GameRoom {
         demoGameEnd();
 
         ////////////////////////// 示例算法 ///////////////////////////
+    }
+
+    /**
+     * 游戏开始时提示的文本信息
+     * */
+    private void displayGameStartMsg() {
+        String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■";
+        for(String s: this.getRoomConfig().gameStartMessage){
+            this.sendTipMessage(FunctionManager.getCentontString(s,line.length()));
+        }
     }
 
     /**

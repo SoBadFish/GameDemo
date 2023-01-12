@@ -1,13 +1,17 @@
 package org.sobadfish.gamedemo.player.team;
 
 import cn.nukkit.Server;
+import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.event.PlayerChoseTeamEvent;
 import org.sobadfish.gamedemo.event.TeamDefeatEvent;
 import org.sobadfish.gamedemo.event.TeamVictoryEvent;
+import org.sobadfish.gamedemo.manager.FunctionManager;
+import org.sobadfish.gamedemo.manager.RandomJoinManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.GameRoom;
@@ -151,6 +155,23 @@ public class TeamInfo {
         //TODO 当队伍胜利
         TeamVictoryEvent event = new TeamVictoryEvent(this,room, TotalManager.getPlugin());
         Server.getInstance().getPluginManager().callEvent(event);
+        event.getTeamInfo().sendTitle(TotalManager.language.getLanguage("game-victory","&e&l胜利!"),5);
+        String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■";
+        event.getRoom().sendTipMessage("&a"+line);
+        event.getRoom().sendTipMessage(FunctionManager.getCentontString(TotalManager.language.getLanguage("game-end","&b游戏结束"),line.length()));
+        event.getRoom().sendTipMessage("");
+        for(PlayerInfo playerInfo: event.getTeamInfo().getVictoryPlayers()){
+//            "&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getData(PlayerData.DataType.KILL))+" 助攻: "+playerInfo.getData(PlayerData.DataType.ASSISTS)
+            event.getRoom().sendTipMessage(FunctionManager.getCentontString(TotalManager.language.getLanguage("game-end-info","&7   [1] 击杀：[2] 助攻: [3]",
+                    playerInfo.getPlayer().getName(),
+                    playerInfo.getData(PlayerData.DataType.KILL)+"",
+                    playerInfo.getData(PlayerData.DataType.ASSISTS)+""),line.length()));
+            event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",playerInfo.getName())));
+        }
+        event.getRoom().sendTipMessage("&a"+line);
+
+
+        event.getRoom().sendMessage(TotalManager.language.getLanguage("game-end-team-info","&a恭喜 [1] &a 获得了胜利!",event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()));
 
     }
 
@@ -158,6 +179,16 @@ public class TeamInfo {
         //TODO 当队伍失败
         TeamDefeatEvent event = new TeamDefeatEvent(this,room,TotalManager.getPlugin());
         Server.getInstance().getPluginManager().callEvent(event);
+        for (PlayerInfo info:event.getTeamInfo().getDefeatPlayers()) {
+            room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
+            if(event.getRoom().getRoomConfig().isAutomaticNextRound){
+                info.sendMessage(TotalManager.language.getLanguage("player-auto-join-next-room","&7即将自动进行下一局"));
+                RandomJoinManager.joinManager.nextJoin(info);
+                //                ThreadManager.addThread(new AutoJoinGameRoomRunnable(5,info,event.getRoom(),null));
+
+            }
+
+        }
 
     }
 
