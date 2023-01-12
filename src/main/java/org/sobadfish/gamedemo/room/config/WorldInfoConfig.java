@@ -140,6 +140,7 @@ public class WorldInfoConfig {
                 if(Server.getInstance().isLevelLoaded(levelName)) {
                     Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName), true);
                 }
+                Utils.toDelete(f2);
                 Utils.copyFiles(world, f2);
                 return true;
             }

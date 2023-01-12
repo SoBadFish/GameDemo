@@ -104,12 +104,11 @@ public class Utils {
                 if (file1.isDirectory()) {
                     toDelete(file1);
                 } else {
-                    String name = file1.getName();
                     file1.delete();
                 }
             }
         }
-        String name = file.getName();
+
         file.delete();
 
     }

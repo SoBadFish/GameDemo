@@ -151,14 +151,15 @@ public class GameRoomCreator {
                 flag++;
                 break;
             case 4:
-                createSpawnPos();
-                flag++;
-                /*
-                 * 可根据自身需求更改
-                 * 如有其他功能需要创建，增加case并修改提示即可
-                 * */
-                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-end-room-setting","&e继续执行 &r/[1] &e进行下一步 &b[结束房间设置]",
-                        TotalManager.COMMAND_ADMIN_NAME));
+                if(createSpawnPos()) {
+                    flag++;
+                    /*
+                     * 可根据自身需求更改
+                     * 如有其他功能需要创建，增加case并修改提示即可
+                     * */
+                    creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-run-command-end-room-setting", "&e继续执行 &r/[1] &e进行下一步 &b[结束房间设置]",
+                            TotalManager.COMMAND_ADMIN_NAME));
+                }
                 break;
             default:
                 //TODO 到这里房间创建完成
@@ -179,7 +180,7 @@ public class GameRoomCreator {
     /**
      * 创建出生点
      * */
-    private void createSpawnPos(){
+    private boolean createSpawnPos(){
         String teamName = new ArrayList<>(roomConfig.teamCfg.keySet()).get(spawnFlag);
         if(!team.containsKey(teamName)){
             team.put(teamName,new ArrayList<>());
@@ -221,9 +222,11 @@ public class GameRoomCreator {
                     }
                     roomConfig.setTeamConfigs(teamInfoConfigs);
                     roomConfig.setWorldInfo(worldInfoConfig);
+                    return false;
                 }
             }
         }
+        return true;
     }
 
 
