@@ -81,6 +81,8 @@ public class GameAdminCommand extends Command {
             if(!creator.createRoom()){
                 commandSender.sendMessage(language.getLanguage("create-room-error","房间创建失败"));
             }
+            //使用完就释放掉
+            create.remove(commandSender.getName());
         }
         return true;
     }
@@ -347,8 +349,8 @@ public class GameAdminCommand extends Command {
             commandSender.sendMessage(language.getLanguage("template-reload-error","请先创建房间模板"));
             return;
         }
-       GameRoomCreator creater = create.get(commandSender.getName());
-        GameRoomConfig roomConfig = creater.getRoomConfig();
+       GameRoomCreator creator = create.get(commandSender.getName());
+        GameRoomConfig roomConfig = creator.getRoomConfig();
         if(roomConfig != null) {
             GameRoomConfig.loadTeamConfig(roomConfig);
             commandSender.sendMessage(language.getLanguage("template-reload-success","成功重新读取模板信息"));
@@ -358,6 +360,15 @@ public class GameAdminCommand extends Command {
 
     }
 
+    public static GameRoomCreator getCreatorByPlayer(String playerName){
+        if(create.containsKey(playerName)){
+            return create.get(playerName);
+        }
+        return null;
+    }
 
-    private final LinkedHashMap<String, GameRoomCreator> create = new LinkedHashMap<>();
+
+
+
+    private static final LinkedHashMap<String, GameRoomCreator> create = new LinkedHashMap<>();
 }

@@ -172,6 +172,9 @@ public class GameRoomCreator {
 
     }
 
+
+
+
     public int spawnSizeFlag = 0;
     /**
      * 创建出生点
@@ -222,6 +225,10 @@ public class GameRoomCreator {
             }
         }
     }
+
+
+
+
 
 
 

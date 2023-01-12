@@ -6,6 +6,10 @@ gameTime: 1200
 callbackY: 17
 # 玩家复活时间 若设置-1则玩家无法复活
 reSpawnTime: 5
+
+# 在允许复活的时候玩家复活次数
+reSpawnCount: 0
+
 # 死亡是否掉落物品
 deathDrop: true
 # 是否允许玩家旁观

@@ -17,7 +17,9 @@ import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.utils.DyeColor;
 import org.sobadfish.gamedemo.manager.TotalManager;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -170,6 +172,7 @@ public class Utils {
 
 
 
+
     /**
      * 复制文件
      * */
@@ -179,7 +182,7 @@ public class Utils {
         File[] files = old.listFiles();
         if(files != null){
             for (File value : files) {
-                TotalManager.sendMessageToConsole("复制地图中 ... "+((load / (float)files.length) * 100) +"%");
+                TotalManager.sendMessageToConsole("Coping world ... "+((load / (float)files.length) * 100) +"%");
                 load++;
                 if (value.isFile()) {
                     // 复制文件
@@ -250,7 +253,7 @@ public class Utils {
         File file = new File(targetDir);
         if(!file.exists()) {
             if (!file.mkdirs()) {
-                Server.getInstance().getLogger().error("新建" + targetDir + "失败");
+                Server.getInstance().getLogger().error("create" + targetDir + "error");
             }
         }
         // 获取源文件夹当前下的文件或目录

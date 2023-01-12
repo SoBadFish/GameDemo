@@ -57,6 +57,9 @@ public class PlayerInfo {
     //小游戏强制等待的时间
     public int waitTime = 0;
 
+    //玩家复活次数
+    public int reSpawnCount = 0;
+
     public int damageTime = 0;
 
     public int updateTime = 0;
@@ -560,7 +563,6 @@ public class PlayerInfo {
             teamName = TotalManager.getLanguage().getLanguage("player-watch-title","&7[旁观] ");
         }
 
-//        "&7["+data.getLevelString()+"&7]&r "+teamName+playerName
         return TotalManager.getLanguage().getLanguage("player-info-title","&7[[1]&7]&r [2][3]",
                 data.getLevelString(),teamName,playerName);
     }
@@ -700,7 +702,7 @@ public class PlayerInfo {
             damageByInfo = null;
         }
         if(damageByInfo != null){
-//            damageByInfo+"  &a"+damageByInfo.getPlayer().getHealth()+" / "+damageByInfo.getPlayer().getMaxHealth()
+
             sendTip(TotalManager.getLanguage().getLanguage("player-attack-player-msg","[1]  &a[2] / [3]",
                     damageByInfo.toString(),damageByInfo.getPlayer().getHealth()+"",
                     damageByInfo.getPlayer().getMaxHealth()+""));
@@ -736,7 +738,6 @@ public class PlayerInfo {
         //TODO 玩家更新线程
         if(playerType == PlayerType.START){
             //TODO 游戏开始后 可以弄一些buff
-//            teamInfo.getTeamConfig().getNameColor()+player.getName()+" \n&c❤&7"+String.format("%.1f",player.getHealth())
             player.setNameTag(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("player-nametag-info","[1] [n]&c❤&7[2]",teamInfo.getTeamConfig().getNameColor()+player.getName(),
                     String.format("%.1f",player.getHealth()))));
 
@@ -783,6 +784,9 @@ public class PlayerInfo {
         return player.hashCode();
     }
 
+    /**
+     * 玩家死亡后的一些操作
+     * */
     public void death(EntityDamageEvent event){
 
         //TODO 玩家死亡后可以做一些逻辑处理
@@ -800,22 +804,16 @@ public class PlayerInfo {
             return;
         }
         if(gameRoom != null && gameRoom.roomConfig.reSpawnTime >= 0) {
-            if (getPlayer() instanceof Player) {
-                ((Player) getPlayer()).setGamemode(3);
+            int roomReSpawnCount = gameRoom.getRoomConfig().reSpawnCount;
+            if(reSpawnCount > 0 && reSpawnCount < roomReSpawnCount){
+                reSpawnCount++;
+                deathCanRespawn();
+            }else{
+                deathFinal();
             }
-            player.teleport(getGameRoom().worldInfo.getConfig().getGameWorld().getSafeSpawn());
-            Position position = teamInfo.getSpawnLocation();
-            player.teleport(new Position(player.x, position.y + 64, player.z, getLevel()));
-            sendTitle(TotalManager.getLanguage().getLanguage("player-death-info-title","&c你死了"),2);
-            playerType = PlayerType.DEATH;
+
         }else{
-            if (getPlayer() instanceof Player) {
-                ((Player) getPlayer()).setGamemode(3);
-            }
-            playerType = PlayerType.WATCH;
-            if(gameRoom.getRoomConfig().teamConfigs.size() == 1) {
-                teamInfo.getDefeatPlayers().add(this);
-            }
+            deathFinal();
         }
 
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
@@ -823,14 +821,57 @@ public class PlayerInfo {
         }
         player.teleport(teamInfo.getSpawnLocation());
         addData(PlayerData.DataType.DEATH);
-        if(event != null) {
-            if(gameRoom != null){
-                if(gameRoom.getRoomConfig().isDeathDrop()){
-                    for(Item item: player.getInventory().getContents().values()){
-                        player.level.dropItem(player,item,new Vector3(0,0.5,0));
-                    }
+
+        //死亡后是否掉落物品
+        if(gameRoom != null){
+            if(gameRoom.getRoomConfig().isDeathDrop()){
+                for(Item item: player.getInventory().getContents().values()){
+                    player.level.dropItem(player,item,new Vector3(0,0.5,0));
                 }
             }
+        }
+        //玩家死亡后的信息
+        echoPlayerDeathInfo(event);
+
+        damageByInfo = null;
+
+        player.getInventory().clearAll();
+        player.getOffhandInventory().clearAll();
+        if(playerType == PlayerType.WATCH){
+            getGameRoom().joinWatch(this,false);
+        }
+    }
+
+    /**
+     * 允许玩家复活
+     * */
+    public void deathCanRespawn(){
+        if (getPlayer() instanceof Player) {
+            ((Player) getPlayer()).setGamemode(3);
+        }
+        player.teleport(getGameRoom().worldInfo.getConfig().getGameWorld().getSafeSpawn());
+        Position position = teamInfo.getSpawnLocation();
+        player.teleport(new Position(player.x, position.y + 64, player.z, getLevel()));
+        sendTitle(TotalManager.getLanguage().getLanguage("player-death-info-title","&c你死了"),2);
+        playerType = PlayerType.DEATH;
+    }
+
+    /**
+     * 死亡后进入旁观模式
+     * */
+    public void deathFinal(){
+        if (getPlayer() instanceof Player) {
+            ((Player) getPlayer()).setGamemode(3);
+        }
+        playerType = PlayerType.WATCH;
+        if(gameRoom.getRoomConfig().teamConfigs.size() == 1) {
+            teamInfo.getDefeatPlayers().add(this);
+        }
+    }
+
+    public void echoPlayerDeathInfo(EntityDamageEvent event){
+        if(event != null) {
+
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                 if(damageByInfo != null){
                     gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-death-by-player-void","[1] &e被 &r[2] 推入虚空。",
@@ -849,7 +890,6 @@ public class PlayerInfo {
                     }
                     if (info != null) {
                         addKill(info);
-//                        this + " &e被 &r" + info + " "+killInfo+"了。"
                         gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-kill-player-info",
                                 "[1] &e被 &r[2] [3]了。",
                                 this.toString(),info.toString(),killInfo));
@@ -863,7 +903,6 @@ public class PlayerInfo {
                     addKill(damageByInfo);
                     gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-death-by-player-kill","[1] &e被 &r[2] 击败了",
                             this.toString(),damageByInfo.toString()));
-//                    gameRoom.sendMessage(this + " &e被 &r" + damageByInfo + " 击败了");
                 }else {
                     String deathInfo = TotalManager.getLanguage().getLanguage("player-death-info-unknown","&e死了");
                     switch (event.getCause()){
@@ -884,13 +923,6 @@ public class PlayerInfo {
                     gameRoom.sendMessage(this +deathInfo);
                 }
             }
-        }
-        damageByInfo = null;
-
-        player.getInventory().clearAll();
-        player.getOffhandInventory().clearAll();
-        if(playerType == PlayerType.WATCH){
-            getGameRoom().joinWatch(this,false);
         }
     }
 
