@@ -230,6 +230,11 @@ public class GameRoom {
             if(event.isCancelled()){
                 return JoinType.NO_JOIN;
             }
+            if(info.getPlayer() instanceof Player) {
+                ((Player) info.getPlayer()).setFoodEnabled(false);
+                ((Player) info.getPlayer()).setGamemode(2);
+            }
+
 
             info.sendForceTitle("",1);
             info.sendForceSubTitle("");
@@ -319,10 +324,6 @@ public class GameRoom {
                 info.sendForceMessage(TotalManager.language.getLanguage("player-join-in-room-max","&c房间满了"));
             }
             event.setCancelled();
-        }
-        if(info.getPlayer() instanceof Player) {
-            ((Player) info.getPlayer()).setFoodEnabled(false);
-            ((Player) info.getPlayer()).setGamemode(2);
         }
 
     }
