@@ -35,7 +35,7 @@ import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
-import org.sobadfish.gamedemo.event.*;
+import org.sobadfish.gamedemo.event.TeamDefeatEvent;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
 import org.sobadfish.gamedemo.item.button.RoomQuitItem;
 import org.sobadfish.gamedemo.item.button.TeamChoseItem;
