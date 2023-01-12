@@ -8,6 +8,7 @@ import org.sobadfish.gamedemo.manager.data.PlayerDataManager;
 import org.sobadfish.gamedemo.manager.data.PlayerTopManager;
 import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
+import org.sobadfish.gamedemo.room.event.defaults.ChestResetEvent;
 import org.sobadfish.gamedemo.room.event.defaults.CommandEvent;
 import org.sobadfish.gamedemo.room.event.defaults.CustomEvent;
 import org.sobadfish.gamedemo.room.event.defaults.EffectEvent;
@@ -63,6 +64,7 @@ public class TotalManager {
         RoomEventManager.register("custom", CustomEvent.class);
         RoomEventManager.register("effect", EffectEvent.class);
         RoomEventManager.register("command", CommandEvent.class);
+        RoomEventManager.register("chest_reset", ChestResetEvent.class);
         ThreadManager.init();
     }
 

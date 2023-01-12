@@ -55,6 +55,12 @@ defeatCmd: []
 # 玩家开启地图内箱子是否随机刷新物品
 
 roundChest: false
+
+# 箱子重置时间(秒)
+chest-reset-time: 120
+
+
+
 # 禁止破坏的方块
 # 当禁止破坏的方块大于0时，全地图可破坏
 ban-break:
