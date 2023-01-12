@@ -164,7 +164,7 @@ public class GameRoomCreator {
                 //TODO 到这里房间创建完成
                 flag = 1;
                 isCreate = true;
-                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-success","&a游戏房间创建完成 &c(重启生效配置)"));
+                creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-setting-success","&a游戏房间创建完成 &c(重启生效配置)"));
                 return false;
         }
 
