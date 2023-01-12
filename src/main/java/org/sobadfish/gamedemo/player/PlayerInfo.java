@@ -807,6 +807,8 @@ public class PlayerInfo {
             int roomReSpawnCount = gameRoom.getRoomConfig().reSpawnCount;
             if(reSpawnCount > 0 && reSpawnCount < roomReSpawnCount){
                 reSpawnCount++;
+                sendMessage(TotalManager.getLanguage().getLanguage("player-respawn-count","&e你还能复活 &a[1] &e次",
+                        (roomReSpawnCount - reSpawnCount)+""));
                 deathCanRespawn();
             }else{
                 deathFinal();
