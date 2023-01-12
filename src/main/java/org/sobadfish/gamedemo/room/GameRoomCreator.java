@@ -179,6 +179,7 @@ public class GameRoomCreator {
     public int spawnSizeFlag = 0;
     /**
      * 创建出生点
+     * @return true: 完成设置 false 未完成设置
      * */
     private boolean createSpawnPos(){
         String teamName = new ArrayList<>(roomConfig.teamCfg.keySet()).get(spawnFlag);
@@ -222,11 +223,11 @@ public class GameRoomCreator {
                     }
                     roomConfig.setTeamConfigs(teamInfoConfigs);
                     roomConfig.setWorldInfo(worldInfoConfig);
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
 
