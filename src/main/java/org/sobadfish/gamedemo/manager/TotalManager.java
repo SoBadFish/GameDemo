@@ -27,17 +27,17 @@ public class TotalManager {
     /**
      * 游戏指令
      * */
-    public static final String COMMAND_NAME = "gd";
+    public static String COMMAND_NAME = "gd";
 
     /**
      * 游戏管理员指令
      * */
-    public static final String COMMAND_ADMIN_NAME = "gda";
+    public static String COMMAND_ADMIN_NAME = "gda";
 
     /**
      * 游戏内喊话指令
      * */
-    public static final String COMMAND_MESSAGE_NAME = "gds";
+    public static String COMMAND_MESSAGE_NAME = "gds";
 
     /**
      * 小游戏名称
@@ -62,6 +62,9 @@ public class TotalManager {
         TotalManager.plugin = pluginBase;
         checkServer();
         loadConfig();
+        COMMAND_NAME = plugin.getConfig().getString("command-player","gd");
+        COMMAND_ADMIN_NAME = plugin.getConfig().getString("command-admin","gda");
+        COMMAND_MESSAGE_NAME = plugin.getConfig().getString("command-msg","gds");
         RoomEventManager.register("custom", CustomEvent.class);
         RoomEventManager.register("effect", EffectEvent.class);
         RoomEventManager.register("command", CommandEvent.class);
