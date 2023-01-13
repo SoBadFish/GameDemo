@@ -11,11 +11,11 @@ import java.util.ArrayList;
  */
 public class WorldRoom {
 
-    private String name;
+    private final String name;
 
-    private ElementButtonImageData imageData;
+    private final ElementButtonImageData imageData;
 
-    private ArrayList<GameRoomConfig> roomConfigs;
+    private final ArrayList<GameRoomConfig> roomConfigs;
 
     public WorldRoom(String name, ArrayList<GameRoomConfig> roomConfigs, ElementButtonImageData imageData){
         this.name = name;
