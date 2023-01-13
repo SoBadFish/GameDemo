@@ -169,7 +169,7 @@ public class GameRoom {
             ((Player)info.getPlayer()).setGamemode(3);
         }
 
-        info.setMoveSpeed(2);
+        info.setMoveSpeed(1.5f);
         info.setPlayerType(PlayerInfo.PlayerType.WATCH);
         info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
         info.getPlayer().getInventory().setItem(FollowItem.getIndex(), FollowItem.get());
