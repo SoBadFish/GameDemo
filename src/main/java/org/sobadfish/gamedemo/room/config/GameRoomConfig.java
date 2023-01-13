@@ -40,6 +40,10 @@ public class GameRoomConfig {
      * 等待时长
      * */
     public int waitTime;
+    /**
+     * 游戏内等待时长
+     * */
+    public int gameInWait;
 
     /**
      * 复活时长
@@ -269,6 +273,7 @@ public class GameRoomConfig {
 
                 int time = room.getInt("gameTime");
                 int waitTime = room.getInt("waitTime");
+
                 int maxWaitTime = room.getInt("max-player-waitTime");
                 int minPlayerSize = room.getInt("minPlayerSize");
                 int maxPlayerSize =  room.getInt("maxPlayerSize");
@@ -279,6 +284,7 @@ public class GameRoomConfig {
                 }
                 GameRoomConfig roomConfig = new GameRoomConfig(name,worldInfoConfig,time,waitTime,maxWaitTime,minPlayerSize,maxPlayerSize,teamInfoConfigs);
                 roomConfig.hasWatch = room.getBoolean("hasWatch",true);
+                roomConfig.gameInWait = room.getInt("gameInWait",10);
                 roomConfig.reSpawnTime = room.getInt("reSpawnTime",0);
                 roomConfig.reSpawnCount = room.getInt("reSpawnCount",0);
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
@@ -388,6 +394,7 @@ public class GameRoomConfig {
 
         config.set("callbackY",callbackY);
         config.set("waitTime",waitTime);
+        config.set("gameInWait",gameInWait);
         config.set("reSpawnTime",reSpawnTime);
         config.set("reSpawnCount",reSpawnCount);
         config.set("enable-food",enableFood);

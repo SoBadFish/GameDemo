@@ -695,6 +695,9 @@ public class GameRoom {
             //TODO 当房间开始
 
             for(PlayerInfo i : getPlayerInfos()){
+                if(roomConfig.gameInWait > 0){
+                    i.waitTime = roomConfig.gameInWait;
+                }
                 try {
                     i.spawn();
                 }catch (Exception e){

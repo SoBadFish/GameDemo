@@ -22,6 +22,7 @@ import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
 import org.sobadfish.gamedemo.event.PlayerGameDeathEvent;
+import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.message.ScoreBoardMessage;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
@@ -61,8 +62,6 @@ public class PlayerInfo {
     public int reSpawnCount = 0;
 
     public int damageTime = 0;
-
-    public int updateTime = 0;
 
     private PlayerInfo damageByInfo = null;
 
@@ -688,6 +687,16 @@ public class PlayerInfo {
      * */
     public void onUpdate(){
         //TODO 玩家进入房间后每秒就会调用这个方法
+        if(waitTime > 0){
+            waitTime--;
+            player.setImmobile(true);
+            sendMessage(TotalManager.getLanguage().getLanguage("player-wait","&e开始倒计时 &r[1] &a[2] s",
+                    FunctionManager.drawLine(waitTime / (float)gameRoom.getRoomConfig().gameInWait,
+                            10,"&c■","&7■")));
+        }else if(waitTime == 0){
+            waitTime = -1;
+            player.setImmobile(false);
+        }
 
         //助攻间隔
         LinkedHashMap<PlayerInfo,Long> ass = new LinkedHashMap<>(assistsPlayers);
