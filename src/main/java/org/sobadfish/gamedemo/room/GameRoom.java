@@ -196,14 +196,14 @@ public class GameRoom {
         if(roomConfig.getWorldInfo().getGameWorld() == null){
             return null;
         }
-        if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig)){
+        if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig.name)){
             return null;
         }
         return new GameRoom(roomConfig);
     }
 
     public JoinType joinPlayerInfo(PlayerInfo info,boolean sendMessage){
-        if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig)){
+        if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig.name)){
             return JoinType.NO_JOIN;
         }
         if(info.getGameRoom() == null){
@@ -698,6 +698,7 @@ public class GameRoom {
                 try {
                     i.spawn();
                 }catch (Exception e){
+                    e.printStackTrace();
                     i.sendForceMessage(TotalManager.getLanguage().getLanguage("room-start-game-teleport-error","&c出现未知原因影响导致无法正常传送 正在重新将你移动中"));
                     try {
                         i.spawn();
@@ -928,7 +929,7 @@ public class GameRoom {
 //            level1.unloadChunks();
             worldInfo.setClose(true);
             worldInfo = null;
-            WorldResetManager.RESET_QUEUE.put(getRoomConfig(),level);
+            WorldResetManager.RESET_QUEUE.put(getRoomConfig().name,level);
         }else{
             worldInfo.setClose(true);
             worldInfo = null;

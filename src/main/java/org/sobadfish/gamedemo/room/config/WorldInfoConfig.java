@@ -141,7 +141,7 @@ public class WorldInfoConfig {
                     Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName), true);
                 }
                 Utils.toDelete(f2);
-                if(!f2.mkdirs()){
+                if(!f2.exists() && !f2.mkdirs()){
                     TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("world-create-folder-error","&c创建地图文件夹失败"));
                 }
                 Utils.copyFiles(world, f2);

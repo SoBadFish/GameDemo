@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.manager;
 
 import cn.nukkit.Player;
+import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
@@ -104,7 +105,7 @@ public class TotalManager {
     }
 
     public static String getScoreBoardTitle(){
-        return TextFormat.colorize('&', plugin.getConfig().getString("scoreboard-title","&f[&a迷你战墙&f]"));
+        return TextFormat.colorize('&', plugin.getConfig().getString("scoreboard-title","&f[&a小游戏&f]"));
     }
 
     public static LanguageManager getLanguage() {
@@ -119,6 +120,9 @@ public class TotalManager {
                     ((Player) o).sendMessage(message);
                     return;
                 }
+            }
+            if(o instanceof EntityHuman){
+                message = ((EntityHuman) o).getName()+"->"+message;
             }
         }
         plugin.getLogger().info(message);

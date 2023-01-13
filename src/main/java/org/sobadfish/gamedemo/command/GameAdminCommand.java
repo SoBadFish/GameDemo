@@ -9,6 +9,7 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Position;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.entity.RobotEntity;
 import org.sobadfish.gamedemo.manager.LanguageManager;
 import org.sobadfish.gamedemo.manager.ThreadManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
@@ -19,7 +20,6 @@ import org.sobadfish.gamedemo.room.GameRoomCreator;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
-import org.sobadfish.gamedemo.thread.BaseValueRunnable;
 import org.sobadfish.gamedemo.top.TopItem;
 
 import java.util.LinkedHashMap;
@@ -178,7 +178,7 @@ public class GameAdminCommand extends Command {
                 break;
             case "robot":
 
-                if(strings.length < 2){
+                if(strings.length < 3){
                     commandSender.sendMessage(language.getLanguage("usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
                     return false;
                 }
@@ -190,8 +190,7 @@ public class GameAdminCommand extends Command {
                 }
                 int count = Integer.parseInt(strings[2]);
                 for(int i = 0; i < count; i++){
-//                    延时一会加入游戏
-                    Position pos = Server.getInstance().getDefaultLevel().getSafeSpawn();
+                    Position pos = roomConfig.getWorldInfo().getWaitPosition();
                     CompoundTag tag = EntityHuman.getDefaultNBT(pos);
                     Skin.initDefaultSkin();
                     Skin skin = Skin.NO_PERSONA_SKIN;
@@ -200,7 +199,7 @@ public class GameAdminCommand extends Command {
                             .putString("ModelId",skin.getSkinId())
                     );
                     int finalI = i;
-                    EntityHuman entityHuman = new EntityHuman(pos.getChunk(), tag){
+                    RobotEntity entityHuman = new RobotEntity(pos.getChunk(), tag){
                         @Override
                         public String getName() {
                             return "robot No."+ finalI;
@@ -212,16 +211,11 @@ public class GameAdminCommand extends Command {
                     entityHuman.setNameTagVisible(true);
                     entityHuman.setSkin(skin);
                     entityHuman.spawnToAll();
-                    Server.getInstance().getScheduler().scheduleDelayedTask(new BaseValueRunnable(entityHuman,roomName) {
-                        @Override
-                        public void run() {
-                            if(value[0] instanceof EntityHuman){
-                                TotalManager.getRoomManager().joinRoom(new PlayerInfo((EntityHuman) value[0]),
-                                        value[1].toString());
-                            }
+                    TotalManager.getRoomManager().joinRoom(new PlayerInfo(entityHuman), roomName);
 
-                        }
-                    },40);
+
+
+
                 }
 
                 break;
