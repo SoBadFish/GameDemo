@@ -35,7 +35,6 @@ import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
-import org.sobadfish.gamedemo.event.TeamDefeatEvent;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
 import org.sobadfish.gamedemo.item.button.RoomQuitItem;
 import org.sobadfish.gamedemo.item.button.TeamChoseItem;
@@ -382,10 +381,10 @@ public class RoomManager implements Listener {
         Entity entity = event.getEntity();
         Level level = event.getTarget();
         GameRoom room = getGameRoomByLevel(level);
-        if(entity instanceof EntityHuman) {
-            PlayerInfo info = getPlayerInfo((EntityHuman) entity);
+        if(entity instanceof Player) {
+            PlayerInfo info = getPlayerInfo((Player) entity);
             if(info == null){
-                info = new PlayerInfo((EntityHuman) entity);
+                info = new PlayerInfo((Player) entity);
             }
             if (room != null) {
                 //不能阻止正常进入游戏
@@ -836,12 +835,7 @@ public class RoomManager implements Listener {
         }
     }
 
-    @EventHandler
-    public void onTeamDefeat(TeamDefeatEvent event){
 
-//        final GameRoom room = event.getRoom();
-
-    }
 
     @EventHandler
     public void onExecuteCommand(PlayerCommandPreprocessEvent event){

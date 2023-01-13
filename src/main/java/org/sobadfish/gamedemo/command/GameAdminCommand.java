@@ -4,6 +4,10 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.entity.EntityHuman;
+import cn.nukkit.entity.data.Skin;
+import cn.nukkit.level.Position;
+import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.manager.LanguageManager;
 import org.sobadfish.gamedemo.manager.ThreadManager;
@@ -15,6 +19,7 @@ import org.sobadfish.gamedemo.room.GameRoomCreator;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
+import org.sobadfish.gamedemo.thread.BaseValueRunnable;
 import org.sobadfish.gamedemo.top.TopItem;
 
 import java.util.LinkedHashMap;
@@ -110,6 +115,7 @@ public class GameAdminCommand extends Command {
             commandSender.sendMessage(language.getLanguage("command-admin-end","/[1] end 停止模板预设",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-float","/[1] float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-cancel","/[1] cancel 终止房间创建",valueData));
+            commandSender.sendMessage(language.getLanguage("command-admin-robot","/[1] robot [房间名称] [数量] 向游戏房间内增加测试机器人",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-top","/[1] top add/remove [名称] [类型] [房间(可不填)] 创建/删除排行榜",valueData));
             StringBuilder v = new StringBuilder(language.getLanguage("top-type","类型: "));
             for(PlayerData.DataType type: PlayerData.DataType.values()){
@@ -167,6 +173,55 @@ public class GameAdminCommand extends Command {
                 }else{
                     commandSender.sendMessage(language.getLanguage("do-not-console","请不要在控制台执行"));
                     return false;
+                }
+
+                break;
+            case "robot":
+
+                if(strings.length < 2){
+                    commandSender.sendMessage(language.getLanguage("usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
+                    return false;
+                }
+                String roomName = strings[1];
+                GameRoomConfig roomConfig = TotalManager.getRoomManager().getRoomConfig(roomName);
+                if(roomConfig == null){
+                    commandSender.sendMessage(language.getLanguage("room-no-exists","房间 [1] 不存在",strings[2]));
+                    return false;
+                }
+                int count = Integer.parseInt(strings[2]);
+                for(int i = 0; i < count; i++){
+//                    延时一会加入游戏
+                    Position pos = Server.getInstance().getDefaultLevel().getSafeSpawn();
+                    CompoundTag tag = EntityHuman.getDefaultNBT(pos);
+                    Skin.initDefaultSkin();
+                    Skin skin = Skin.NO_PERSONA_SKIN;
+                    tag.putCompound("Skin",new CompoundTag()
+                            .putByteArray("Data", skin.getSkinData().data)
+                            .putString("ModelId",skin.getSkinId())
+                    );
+                    int finalI = i;
+                    EntityHuman entityHuman = new EntityHuman(pos.getChunk(), tag){
+                        @Override
+                        public String getName() {
+                            return "robot No."+ finalI;
+                        }
+                    };
+                    entityHuman.setNameTag("robot No."+ i);
+
+                    entityHuman.setNameTagAlwaysVisible(true);
+                    entityHuman.setNameTagVisible(true);
+                    entityHuman.setSkin(skin);
+                    entityHuman.spawnToAll();
+                    Server.getInstance().getScheduler().scheduleDelayedTask(new BaseValueRunnable(entityHuman,roomName) {
+                        @Override
+                        public void run() {
+                            if(value[0] instanceof EntityHuman){
+                                TotalManager.getRoomManager().joinRoom(new PlayerInfo((EntityHuman) value[0]),
+                                        value[1].toString());
+                            }
+
+                        }
+                    },40);
                 }
 
                 break;
@@ -257,9 +312,9 @@ public class GameAdminCommand extends Command {
                     return false;
                 }
                 if(commandSender instanceof Player) {
-                    GameRoomConfig roomConfig = TotalManager.getRoomManager().getRoomConfig(strings[2]);
+                    roomConfig = TotalManager.getRoomManager().getRoomConfig(strings[2]);
                     if(roomConfig == null){
-                        commandSender.sendMessage(language.getLanguage("float-room-no-exists","房间 [1] 不存在",strings[2]));
+                        commandSender.sendMessage(language.getLanguage("room-no-exists","房间 [1] 不存在",strings[2]));
                         return false;
                     }
                     if("remove".equalsIgnoreCase(strings[1])){
@@ -366,6 +421,7 @@ public class GameAdminCommand extends Command {
         }
         return null;
     }
+
 
 
 

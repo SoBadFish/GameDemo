@@ -226,8 +226,11 @@ public class GameRoom {
             PlayerJoinRoomEvent event = new PlayerJoinRoomEvent(info,this,TotalManager.getPlugin());
             event.setSend(sendMessage);
             Server.getInstance().getPluginManager().callEvent(event);
-            eventToJoinPlayer(event);
+
             if(event.isCancelled()){
+                return JoinType.NO_JOIN;
+            }
+            if(!eventToJoinPlayer(event)){
                 return JoinType.NO_JOIN;
             }
             if(info.getPlayer() instanceof Player) {
@@ -278,7 +281,7 @@ public class GameRoom {
     /**
      * 玩家加入房间的一些监听
      * */
-    private void eventToJoinPlayer(PlayerJoinRoomEvent event) {
+    private boolean eventToJoinPlayer(PlayerJoinRoomEvent event) {
         PlayerInfo info = event.getPlayerInfo();
         GameRoom gameRoom = event.getRoom();
         if (TotalManager.getRoomManager().playerJoin.containsKey(info.getPlayer().getName())) {
@@ -287,8 +290,7 @@ public class GameRoom {
                 if(event.isSend()) {
                     info.sendForceMessage(TotalManager.language.getLanguage("player-join-in-room","&c你已经在游戏房间内了"));
                 }
-                event.setCancelled();
-                return;
+                return false;
             }
             if (TotalManager.getRoomManager().hasGameRoom(roomName)) {
                 GameRoom room = TotalManager.getRoomManager().getRoom(roomName);
@@ -298,7 +300,7 @@ public class GameRoom {
                         if(event.isSend()) {
                             info.sendForceMessage(TotalManager.language.getLanguage("player-join-in-room","&c你已经在游戏房间内了"));
                         }
-                        event.setCancelled();
+                        return false;
 
                     }
                 }
@@ -309,22 +311,22 @@ public class GameRoom {
                 //TODO 或许还能旁观
                 if(gameRoom.getRoomConfig().hasWatch){
                     event.setCancelled();
-                    return;
+                    return false;
                 }
 
             }
             if(event.isSend()) {
                 info.sendForceMessage(TotalManager.language.getLanguage("player-join-in-room-started","&c游戏已经开始了"));
             }
-            event.setCancelled();
-            return;
+            return false;
         }
         if(gameRoom.getPlayerInfos().size() == gameRoom.getRoomConfig().getMaxPlayerSize()){
             if(event.isSend()) {
                 info.sendForceMessage(TotalManager.language.getLanguage("player-join-in-room-max","&c房间满了"));
             }
-            event.setCancelled();
+            return false;
         }
+        return true;
 
     }
 
@@ -639,7 +641,9 @@ public class GameRoom {
         //移除编外人员
         for(PlayerInfo info: getInRoomPlayers()){
             if(!TotalManager.getRoomManager().playerJoin.containsKey(info.getPlayer().getName())){
-                playerInfos.remove(info);
+                if(info.getPlayer() instanceof Player){
+                    playerInfos.remove(info);
+                }
             }
         }
 
