@@ -662,7 +662,7 @@ public class PlayerInfo {
             lore.add("      ");
             lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-kill","击杀数: &a[1]",
                     getData(PlayerData.DataType.KILL)+""));
-            lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-kill",
+            lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-assists",
                     "助攻数: &a[1]",
                     getData(PlayerData.DataType.ASSISTS)+""));
 
