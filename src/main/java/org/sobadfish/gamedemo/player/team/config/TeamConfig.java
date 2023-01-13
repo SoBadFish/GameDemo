@@ -127,7 +127,27 @@ public class TeamConfig {
         LinkedHashMap<Integer,Item> items = new LinkedHashMap<>();
         int i = 0;
         for(Object o: list){
-            Item item = Item.fromString(o.toString());
+            String[] s = o.toString().split(":");
+            int itemId = 0;
+            try{
+                itemId = Integer.parseInt(s[0]);
+            }catch (Exception ignored){}
+            int itemDamage = 0;
+            if(s.length > 1){
+                try {
+                    itemDamage = Integer.parseInt(s[1]);
+                }catch (Exception ignored){}
+            }
+            int itemCount = 0;
+            if(s.length > 2){
+                try {
+                    itemCount = Integer.parseInt(s[2]);
+                }catch (Exception ignored){}
+            }
+
+            Item item =  Item.get(itemId,itemDamage);
+            item.setCount(itemCount);
+
             if(item.getId() > 0) {
                 items.put(i,item);
             }
