@@ -37,7 +37,7 @@ import java.util.LinkedHashMap;
 public class GameAdminCommand extends Command {
 
 
-    public LanguageManager language = TotalManager.getLanguage();
+    private LanguageManager language = TotalManager.getLanguage();
 
     public GameAdminCommand(String name) {
         super(name);
