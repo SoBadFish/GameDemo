@@ -7,11 +7,9 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.manager.FloatTextManager;
 import org.sobadfish.gamedemo.room.GameRoom;
-
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -132,9 +130,11 @@ public class GameFloatText extends Entity {
                 spawnTo(player);
             }else{
                 this.player.remove(player);
-                RemoveEntityPacket dp = new RemoveEntityPacket();
-                dp.eid = getId();
-                player.dataPacket(dp);
+                //直接用close移除即可
+                close();
+//                RemoveEntityPacket dp = new RemoveEntityPacket();
+//                dp.eid = getId();
+//                player.dataPacket(dp);
             }
         }
     }
