@@ -7,6 +7,7 @@ import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -167,24 +168,9 @@ public class PlayerData {
 
     public static class RoomData{
 
-        public String roomName = "";
+        String roomName = "";
 
-        //击杀数量
-        public int killCount = 0;
-
-        //死亡数量
-        public int deathCount = 0;
-        //游戏次数
-        public int gameCount = 0;
-
-        //失败次数
-        public int defeatCount = 0;
-
-        //胜利次数
-        public int victoryCount = 0;
-
-        //助攻次数
-        public int assist = 0;
+        public LinkedHashMap<String, Integer> data = new LinkedHashMap<>();
 
         @Override
         public boolean equals(Object o) {
@@ -205,32 +191,10 @@ public class PlayerData {
 
         public int getInt(DataType type){
             int c = 0;
-            switch (type){
-                case VICTORY:
-                    c += victoryCount;
-                    break;
-                case DEFEAT:
-                    c += defeatCount;
-                    break;
-                case DEATH:
-                    c += deathCount;
-                    break;
-                case KILL:
-                    c += killCount;
-                    break;
-                case GAME:
-                    c += gameCount;
-                    break;
-                case ASSISTS:
-                    c += assist;
-                    break;
-                default:break;
-
+            if(data.containsKey(type.getName())){
+                return data.get(type.getName());
             }
-
             return c;
-
-
         }
     }
 
@@ -247,9 +211,10 @@ public class PlayerData {
 
     public void setInfo(PlayerInfo info){
         RoomData data = getRoomData(info.getGameRoom().getRoomConfig().name);
-        data.deathCount += info.deathCount;
-        data.killCount += info.killCount;
-        data.assist += info.assists;
+        for(DataType dataType: info.statistics.keySet()){
+            data.data.put(dataType.getName(),data.data.get(dataType.getName())
+                    + info.statistics.get(dataType));
+        }
     }
 
     @Override
