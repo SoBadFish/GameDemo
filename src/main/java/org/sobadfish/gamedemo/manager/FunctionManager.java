@@ -179,28 +179,36 @@ public class FunctionManager {
     private static Item stringToItem(String s){
         String[] sList = s.split(":");
         //tag物品截胡检测一下
+        Item item = Item.get(0);
         TagItemDataManager itemDataManager = TotalManager.getTagItemDataManager();
         if(itemDataManager.hasItem(sList[0])){
-            Item item = itemDataManager.getItem(sList[0]);
+             item = itemDataManager.getItem(sList[0]);
             int count = 1;
             if(sList.length > 1){
                 count = Integer.parseInt(sList[1]);
             }
             item.setCount(count);
-            if(item.getId() > 0){
-                return item;
+        }
+
+        if(item.getId() == 0){
+            item = Item.get(Integer.parseInt(sList[0]));
+            if(sList.length > 1){
+                item.setDamage(Integer.parseInt(sList[1]));
+                if(sList.length > 2){
+                    item.setCount(Integer.parseInt(sList[2]));
+                }else{
+                    item.setCount(1);
+                }
             }
         }
 
-        Item item = Item.get(Integer.parseInt(sList[0]));
-        if(sList.length > 1){
-            item.setDamage(Integer.parseInt(sList[1]));
-            if(sList.length > 2){
-                item.setCount(Integer.parseInt(sList[2]));
-            }else{
-                item.setCount(1);
-            }
-        }
+//        if(value.length > 1){
+//            //自定义随机附魔格式
+//            //-1(代表无)~9 or -1,3,9 : 0 ~ 3 or 0,2,3
+//            String[] ench = value[1].split(":");
+//
+//        }
+
         return item;
 
     }
