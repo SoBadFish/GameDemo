@@ -191,6 +191,9 @@ public class PlayerData {
 
         public int getInt(DataType type){
             int c = 0;
+            if(type == null){
+                return c;
+            }
             if(data.containsKey(type.getName())){
                 return data.get(type.getName());
             }

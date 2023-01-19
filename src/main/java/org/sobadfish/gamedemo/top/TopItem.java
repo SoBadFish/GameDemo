@@ -23,14 +23,27 @@ public class TopItem {
 
 
     public TopItem(String name, PlayerData.DataType topType, Position position, String title){
-        this.topType = topType.getName();
+        this.topType = topType.toString();
         this.position = WorldInfoConfig.positionToString(position);
         this.name = name;
         this.title = title;
     }
 
+    /**
+     * 修复名称不匹配的BUG
+     * */
     public PlayerData.DataType getTopType() {
-        return PlayerData.DataType.byName(topType);
+        PlayerData.DataType dataType = PlayerData.DataType.byName(topType);
+        if(dataType == null){
+            try {
+                dataType = PlayerData.DataType.valueOf(topType);
+            }catch (Exception e){
+                dataType = PlayerData.DataType.GAME;
+            }
+
+        }
+        return dataType;
+
     }
 
     public Position getPosition() {
