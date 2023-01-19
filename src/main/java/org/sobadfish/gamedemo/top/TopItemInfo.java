@@ -29,8 +29,5 @@ public class TopItemInfo {
         return Objects.equals(topItem, that.topItem);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(topItem);
-    }
+
 }
