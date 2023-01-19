@@ -7,7 +7,6 @@ import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TopItem {
 
@@ -123,13 +122,9 @@ public class TopItem {
     @Override
     public boolean equals(Object o) {
         if(o instanceof TopItem){
-            return ((TopItem) o).name.equalsIgnoreCase(name) && ((TopItem) o).topType.equals(topType);
+            return ((TopItem) o).name.equalsIgnoreCase(name) && ((TopItem) o).topType.equalsIgnoreCase(topType);
         }
         return false;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, topType);
-    }
+    
 }
