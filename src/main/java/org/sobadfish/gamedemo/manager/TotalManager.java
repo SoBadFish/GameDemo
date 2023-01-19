@@ -7,6 +7,7 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.manager.data.PlayerDataManager;
 import org.sobadfish.gamedemo.manager.data.PlayerTopManager;
+import org.sobadfish.gamedemo.manager.data.TagItemDataManager;
 import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.event.defaults.ChestResetEvent;
@@ -52,6 +53,8 @@ public class TotalManager {
     private static PlayerDataManager dataManager;
 
     private static PlayerTopManager topManager;
+
+    private static TagItemDataManager tagItemDataManager;
 
     public static LanguageManager language;
 
@@ -144,6 +147,7 @@ public class TotalManager {
         upExp = getConfig().getInt("up-exp",500);
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
+        tagItemDataManager = TagItemDataManager.asFile(new File(plugin.getDataFolder()+File.separator+"tag.json"));
         File mainFileDir = new File(plugin.getDataFolder()+File.separator+"rooms");
         if(!mainFileDir.exists()){
             if(!mainFileDir.mkdirs()){
@@ -183,6 +187,9 @@ public class TotalManager {
         return menuRoomManager;
     }
 
+    public static TagItemDataManager getTagItemDataManager() {
+        return tagItemDataManager;
+    }
 
     public static void sendMessageToObject(String msg, Object o){
         String message = TextFormat.colorize('&',getTitle()+" &b>>&r "+msg);

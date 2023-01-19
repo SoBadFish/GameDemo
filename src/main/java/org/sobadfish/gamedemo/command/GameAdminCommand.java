@@ -6,10 +6,12 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.data.Skin;
+import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.entity.RobotEntity;
+import org.sobadfish.gamedemo.item.tag.TagItem;
 import org.sobadfish.gamedemo.manager.LanguageManager;
 import org.sobadfish.gamedemo.manager.ThreadManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
@@ -109,6 +111,7 @@ public class GameAdminCommand extends Command {
             commandSender.sendMessage(language.getLanguage("command-admin-set","/[1] set [名称] 创建一个自定义房间模板",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-tsl","/[1] tsl 读取模板的队伍数据",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-see","/[1] see 查看所有加载的房间",valueData));
+            commandSender.sendMessage(language.getLanguage("command-admin-save-item","/[1] si [名称] 将手持的物品保存到配置文件中",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-close","/[1] close [名称] 关闭房间",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-exp","/[1] exp [玩家] [数量] <由来> 增加玩家经验",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-status","/[1] status 查看线程状态",valueData));
@@ -179,7 +182,7 @@ public class GameAdminCommand extends Command {
             case "robot":
 
                 if(strings.length < 3){
-                    commandSender.sendMessage(language.getLanguage("usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
+                    commandSender.sendMessage(language.getLanguage("command-admin-usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
                     return false;
                 }
                 String roomName = strings[1];
@@ -221,7 +224,7 @@ public class GameAdminCommand extends Command {
                 break;
             case "exp":
                 if(strings.length < 3){
-                    commandSender.sendMessage(language.getLanguage("usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
+                    commandSender.sendMessage(language.getLanguage("command-admin-usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
                     return false;
                 }
                 String playerName = strings[1];
@@ -251,7 +254,7 @@ public class GameAdminCommand extends Command {
             case "top":
                 if(commandSender instanceof Player) {
                     if (strings.length < 3) {
-                        commandSender.sendMessage(language.getLanguage("usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
+                        commandSender.sendMessage(language.getLanguage("command-admin-usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
                         return false;
                     }
                     String name = strings[2];
@@ -259,7 +262,7 @@ public class GameAdminCommand extends Command {
 
                     if ("add".equalsIgnoreCase(strings[1])) {
                         if(strings.length < 4){
-                            commandSender.sendMessage(language.getLanguage("usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
+                            commandSender.sendMessage(language.getLanguage("command-admin-usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
                             return false;
                         }
                         PlayerData.DataType type = PlayerData.DataType.byName(strings[3]);
@@ -302,7 +305,7 @@ public class GameAdminCommand extends Command {
                 break;
             case "float":
                 if(strings.length < 4){
-                    commandSender.sendMessage(language.getLanguage("usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
+                    commandSender.sendMessage(language.getLanguage("command-admin-usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
                     return false;
                 }
                 if(commandSender instanceof Player) {
@@ -321,7 +324,7 @@ public class GameAdminCommand extends Command {
 
                     }else{
                         if(strings.length < 5){
-                            commandSender.sendMessage(language.getLanguage("usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
+                            commandSender.sendMessage(language.getLanguage("command-admin-usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
                             return false;
                         }
                         if(roomConfig.notHasFloatText(strings[3])){
@@ -360,6 +363,35 @@ public class GameAdminCommand extends Command {
 
             case "see":
                 TotalManager.sendMessageToObject(TotalManager.getRoomManager().getRooms().keySet().toString(),commandSender);
+                break;
+            case "si":
+                if(commandSender instanceof Player) {
+                    if (strings.length > 1) {
+                        String name = strings[1];
+                        if("".equalsIgnoreCase(name)) {
+                            commandSender.sendMessage(language.getLanguage("command-admin-usage", "/[1] help 查看指令帮助", TotalManager.COMMAND_ADMIN_NAME));
+                            return false;
+                        }
+                        if ( TotalManager.getTagItemDataManager().hasItem(name)) {
+                            commandSender.sendMessage(language.getLanguage("save-item-exists-name", "&c存在名称为 &a[1] &c的物品了", name));
+                            return true;
+                        }
+                        Item item = ((Player) commandSender).getInventory().getItemInHand();
+                        if(item.getId() == 0){
+                            commandSender.sendMessage(language.getLanguage("save-item-air", "&c你不能保存空气！"));
+                            return true;
+                        }
+                        TotalManager.getTagItemDataManager().dataList.add(new TagItem(name,item));
+                        TotalManager.getTagItemDataManager().save();
+                        commandSender.sendMessage(language.getLanguage("save-item-exists-success", "&a成功保存名称为 &e[1] &a的物品",name));
+                    } else {
+                        commandSender.sendMessage(language.getLanguage("command-admin-usage", "/[1] help 查看指令帮助", TotalManager.COMMAND_ADMIN_NAME));
+                        return false;
+                    }
+                }else{
+                    commandSender.sendMessage(language.getLanguage("do-not-console","请不要在控制台执行"));
+                    return false;
+                }
                 break;
             case "reload":
                 TotalManager.sendMessageToObject(language.getLanguage("reload-config-loading","正在读取配置文件"),commandSender);

@@ -2,6 +2,7 @@ package org.sobadfish.gamedemo.manager;
 
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.manager.data.TagItemDataManager;
 import org.sobadfish.gamedemo.room.config.ItemConfig;
 
 import java.util.*;
@@ -162,7 +163,7 @@ public class FunctionManager {
 
     }
 
-    public static List<Item> stringToItemList(String str){
+    private static List<Item> stringToItemList(String str){
         ArrayList<Item> items = new ArrayList<>();
         String[] sl = str.split("-");
         if(sl.length > 1){
@@ -175,8 +176,22 @@ public class FunctionManager {
         return items;
     }
 
-    public static Item stringToItem(String s){
+    private static Item stringToItem(String s){
         String[] sList = s.split(":");
+        //tag物品截胡检测一下
+        TagItemDataManager itemDataManager = TotalManager.getTagItemDataManager();
+        if(itemDataManager.hasItem(sList[0])){
+            Item item = itemDataManager.getItem(sList[0]);
+            int count = 1;
+            if(sList.length > 1){
+                count = Integer.parseInt(sList[1]);
+            }
+            item.setCount(count);
+            if(item.getId() > 0){
+                return item;
+            }
+        }
+
         Item item = Item.get(Integer.parseInt(sList[0]));
         if(sList.length > 1){
             item.setDamage(Integer.parseInt(sList[1]));
