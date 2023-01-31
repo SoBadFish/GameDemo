@@ -590,24 +590,12 @@ public class PlayerInfo {
 
 
 
+    /**
+     * 此方法移植到{@link FunctionManager}
+     * */
+    @Deprecated
     public static String formatTime1(int s){
-        int min = s / 60;
-        int ss = s % 60;
-        String mi = min+"";
-        String sss = ss+"";
-        if(min < 10){
-            mi = "0"+mi;
-        }
-        if(ss < 10){
-            sss = "0"+ss;
-        }
-        if(min > 0){
-
-            return mi+":"+sss;
-        }else{
-            return "00:"+sss+"";
-        }
-
+        return FunctionManager.formatTime(s);
     }
 
     private ArrayList<String> getLore(boolean isWait){
@@ -690,12 +678,13 @@ public class PlayerInfo {
         if(waitTime > 0){
             waitTime--;
             player.setImmobile(true);
-            sendMessage(TotalManager.getLanguage().getLanguage("player-wait","&e开始倒计时 &r[1] &a[2] s",
+            sendTip(TotalManager.getLanguage().getLanguage("player-wait","&e开始倒计时 &r[1] &a[2] s",
                     FunctionManager.drawLine(waitTime / (float)gameRoom.getRoomConfig().gameInWait,
-                            10,"&c■","&7■")));
-        }else if(waitTime == 0){
+                            10,"&c■","&7■"),waitTime+""));
+        }else if(waitTime == 0 && playerType == PlayerType.START){
             waitTime = -1;
             player.setImmobile(false);
+            sendTitle(TotalManager.getLanguage().getLanguage("player-wait-success","&a游戏开始!"));
         }
 
         //助攻间隔

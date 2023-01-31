@@ -3,7 +3,6 @@ package org.sobadfish.gamedemo.manager.data;
 import cn.nukkit.item.Item;
 import org.sobadfish.gamedemo.item.tag.TagItem;
 import org.sobadfish.gamedemo.manager.BaseDataWriterGetterManager;
-import org.sobadfish.gamedemo.player.PlayerData;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -46,7 +45,7 @@ public class TagItemDataManager extends BaseDataWriterGetterManager<TagItem> {
      * @return tag物品控制类
      * */
     public static TagItemDataManager asFile(File file){
-        return (TagItemDataManager) BaseDataWriterGetterManager.asFile(file,"tag.json", PlayerData[].class,PlayerDataManager.class);
+        return (TagItemDataManager) BaseDataWriterGetterManager.asFile(file,"tag.json", TagItem[].class,TagItemDataManager.class);
     }
 
 

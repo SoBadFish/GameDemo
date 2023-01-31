@@ -1,5 +1,6 @@
 package org.sobadfish.gamedemo.player;
 
+import cn.nukkit.Player;
 import cn.nukkit.Server;
 import org.sobadfish.gamedemo.event.PlayerGetExpEvent;
 import org.sobadfish.gamedemo.event.PlayerLevelChangeEvent;
@@ -214,9 +215,11 @@ public class PlayerData {
 
     public void setInfo(PlayerInfo info){
         RoomData data = getRoomData(info.getGameRoom().getRoomConfig().name);
-        for(DataType dataType: info.statistics.keySet()){
-            data.data.put(dataType.getName(),data.data.get(dataType.getName())
-                    + info.statistics.get(dataType));
+        if(info.getPlayer() instanceof Player) {
+            for (DataType dataType : info.statistics.keySet()) {
+                data.data.put(dataType.getName(), data.data.get(dataType.getName())
+                        + info.statistics.get(dataType));
+            }
         }
     }
 

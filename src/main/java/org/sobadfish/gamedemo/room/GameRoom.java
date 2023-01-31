@@ -9,6 +9,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
 import org.sobadfish.gamedemo.event.GameCloseEvent;
@@ -236,6 +237,10 @@ public class GameRoom {
             if(info.getPlayer() instanceof Player) {
                 ((Player) info.getPlayer()).setFoodEnabled(false);
                 ((Player) info.getPlayer()).setGamemode(2);
+            }else{
+                CompoundTag tag = info.getPlayer().namedTag;
+                tag.putString("room",getRoomConfig().getName());
+
             }
 
 

@@ -15,6 +15,7 @@ import org.sobadfish.gamedemo.item.tag.TagItem;
 import org.sobadfish.gamedemo.manager.LanguageManager;
 import org.sobadfish.gamedemo.manager.ThreadManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
 import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
@@ -24,7 +25,10 @@ import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
 import org.sobadfish.gamedemo.top.TopItem;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -195,8 +199,22 @@ public class GameAdminCommand extends Command {
                 for(int i = 0; i < count; i++){
                     Position pos = roomConfig.getWorldInfo().getWaitPosition();
                     CompoundTag tag = EntityHuman.getDefaultNBT(pos);
-                    Skin.initDefaultSkin();
-                    Skin skin = Skin.NO_PERSONA_SKIN;
+                    Skin skin;
+                    if(AbstractFakeInventory.IS_PM1E) {
+                        Skin.initDefaultSkin();
+                        skin = Skin.NO_PERSONA_SKIN;
+                    }else{
+                        List<Player> pls = new ArrayList<>(Server.getInstance().getOnlinePlayers().values());
+                        skin = new Skin();
+                        if(pls.size() > 0) {
+                            Player pskin = pls.get(new Random().nextInt(pls.size()));
+                            skin = pskin.getSkin();
+                        }else{
+                            skin.setSkinData(new byte[Skin.SINGLE_SKIN_SIZE]);
+                        }
+
+                    }
+
                     tag.putCompound("Skin",new CompoundTag()
                             .putByteArray("Data", skin.getSkinData().data)
                             .putString("ModelId",skin.getSkinId())
