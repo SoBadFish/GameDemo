@@ -53,10 +53,7 @@ import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.ItemConfig;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 游戏房间管理类
@@ -591,10 +588,11 @@ public class RoomManager implements Listener {
                         DamageFloatTextEntity floatTextEntity = new DamageFloatTextEntity(
                                 TextFormat.colorize('&',"&c-"+String.format("%.1f",event.getDamage())),
                                 event.getEntity().chunk,Entity.getDefaultNBT(
-                                event.getEntity().getPosition().add(1,0.8,1)
+                                event.getEntity().getPosition().add(0,0.8,0)
                         ));
                         floatTextEntity.spawnToAll();
-                        floatTextEntity.addMotion(0.2,0.5,0.1);
+
+                        floatTextEntity.addMotion(1,0,85 / 180f);
                     }
                 }
             }
