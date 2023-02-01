@@ -404,7 +404,7 @@ public class GameRoom {
                         || (s < t )){
                     if(manager.getTeamConfig().getTeamConfig().maxPlayer > 0) {
                         if(t > manager.getTeamConfig().getTeamConfig().maxPlayer) {
-                            t += (t - manager.getTeamConfig().getTeamConfig().maxPlayer);
+                            t += (int)Math.ceil(((t - manager.getTeamConfig().getTeamConfig().maxPlayer) / (float)s));
                         }
                         if(manager.getTeamConfig().getTeamConfig().maxPlayer > s) {
                             if (noTeam.size() > 0) {
