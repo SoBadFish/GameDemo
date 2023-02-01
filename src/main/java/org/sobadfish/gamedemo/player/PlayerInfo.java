@@ -484,7 +484,9 @@ public class PlayerInfo {
 
         cancel = true;
         disable = true;
-        getGameRoom().getPlayerInfos().remove(this);
+        if(getGameRoom() != null) {
+            getGameRoom().getPlayerInfos().remove(this);
+        }
         setGameRoom(null);
     }
 

@@ -502,14 +502,7 @@ public class RoomManager implements Listener {
         if(event.getEntity() instanceof EntityHuman){
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
             if(playerInfo != null) {
-                if(TotalManager.getConfig().getBoolean("display-damage",true)){
-                    DamageFloatTextEntity floatTextEntity = new DamageFloatTextEntity(
-                            TextFormat.colorize('&',"&c-"+String.format("%.1f",event.getDamage())),
-                                    event.getEntity().chunk,Entity.getDefaultNBT(
-                                            event.getEntity().getPosition().add(0,1.5)
-                                    ));
-                    floatTextEntity.spawnToAll();
-                }
+
                 if (playerInfo.isWatch()) {
                     playerInfo.sendForceMessage(language.getLanguage("player-gamemode-3","&c你处于观察者模式"));
                     event.setCancelled();
@@ -591,6 +584,17 @@ public class RoomManager implements Listener {
                     playerInfo.death(event);
                     for (EntityDamageEvent.DamageModifier modifier : EntityDamageEvent.DamageModifier.values()) {
                         event.setDamage(0, modifier);
+                    }
+                }
+                if(!event.isCancelled()){
+                    if(TotalManager.getConfig().getBoolean("display-damage",true)){
+                        DamageFloatTextEntity floatTextEntity = new DamageFloatTextEntity(
+                                TextFormat.colorize('&',"&c-"+String.format("%.1f",event.getDamage())),
+                                event.getEntity().chunk,Entity.getDefaultNBT(
+                                event.getEntity().getPosition().add(1,0.8,1)
+                        ));
+                        floatTextEntity.spawnToAll();
+                        floatTextEntity.addMotion(0.2,0.5,0.1);
                     }
                 }
             }

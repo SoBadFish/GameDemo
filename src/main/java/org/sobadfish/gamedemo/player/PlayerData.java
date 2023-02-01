@@ -217,8 +217,13 @@ public class PlayerData {
         RoomData data = getRoomData(info.getGameRoom().getRoomConfig().name);
         if(info.getPlayer() instanceof Player) {
             for (DataType dataType : info.statistics.keySet()) {
-                data.data.put(dataType.getName(), data.data.get(dataType.getName())
-                        + info.statistics.get(dataType));
+                if(data.data.containsKey(dataType.getName())){
+                    data.data.put(dataType.getName(), data.data.get(dataType.getName())
+                            + info.statistics.get(dataType));
+                }else{
+                    data.data.put(dataType.getName(),info.statistics.getOrDefault(dataType,0));
+                }
+
             }
         }
     }
