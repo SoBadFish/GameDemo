@@ -11,7 +11,7 @@ import cn.nukkit.nbt.tag.CompoundTag;
  */
 public class DamageFloatTextEntity extends Entity {
 
-    private int tick = 20 * 2;
+    private int tick = 12;
 
     public DamageFloatTextEntity(String damage, FullChunk fullChunk, CompoundTag compoundTag) {
         super(fullChunk, compoundTag);
@@ -40,31 +40,26 @@ public class DamageFloatTextEntity extends Entity {
 
     @Override
     public boolean onUpdate(int i) {
-        super.onUpdate(i);
-        if(tick <= 0){
-            this.close();
-        }else{
-            tick -= i - lastUpdate;
-        }
-        boolean hasUpdate = this.entityBaseTick(i);
-        if (this.isAlive()) {
 
+        if(tick > 0){
+            tick -= (i - lastUpdate);
+        }else{
+            this.close();
+            return true;
+        }
+
+        if (this.isAlive()) {
             if (!this.isCollided) {
                 this.motionY -= 0.03;
+            }else{
+                this.close();
+                return true;
             }
-
             this.move(this.motionX, this.motionY, this.motionZ);
-
-            if (!this.onGround || Math.abs(this.motionX) > 0.00001 || Math.abs(this.motionY) > 0.00001 || Math.abs(this.motionZ) > 0.00001) {
-                double f = Math.sqrt((this.motionX * this.motionX) + (this.motionZ * this.motionZ));
-                this.yaw = (Math.atan2(this.motionX, this.motionZ) * 180 / Math.PI);
-                this.pitch = (Math.atan2(this.motionY, f) * 180 / Math.PI);
-                hasUpdate = true;
-            }
 
             this.updateMovement();
         }
 
-        return hasUpdate;
+        return super.onUpdate(i);
     }
 }

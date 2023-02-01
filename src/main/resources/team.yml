@@ -3,6 +3,10 @@ team:
     nameColor: "&c"
     blockWoolColor: "35:14"
     canPvp: false
+    # 是否将其他队伍的玩家更改为自身阵营
+    canInfection: false
+    # 倒计时结束时胜利的权重
+    victoryWeight: 0
     inventory:
       armor:
         - "298:0"
@@ -19,6 +23,8 @@ team:
     nameColor: "&9"
     blockWoolColor: "35:11"
     canPvp: false
+    canInfection: false
+    victoryWeight: 0
     inventory:
       armor:
         - "298:0"

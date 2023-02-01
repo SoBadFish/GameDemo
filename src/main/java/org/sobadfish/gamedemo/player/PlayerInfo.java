@@ -26,6 +26,7 @@ import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.message.ScoreBoardMessage;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
+import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
 
@@ -693,11 +694,11 @@ public class PlayerInfo {
     public void onUpdate(){
         //TODO 玩家进入房间后每秒就会调用这个方法
         if(waitTime > 0){
-            waitTime--;
             player.setImmobile(true);
             sendTip(TotalManager.getLanguage().getLanguage("player-wait","&e开始倒计时 &r[1] &a[2] s",
                     FunctionManager.drawLine(waitTime / (float)gameRoom.getRoomConfig().gameInWait,
                             10,"&c■","&7■"),waitTime+""));
+            waitTime--;
         }else if(waitTime == 0 && playerType == PlayerType.START){
             waitTime = -1;
             player.setImmobile(false);
@@ -818,17 +819,21 @@ public class PlayerInfo {
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
             return;
         }
+
         if(gameRoom != null && gameRoom.roomConfig.reSpawnTime >= 0) {
             int roomReSpawnCount = gameRoom.getRoomConfig().reSpawnCount;
-            if(reSpawnCount > 0 && reSpawnCount < roomReSpawnCount){
-                reSpawnCount++;
-                sendMessage(TotalManager.getLanguage().getLanguage("player-respawn-count","&e你还能复活 &a[1] &e次",
-                        (roomReSpawnCount - reSpawnCount)+""));
-                deathCanRespawn();
+            if(roomReSpawnCount > 0){
+                if(reSpawnCount > 0 && reSpawnCount < roomReSpawnCount){
+                    reSpawnCount++;
+                    sendMessage(TotalManager.getLanguage().getLanguage("player-respawn-count","&e你还能复活 &a[1] &e次",
+                            (roomReSpawnCount - reSpawnCount)+""));
+                    deathCanRespawn();
+                }else{
+                    deathFinal();
+                }
             }else{
-                deathFinal();
+                deathCanRespawn();
             }
-
         }else{
             deathFinal();
         }
@@ -849,6 +854,13 @@ public class PlayerInfo {
         }
         //玩家死亡后的信息
         echoPlayerDeathInfo(event);
+        if(damageByInfo != null && damageByInfo.teamInfo != null){
+            TeamInfoConfig targetTeam = damageByInfo.teamInfo.getTeamConfig();
+            if(targetTeam.getTeamConfig().isCanInfection()){
+                //TODO 被感染了
+                damageByInfo.teamInfo.mjoin(this);
+            }
+        }
 
         damageByInfo = null;
 

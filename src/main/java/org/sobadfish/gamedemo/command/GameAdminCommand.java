@@ -209,6 +209,7 @@ public class GameAdminCommand extends Command {
                         if(pls.size() > 0) {
                             Player pskin = pls.get(new Random().nextInt(pls.size()));
                             skin = pskin.getSkin();
+
                         }else{
                             skin.setSkinData(new byte[Skin.SINGLE_SKIN_SIZE]);
                         }

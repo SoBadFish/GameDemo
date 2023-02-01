@@ -775,13 +775,21 @@ public class GameRoom {
             TeamInfo successInfo;
             if(getRoomConfig().teamConfigs.size() > 1) {
                 //在这个判断条件下为多队伍状态
+
                 //TODO 倒计时结束后 找到血量最高的队伍判胜
                 ArrayList<TeamInfo> teamInfos = getLiveTeam();
                 if (teamInfos.size() > 0) {
+
                     int pl = 0;
                     double dh = 0;
                     successInfo = teamInfos.get(0);
                     for (TeamInfo info : teamInfos) {
+                        //TODO 先找到权重高的
+                        if(info.getTeamConfig().getTeamConfig().victoryWeight > 0){
+                            successInfo = info;
+                            break;
+                        }
+
                         ArrayList<PlayerInfo> successInfos = info.getLivePlayer();
                         if (successInfos.size() > pl) {
                             pl = successInfos.size();

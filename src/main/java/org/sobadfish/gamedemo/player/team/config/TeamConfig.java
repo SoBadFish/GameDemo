@@ -43,6 +43,10 @@ public class TeamConfig {
      * */
     private final Item blockWoolColor;
 
+    public boolean canInfection;
+
+    public int victoryWeight = 0;
+
     /**
      * 团队皮革衣服的颜色
      * */
@@ -71,6 +75,14 @@ public class TeamConfig {
         return name;
     }
 
+    public void setVictoryWeight(int victoryWeight) {
+        this.victoryWeight = victoryWeight;
+    }
+
+    public int getVictoryWeight() {
+        return victoryWeight;
+    }
+
     public LinkedHashMap<Integer, Item> getInventoryItem() {
         return inventoryItem;
     }
@@ -95,6 +107,14 @@ public class TeamConfig {
         return nameColor;
     }
 
+    public void setCanInfection(boolean canInfection) {
+        this.canInfection = canInfection;
+    }
+
+    public boolean isCanInfection() {
+        return canInfection;
+    }
+
     /**
      * 解析 team.yml 配置文件
      * */
@@ -110,6 +130,12 @@ public class TeamConfig {
         if(map.containsKey("canPvp")){
             teamConfig.setCanPvp(Boolean.parseBoolean(map.get("canPvp").toString()));
         }
+        if(map.containsKey("canInfection")){
+            teamConfig.setCanInfection(Boolean.parseBoolean(map.get("canInfection").toString()));
+        }
+        if(map.containsKey("victoryWeight")){
+            teamConfig.setVictoryWeight(Integer.parseInt(map.get("victoryWeight").toString()));
+        }
         if(map.containsKey("inventory")){
             Map<?,?> inventoryMap = (Map<?, ?>) map.get("inventory");
             if(inventoryMap.containsKey("armor")){
@@ -121,6 +147,10 @@ public class TeamConfig {
         }
         return teamConfig;
     }
+
+
+
+
 
     //解析物品对象
     private static LinkedHashMap<Integer,Item> decodeItemList(List<?> list){

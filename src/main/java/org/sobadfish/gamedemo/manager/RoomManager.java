@@ -592,7 +592,7 @@ public class RoomManager implements Listener {
                         ));
                         floatTextEntity.spawnToAll();
 
-                        floatTextEntity.addMotion(1,0,85 / 180f);
+                        floatTextEntity.addMotion(1,0.8,90 / 180f);
                     }
                 }
             }
