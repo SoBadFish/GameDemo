@@ -34,6 +34,7 @@ import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.entity.DamageFloatTextEntity;
 import org.sobadfish.gamedemo.entity.EntityTnt;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
 import org.sobadfish.gamedemo.item.button.RoomQuitItem;
@@ -501,6 +502,14 @@ public class RoomManager implements Listener {
         if(event.getEntity() instanceof EntityHuman){
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
             if(playerInfo != null) {
+                if(TotalManager.getConfig().getBoolean("display-damage",true)){
+                    DamageFloatTextEntity floatTextEntity = new DamageFloatTextEntity(
+                            TextFormat.colorize('&',"&c-"+String.format("%.1f",event.getDamage())),
+                                    event.getEntity().chunk,Entity.getDefaultNBT(
+                                            event.getEntity().getPosition().add(0,1.5)
+                                    ));
+                    floatTextEntity.spawnToAll();
+                }
                 if (playerInfo.isWatch()) {
                     playerInfo.sendForceMessage(language.getLanguage("player-gamemode-3","&c你处于观察者模式"));
                     event.setCancelled();

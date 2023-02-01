@@ -640,10 +640,25 @@ public class PlayerInfo {
             }else{
                 TeamInfo teamInfo = gameRoom.getTeamInfos().get(0);
                 lore.add("   ");
+                if(teamInfo.getTeamPlayers().size() <= 2){
+                    lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-damage-one","目标:"));
+                    PlayerInfo target = null;
+                    for(PlayerInfo info: teamInfo.getLivePlayer()){
+                        if(!info.equals(this)){
+                            target = info;
+                            break;
+                        }
+                    }
+                    if(target != null){
+                        lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-damage-one-target"," [1] [2] &c♥",
+                                target.getName(),(int)target.getPlayer().getHealth()+""));
+                    }
+                }else {
 //                " 存活人数: &a "+teamInfo.getLivePlayer().size() +" &7/&a "+teamInfo.getTeamPlayers().size()
-                lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-no-team-live-player"," 存活人数: &a [1] &7/&a [2]",
-                        teamInfo.getLivePlayer().size()+"",
-                        teamInfo.getTeamPlayers().size()+""));
+                    lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-no-team-live-player", " 存活人数: &a [1] &7/&a [2]",
+                            teamInfo.getLivePlayer().size() + "",
+                            teamInfo.getTeamPlayers().size() + ""));
+                }
             }
 
             lore.add("      ");

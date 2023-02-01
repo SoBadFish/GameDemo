@@ -1,5 +1,8 @@
 title: "&f[&a小游戏&f]"
 
+# 是否显示伤害浮空字
+display-damage: true
+
 scoreboard-title: "&a小游戏"
 
 command-player: "gd"
