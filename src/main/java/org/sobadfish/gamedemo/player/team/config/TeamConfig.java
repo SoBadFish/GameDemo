@@ -43,7 +43,9 @@ public class TeamConfig {
      * */
     private final Item blockWoolColor;
 
-    public boolean canInfection;
+    private boolean canInfection;
+
+    public int maxPlayer = -1;
 
     public int victoryWeight = 0;
 
@@ -77,6 +79,14 @@ public class TeamConfig {
 
     public void setVictoryWeight(int victoryWeight) {
         this.victoryWeight = victoryWeight;
+    }
+
+    public void setMaxPlayer(int maxPlayer) {
+        this.maxPlayer = maxPlayer;
+    }
+
+    public int getMaxPlayer() {
+        return maxPlayer;
     }
 
     public int getVictoryWeight() {
@@ -135,6 +145,9 @@ public class TeamConfig {
         }
         if(map.containsKey("victoryWeight")){
             teamConfig.setVictoryWeight(Integer.parseInt(map.get("victoryWeight").toString()));
+        }
+        if(map.containsKey("maxPlayer")){
+            teamConfig.setMaxPlayer(Integer.parseInt(map.get("maxPlayer").toString()));
         }
         if(map.containsKey("inventory")){
             Map<?,?> inventoryMap = (Map<?, ?>) map.get("inventory");

@@ -375,6 +375,15 @@ public class GameRoom {
         LinkedList<PlayerInfo> noTeam = getNoTeamPlayers();
         // TODO 检测是否一个队伍里有太多的人 拆掉多余的人
         for (TeamInfo manager: teamInfos){
+            if(manager.getTeamConfig().getTeamConfig().maxPlayer > 0){
+                if(manager.getTeamPlayers().size() > manager.getTeamConfig().getTeamConfig().maxPlayer){
+                    int size = manager.getTeamPlayers().size() - manager.getTeamConfig().getTeamConfig().maxPlayer;
+                    for(int i = 0;i < size;i++){
+                        PlayerInfo info = manager.getTeamPlayers().remove(manager.getTeamPlayers().size()-1);
+                        noTeam.add(info);
+                    }
+                }
+            }
             if(manager.getTeamPlayers().size() > t){
                 int size = manager.getTeamPlayers().size() - t;
                 for(int i = 0;i < size;i++){
@@ -383,13 +392,31 @@ public class GameRoom {
                 }
             }
         }
+        int w = 0;
         while(noTeam.size() > 0){
+          if(w > teamInfos.size()){
+              //TODO 防止服主不会设置导致的死循环
+              break;
+          }
             for (TeamInfo manager: teamInfos){
-                if(manager.getTeamPlayers().size() == 0
-                        || (manager.getTeamPlayers().size() < t )){
-                    if(noTeam.size() > 0) {
-                        listener = noTeam.poll();
-                        manager.mjoin(listener);
+                int s = manager.getTeamPlayers().size();
+                if(s == 0
+                        || (s < t )){
+                    if(manager.getTeamConfig().getTeamConfig().maxPlayer > 0) {
+                        if(t > manager.getTeamConfig().getTeamConfig().maxPlayer) {
+                            t += (t - manager.getTeamConfig().getTeamConfig().maxPlayer);
+                        }
+                        if(manager.getTeamConfig().getTeamConfig().maxPlayer > s) {
+                            if (noTeam.size() > 0) {
+                                listener = noTeam.poll();
+                                manager.mjoin(listener);
+                            }
+                        }
+                    }else{
+                        if (noTeam.size() > 0) {
+                            listener = noTeam.poll();
+                            manager.mjoin(listener);
+                        }
                     }
                 }else{
                     if(manager.getTeamPlayers().size() > t){
@@ -400,6 +427,12 @@ public class GameRoom {
                         }
                     }
                 }
+            }
+            w++;
+        }
+        if(noTeam.size() > 0){
+            for(PlayerInfo info: noTeam){
+                quitPlayerInfo(info,true);
             }
         }
         return true;

@@ -7,6 +7,8 @@ team:
     canInfection: false
     # 倒计时结束时胜利的权重
     victoryWeight: 0
+    # 自动分配
+    maxPlayer: -1
     inventory:
       armor:
         - "298:0"
