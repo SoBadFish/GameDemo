@@ -4,10 +4,8 @@ import cn.nukkit.Player;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 
-
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -102,10 +100,6 @@ public class RandomJoinManager {
             return false;
         }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(playerInfo, name, time, cancel);
-        }
     }
 
 }
