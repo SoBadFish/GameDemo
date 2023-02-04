@@ -355,13 +355,15 @@ public class RoomManager implements Listener {
                 }
             }
             reset(player);
-        }else if(player.getGamemode() == 3){
+        }else {
             for(GameRoomConfig gameRoomConfig: getRoomConfigs()){
                 if(gameRoomConfig.getWorldInfo().getGameWorld() ==  player.level){
                     reset(player);
                 }
             }
-            player.setGamemode(0);
+            if(player.getGamemode() == 3) {
+                player.setGamemode(0);
+            }
         }
 
     }
