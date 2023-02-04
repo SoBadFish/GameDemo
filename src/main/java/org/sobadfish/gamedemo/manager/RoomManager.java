@@ -325,44 +325,36 @@ public class RoomManager implements Listener {
             player.setFoodEnabled(false);
             player.setGamemode(2);
             String room = playerJoin.get(player.getName());
-            if(hasGameRoom(room)){
+            if(hasGameRoom(room)) {
                 GameRoom room1 = getRoom(room);
-                if(room1 == null){
+                if (room1 == null) {
                     reset(player);
                     playerJoin.remove(player.getName());
                     player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
                     return;
                 }
-                if(room1.getType() != GameRoom.GameType.END && !room1.close ){
+                if (room1.getType() != GameRoom.GameType.END && !room1.close) {
                     PlayerInfo info = room1.getPlayerInfo(player);
-                    if(info != null){
+                    if (info != null) {
                         info.setPlayer(player);
                         info.setLeave(false);
-                        if(room1.getType() == GameRoom.GameType.WAIT){
-                            if(room1.worldInfo.getConfig().getGameWorld() != null){
+                        if (room1.getType() == GameRoom.GameType.WAIT) {
+                            if (room1.worldInfo.getConfig().getGameWorld() != null) {
                                 player.teleport(room1.worldInfo.getConfig().getGameWorld().getSafeSpawn());
                                 player.teleport(room1.getWorldInfo().getConfig().getWaitPosition());
+                                return;
                             }
-
-                        }else{
-                            if(info.isWatch() || info.getTeamInfo() == null){
+                        } else {
+                            if (info.isWatch() || info.getTeamInfo() == null) {
                                 room1.joinWatch(info);
-                            }else{
+                            } else {
                                 info.death(null);
                             }
-
                         }
-                    }else{
-                        reset(player);
                     }
-
-                }else{
-                    reset(player);
                 }
-            }else{
-                //TODO 无房间回到出生点
-                reset(player);
             }
+            reset(player);
         }else if(player.getGamemode() == 3){
             for(GameRoomConfig gameRoomConfig: getRoomConfigs()){
                 if(gameRoomConfig.getWorldInfo().getGameWorld() ==  player.level){
