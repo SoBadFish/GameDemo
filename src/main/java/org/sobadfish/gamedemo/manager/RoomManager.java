@@ -339,11 +339,8 @@ public class RoomManager implements Listener {
                         info.setPlayer(player);
                         info.setLeave(false);
                         if (room1.getType() == GameRoom.GameType.WAIT) {
-                            if (room1.worldInfo.getConfig().getGameWorld() != null) {
-                                player.teleport(room1.worldInfo.getConfig().getGameWorld().getSafeSpawn());
-                                player.teleport(room1.getWorldInfo().getConfig().getWaitPosition());
-                                return;
-                            }
+                            room1.quitPlayerInfo(info,true);
+                            return;
                         } else {
                             if (info.isWatch() || info.getTeamInfo() == null) {
                                 room1.joinWatch(info);
