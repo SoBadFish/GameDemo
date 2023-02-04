@@ -49,6 +49,8 @@ public class TeamConfig {
 
     public int victoryWeight = 0;
 
+    public int teamSpawnCount = 0;
+
     /**
      * 团队皮革衣服的颜色
      * */
@@ -87,6 +89,14 @@ public class TeamConfig {
 
     public int getMaxPlayer() {
         return maxPlayer;
+    }
+
+    public void setTeamSpawnCount(int teamSpawnCount) {
+        this.teamSpawnCount = teamSpawnCount;
+    }
+
+    public int getTeamSpawnCount() {
+        return teamSpawnCount;
     }
 
     public int getVictoryWeight() {
@@ -148,6 +158,9 @@ public class TeamConfig {
         }
         if(map.containsKey("maxPlayer")){
             teamConfig.setMaxPlayer(Integer.parseInt(map.get("maxPlayer").toString()));
+        }
+        if(map.containsKey("teamSpawnCount")){
+            teamConfig.setTeamSpawnCount(Integer.parseInt(map.get("teamSpawnCount").toString()));
         }
         if(map.containsKey("inventory")){
             Map<?,?> inventoryMap = (Map<?, ?>) map.get("inventory");

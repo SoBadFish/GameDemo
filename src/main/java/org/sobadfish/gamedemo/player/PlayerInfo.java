@@ -72,6 +72,9 @@ public class PlayerInfo {
 
     public float speed;
 
+    //玩家生命
+    public int health = 0;
+
     //助攻
     public LinkedHashMap<PlayerInfo,Long> assistsPlayers = new LinkedHashMap<>();
 
@@ -168,6 +171,9 @@ public class PlayerInfo {
         if(teamInfo != null) {
             this.armor = teamInfo.getTeamConfig().getTeamConfig().getInventoryArmor();
             this.inventoryItem = teamInfo.getTeamConfig().getTeamConfig().getInventoryItem();
+            ////////////////////////////// 设置生命
+            this.health = 0;//重置
+            this.health += teamInfo.getTeamConfig().getTeamConfig().getTeamSpawnCount();
         }
     }
 
@@ -820,22 +826,29 @@ public class PlayerInfo {
             return;
         }
 
-        if(gameRoom != null && gameRoom.roomConfig.reSpawnTime >= 0) {
-            int roomReSpawnCount = gameRoom.getRoomConfig().reSpawnCount;
-            if(roomReSpawnCount > 0){
-                if(reSpawnCount > 0 && reSpawnCount < roomReSpawnCount){
-                    reSpawnCount++;
-                    sendMessage(TotalManager.getLanguage().getLanguage("player-respawn-count","&e你还能复活 &a[1] &e次",
-                            (roomReSpawnCount - reSpawnCount)+""));
+        if(health > 0){
+            health--;
+            sendMessage(TotalManager.getLanguage().getLanguage("player-respawn-health-count","&a你剩余 &e[1] &a条生命",
+                     health+""));
+            deathCanRespawn();
+        }else {
+            if (gameRoom != null && gameRoom.roomConfig.reSpawnTime >= 0) {
+                int roomReSpawnCount = gameRoom.getRoomConfig().reSpawnCount;
+                if (roomReSpawnCount > 0) {
+                    if (reSpawnCount > 0 && reSpawnCount < roomReSpawnCount) {
+                        reSpawnCount++;
+                        sendMessage(TotalManager.getLanguage().getLanguage("player-respawn-count", "&e你还能复活 &a[1] &e次",
+                                (roomReSpawnCount - reSpawnCount) + ""));
+                        deathCanRespawn();
+                    } else {
+                        deathFinal();
+                    }
+                } else {
                     deathCanRespawn();
-                }else{
-                    deathFinal();
                 }
-            }else{
-                deathCanRespawn();
+            } else {
+                deathFinal();
             }
-        }else{
-            deathFinal();
         }
 
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
@@ -869,6 +882,39 @@ public class PlayerInfo {
         if(playerType == PlayerType.WATCH){
             getGameRoom().joinWatch(this,false);
         }
+    }
+
+    /**
+     * 设置玩家生命次数
+     * */
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    /**
+     * 获取玩家生命次数
+     * */
+    public int getHealth() {
+        return health;
+    }
+
+    /**
+     * 增加玩家生命次数
+     * */
+    public void addHealth(int health) {
+        this.health += health;
+    }
+
+    /**
+     * 增加玩家生命次数
+     * */
+    public void reduceHealth(int health) {
+        if(this.health >= health){
+            this.health -= health;
+        }else{
+            this.health = 0;
+        }
+
     }
 
     /**

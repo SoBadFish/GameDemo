@@ -9,6 +9,9 @@ team:
     victoryWeight: 0
     # 自动分配
     maxPlayer: -1
+    # 队伍每个玩家复活次数
+    teamSpawnCount: 0
+    # 背包内物品
     inventory:
       armor:
         - "298:0"
