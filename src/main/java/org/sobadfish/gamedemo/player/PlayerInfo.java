@@ -811,6 +811,7 @@ public class PlayerInfo {
      * */
     public void death(EntityDamageEvent event){
 
+        boolean finalDeath = false;
         //TODO 玩家死亡后可以做一些逻辑处理
         player.setHealth(player.getMaxHealth());
         if(player instanceof Player){
@@ -823,6 +824,7 @@ public class PlayerInfo {
 
         player.removeAllEffects();
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
+            cancel();
             return;
         }
 
@@ -841,17 +843,19 @@ public class PlayerInfo {
                                 (roomReSpawnCount - reSpawnCount) + ""));
                         deathCanRespawn();
                     } else {
-                        deathFinal();
+                        finalDeath = true;
+
                     }
                 } else {
                     deathCanRespawn();
                 }
             } else {
-                deathFinal();
+                finalDeath = true;
             }
         }
 
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
+            cancel();
             return;
         }
         player.teleport(teamInfo.getSpawnLocation());
