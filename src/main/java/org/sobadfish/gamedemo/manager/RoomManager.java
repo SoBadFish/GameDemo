@@ -116,19 +116,19 @@ public class RoomManager implements Listener {
      * @return 是否成功加入房间
      * */
     public boolean joinRoom(PlayerInfo player, String roomName){
-        PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo(player.getPlayer());
+        PlayerInfo info = getPlayerInfo(player.getPlayer());
         if(info != null){
             player = info;
         }
 
-        if (TotalManager.getRoomManager().hasRoom(roomName)) {
-            if (!TotalManager.getRoomManager().hasGameRoom(roomName)) {
-                if(!TotalManager.getRoomManager().enableRoom(TotalManager.getRoomManager().getRoomConfig(roomName))){
+        if (hasRoom(roomName)) {
+            if (!hasGameRoom(roomName)) {
+                if(!enableRoom(getRoomConfig(roomName))){
                     player.sendForceMessage(language.getLanguage("room-enable-error","&c[1] 还没准备好",roomName));
                     return false;
                 }
             }else{
-                GameRoom room = TotalManager.getRoomManager().getRoom(roomName);
+                GameRoom room =getRoom(roomName);
                 if(room != null){
                     if(RoomManager.LOCK_GAME.contains(room.getRoomConfig()) && room.getType() == GameType.END || room.getType() == GameType.CLOSE){
                         player.sendForceMessage(language.getLanguage("room-enable-error","&c[1] 还没准备好",roomName));
@@ -144,7 +144,7 @@ public class RoomManager implements Listener {
                 }
             }
 
-            GameRoom room = TotalManager.getRoomManager().getRoom(roomName);
+            GameRoom room = getRoom(roomName);
             if(room == null){
                 return false;
             }
@@ -328,6 +328,7 @@ public class RoomManager implements Listener {
             if(hasGameRoom(room)){
                 GameRoom room1 = getRoom(room);
                 if(room1 == null){
+                    reset(player);
                     playerJoin.remove(player.getName());
                     player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
                     return;
@@ -363,6 +364,11 @@ public class RoomManager implements Listener {
                 reset(player);
             }
         }else if(player.getGamemode() == 3){
+            for(GameRoomConfig gameRoomConfig: getRoomConfigs()){
+                if(gameRoomConfig.getWorldInfo().getGameWorld() ==  player.level){
+                    reset(player);
+                }
+            }
             player.setGamemode(0);
         }
 
@@ -405,13 +411,16 @@ public class RoomManager implements Listener {
 
 
     private void reset(Player player){
+        PlayerInfo info = getPlayerInfo(player);
         player.setNameTag(player.getName());
         playerJoin.remove(player.getName());
         player.setHealth(player.getMaxHealth());
-        player.getInventory().clearAll();
+        if(info != null){
+            player.getInventory().setContents(info.inventory);
+            player.getEnderChestInventory().setContents(info.eInventory);
+        }
         player.removeAllEffects();
         player.setGamemode(0);
-        player.getEnderChestInventory().clearAll();
         player.teleport(Server.getInstance().getDefaultLevel().getSafeSpawn());
     }
 
