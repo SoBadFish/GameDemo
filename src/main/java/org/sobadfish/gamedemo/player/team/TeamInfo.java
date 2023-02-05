@@ -4,6 +4,7 @@ import cn.nukkit.Server;
 import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.event.PlayerChoseTeamEvent;
 import org.sobadfish.gamedemo.event.TeamDefeatEvent;
@@ -234,6 +235,10 @@ public class TeamInfo {
         for(PlayerInfo info: getTeamPlayers()){
             if(info.getPlayerType() == PlayerInfo.PlayerType.WATCH || info.getPlayerType() == PlayerInfo.PlayerType.LEAVE){
                 d++;
+            }
+            for(Effect effect: getTeamConfig().getTeamConfig().getTeamEffect()){
+                effect.setDuration(20 * 5);
+                info.addEffect(effect);
             }
         }
 

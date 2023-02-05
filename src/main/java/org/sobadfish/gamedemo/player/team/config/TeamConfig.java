@@ -2,8 +2,10 @@ package org.sobadfish.gamedemo.player.team.config;
 
 
 import cn.nukkit.item.Item;
+import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.BlockColor;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,9 @@ import java.util.Map;
 
 public class TeamConfig {
 
-    /**团队的名称*/
+    /**
+     * 团队的名称
+     * */
     private final String name;
 
     /**
@@ -35,7 +39,9 @@ public class TeamConfig {
     private LinkedHashMap<Integer,Item> inventoryItem = new LinkedHashMap<>();
 
 
-    /**团队的颜色符号*/
+    /**
+     * 团队的颜色符号
+     * */
     private final String nameColor;
 
     /**
@@ -43,13 +49,32 @@ public class TeamConfig {
      * */
     private final Item blockWoolColor;
 
+    /**
+     * 是否将感染其他队伍的玩家
+     * */
     private boolean canInfection;
 
+    /**
+     * 队伍最大玩家数量
+     * -1 为自动分配
+     * */
     public int maxPlayer = -1;
 
+    /**
+     * 胜利的权重，当游戏结束时
+     * 这个数值大于1的获得胜利
+     * */
     public int victoryWeight = 0;
 
+    /**
+     * 队伍复活次数限制
+     * */
     public int teamSpawnCount = 0;
+
+    /**
+     * 队伍的永久药水效果
+     * */
+    public List<Effect> teamEffect = new ArrayList<>();
 
     /**
      * 团队皮革衣服的颜色
@@ -77,6 +102,14 @@ public class TeamConfig {
 
     public String getName() {
         return name;
+    }
+
+    public List<Effect> getTeamEffect() {
+        return teamEffect;
+    }
+
+    public void setTeamEffect(List<Effect> teamEffect) {
+        this.teamEffect = teamEffect;
     }
 
     public void setVictoryWeight(int victoryWeight) {
@@ -161,6 +194,18 @@ public class TeamConfig {
         }
         if(map.containsKey("teamSpawnCount")){
             teamConfig.setTeamSpawnCount(Integer.parseInt(map.get("teamSpawnCount").toString()));
+        }
+        if(map.containsKey("teamEffect")){
+            List<Effect> effect = new ArrayList<>();
+            for(Object o: (List<?>)map.get("teamEffect")){
+                String[] e = o.toString().split(":");
+                Effect effect1 = Effect.getEffect(Integer.parseInt(e[0]));
+                if(e.length > 1){
+                    effect1.setAmplifier(Integer.parseInt(e[1]));
+                }
+                effect.add(effect1);
+            }
+            teamConfig.setTeamEffect(effect);
         }
         if(map.containsKey("inventory")){
             Map<?,?> inventoryMap = (Map<?, ?>) map.get("inventory");

@@ -7,6 +7,8 @@ team:
     canInfection: false
     # 倒计时结束时胜利的权重
     victoryWeight: 0
+    # 团队永久Buff
+    teamEffect: []
     # 自动分配
     maxPlayer: -1
     # 队伍每个玩家复活次数
@@ -29,6 +31,7 @@ team:
     blockWoolColor: "35:11"
     canPvp: false
     canInfection: false
+    teamEffect: []
     victoryWeight: 0
     inventory:
       armor:
