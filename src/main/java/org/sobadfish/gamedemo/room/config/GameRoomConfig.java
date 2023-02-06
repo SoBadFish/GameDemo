@@ -2,6 +2,7 @@ package org.sobadfish.gamedemo.room.config;
 
 import cn.nukkit.utils.Config;
 import org.sobadfish.gamedemo.manager.FunctionManager;
+import org.sobadfish.gamedemo.manager.ShopManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.team.config.TeamConfig;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
@@ -179,6 +180,24 @@ public class GameRoomConfig {
      * */
     public boolean chestCanReset = true;
 
+    /**
+     * 房间内置商店
+     * */
+    public ShopManager shopManager;
+    /**
+     * 是否开启商店功能
+     * */
+    public boolean enableShop;
+
+    /**
+     * 是否启用经济
+     * */
+    public boolean enableMoney;
+    /**
+     * 经济配置
+     * */
+    public MoneyConfig moneyConfig;
+
 
 
 
@@ -299,6 +318,8 @@ public class GameRoomConfig {
                 roomConfig.enableFood = room.getBoolean("enable-food",false);
                 roomConfig.chestResetTime = room.getInt("chest-reset-time",120);
                 roomConfig.chestCanReset = room.getBoolean("chest-can-reset",true);
+                roomConfig.enableMoney = room.getBoolean("money.enable",false);
+                roomConfig.enableShop = room.getBoolean("enable-shop",false);
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
@@ -308,9 +329,21 @@ public class GameRoomConfig {
 
                     Config item = new Config(file + "/items.yml", Config.YAML);
                     List<Map> strings = item.getMapList("chests");
-                    Map<String, ItemConfig> buildItem = FunctionManager.buildItem(strings);
-                    roomConfig.items = buildItem;
+                    roomConfig.items = FunctionManager.buildItem(strings);
                     roomConfig.round = room.getInt("round", 15);
+                }
+                if(roomConfig.enableMoney){
+                    MoneyConfig moneyConfig = new MoneyConfig();
+                    moneyConfig.moneyUnit = room.getString("money.unit","$");
+                    moneyConfig.defaultValue = room.getDouble("money.default-money",1000d);
+                    roomConfig.moneyConfig = moneyConfig;
+                }
+                if(roomConfig.enableShop){
+                    if (!new File(file + "/shop.yml").exists()) {
+                        TotalManager.saveResource("shop.yml", "/rooms/" + name + "/shop.yml", false);
+                    }
+                    Config shop = new Config(file + "/shop.yml", Config.YAML);
+                    roomConfig.shopManager = ShopManager.init(shop);
                 }
 
                 ////////////////////////////////////////////////////////////////

@@ -7,6 +7,12 @@ callbackY: 17
 # 玩家复活时间 若设置-1则玩家无法复活
 reSpawnTime: 5
 
+# 是否启用内置经济系统
+money:
+  enable: false
+  default-money: 1000
+  unit: "$"
+
 # 在允许复活的时候玩家复活次数
 reSpawnCount: 0
 
@@ -21,6 +27,10 @@ gameInWait: 10
 
 # 是否启用饥饿值掉落
 enable-food: false
+
+# 是否启用商店功能
+
+enable-shop: false
 
 # 满人时等待时长
 max-player-waitTime: 20
@@ -55,6 +65,7 @@ defeatCmd: []
 # 玩家开启地图内箱子是否随机刷新物品
 
 roundChest: false
+
 
 # 是否允许箱子重置
 chest-can-reset: true

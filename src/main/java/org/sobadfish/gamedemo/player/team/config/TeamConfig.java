@@ -77,6 +77,12 @@ public class TeamConfig {
     public List<Effect> teamEffect = new ArrayList<>();
 
     /**
+     * 击杀奖励对方
+     * */
+    public double deathMoney = 10;
+
+
+    /**
      * 团队皮革衣服的颜色
      * */
     private final BlockColor rgb;
@@ -148,6 +154,14 @@ public class TeamConfig {
         return rgb;
     }
 
+    public double getDeathMoney() {
+        return deathMoney;
+    }
+
+    public void setDeathMoney(double deathMoney) {
+        this.deathMoney = deathMoney;
+    }
+
     public void setInventoryArmor(LinkedHashMap<Integer, Item> inventoryArmor) {
         this.inventoryArmor = inventoryArmor;
     }
@@ -194,6 +208,9 @@ public class TeamConfig {
         }
         if(map.containsKey("teamSpawnCount")){
             teamConfig.setTeamSpawnCount(Integer.parseInt(map.get("teamSpawnCount").toString()));
+        }
+        if(map.containsKey("deathMoney")){
+            teamConfig.setDeathMoney(Double.parseDouble(map.get("deathMoney").toString()));
         }
         if(map.containsKey("teamEffect")){
             List<Effect> effect = new ArrayList<>();

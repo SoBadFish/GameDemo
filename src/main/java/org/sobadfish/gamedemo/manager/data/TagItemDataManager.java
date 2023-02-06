@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class TagItemDataManager extends BaseDataWriterGetterManager<TagItem> {
 
-    private static LinkedHashMap<String,Item> cacheItem = new LinkedHashMap<>();
+    private static final LinkedHashMap<String,Item> cacheItem = new LinkedHashMap<>();
 
     public TagItemDataManager(List<TagItem> dataList, File file) {
         super(dataList, file);

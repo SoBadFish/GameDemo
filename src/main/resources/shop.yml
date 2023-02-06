@@ -1,0 +1,22 @@
+shop-title: "良心商店"
+
+shop-content: "良心商店，童嫂无欺 当前您的余额为: %money%"
+
+shop-menu:
+  - item: "366:0:2"
+    buttonImg: ""
+    display: "烤鸡 * 2"
+    type: "item"
+    money: 2
+  - type: "button"
+    display: "矿物"
+    buttonImg: ""
+    money: 0
+    menu:
+      - item: "264:0:1"
+        display: "钻石 * 1"
+        buttonImg: ""
+        type: "item"
+        money: 3
+
+

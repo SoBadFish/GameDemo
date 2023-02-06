@@ -22,6 +22,7 @@ import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
 import org.sobadfish.gamedemo.event.PlayerGameDeathEvent;
+import org.sobadfish.gamedemo.item.button.OpenShopItem;
 import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.message.ScoreBoardMessage;
@@ -54,6 +55,7 @@ public class PlayerInfo {
 
     public boolean isLeave;
 
+    //记录信息
     public LinkedHashMap<PlayerData.DataType,Integer> statistics = new LinkedHashMap<>();
 
     //小游戏强制等待的时间
@@ -62,18 +64,24 @@ public class PlayerInfo {
     //玩家复活次数
     public int reSpawnCount = 0;
 
+    //攻击间隔
     public int damageTime = 0;
 
+    //缓存攻击的玩家对象
     private PlayerInfo damageByInfo = null;
 
     public Map<Integer,Item> inventory;
 
     public  Map<Integer,Item> eInventory;
 
+    //缓存玩家速度
     public float speed;
 
     //玩家生命
     public int health = 0;
+
+    //内置经济系统
+    public double money;
 
     //助攻
     public LinkedHashMap<PlayerInfo,Long> assistsPlayers = new LinkedHashMap<>();
@@ -478,6 +486,9 @@ public class PlayerInfo {
             Item item = entry.getValue();
             player.getInventory().setItem(entry.getKey(), item);
         }
+        if(gameRoom != null && gameRoom.roomConfig.enableShop){
+            player.getInventory().addItem(OpenShopItem.get());
+        }
         playerType = PlayerType.START;
 
     }
@@ -869,13 +880,27 @@ public class PlayerInfo {
                 }
             }
         }
+
         //玩家死亡后的信息
         echoPlayerDeathInfo(event);
-        if(damageByInfo != null && damageByInfo.teamInfo != null){
-            TeamInfoConfig targetTeam = damageByInfo.teamInfo.getTeamConfig();
-            if(targetTeam.getTeamConfig().isCanInfection()){
-                //TODO 被感染了
-                damageByInfo.teamInfo.mjoin(this);
+
+        //被击杀后给予击杀者钱..
+        if (damageByInfo != null && damageByInfo.teamInfo != null) {
+            if(gameRoom.roomConfig.enableMoney){
+                gameRoom.roomConfig.moneyConfig.add(this,damageByInfo.teamInfo
+                        .getTeamConfig().getTeamConfig().deathMoney);
+            }
+        }
+        if(finalDeath) {
+            if (damageByInfo != null && damageByInfo.teamInfo != null) {
+                TeamInfoConfig targetTeam = damageByInfo.teamInfo.getTeamConfig();
+                if (targetTeam.getTeamConfig().isCanInfection()) {
+                    //TODO 被感染了
+                    damageByInfo.teamInfo.mjoin(this);
+                    gameRoom.addSound(Sound.MOB_ZOMBIE_SAY);
+                }else{
+                    deathFinal();
+                }
             }
         }
 

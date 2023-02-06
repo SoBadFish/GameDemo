@@ -3,8 +3,7 @@ package org.sobadfish.gamedemo.panel.from;
 import cn.nukkit.Player;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.utils.TextFormat;
-import lombok.Getter;
-import lombok.Setter;
+import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
 import org.sobadfish.gamedemo.panel.from.button.BaseIButton;
 
 import java.util.ArrayList;
@@ -19,8 +18,7 @@ public class GameFrom {
 
     private final int id;
 
-    @Getter
-    @Setter
+
     private List<BaseIButton> baseIButtons = new ArrayList<>();
 
     private final String title;
@@ -30,6 +28,20 @@ public class GameFrom {
         this.title = title;
         this.context = context;
         this.id = id;
+    }
+
+    public GameFrom(String title, String context){
+        this.title = title;
+        this.context = context;
+        this.id = DisPlayWindowsFrom.getId();
+    }
+
+    public List<BaseIButton> getBaseIButtons() {
+        return baseIButtons;
+    }
+
+    public void setBaseIButtons(List<BaseIButton> baseIButtons) {
+        this.baseIButtons = baseIButtons;
     }
 
     public int getId() {

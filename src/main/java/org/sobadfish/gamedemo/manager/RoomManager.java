@@ -652,6 +652,16 @@ public class RoomManager implements Listener {
                         event.setCancelled();
                         return;
                     }
+                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("openShop")){
+                        event.setCancelled();
+                        PlayerInfo info = room.getPlayerInfo(player);
+                        if(info != null && !info.isWatch() && info.isInRoom()){
+                            if(room.roomConfig.enableShop){
+                                room.getRoomConfig().shopManager.toDisPlay(room,player);
+                            }
+                        }
+                        return;
+                    }
 
                     if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
                         event.setCancelled();

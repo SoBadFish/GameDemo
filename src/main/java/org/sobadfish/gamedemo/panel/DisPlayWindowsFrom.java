@@ -24,10 +24,15 @@ public class DisPlayWindowsFrom {
 
 
     public static void disPlayerCustomMenu(Player player, String tag, List<BaseIButton> from){
-        GameFrom bedWarFrom = new GameFrom(tag,"",getId());
-        bedWarFrom.setBaseIButtons(from);
-        FROM.put(player.getName(), bedWarFrom);
-        bedWarFrom.disPlay(player);
+        GameFrom gf = new GameFrom(tag,"",getId());
+        gf.setBaseIButtons(from);
+        FROM.put(player.getName(), gf);
+        gf.disPlay(player);
+    }
+
+    public static void disPlayFrom(Player player, GameFrom gameFrom){
+        FROM.put(player.getName(), gameFrom);
+        gameFrom.disPlay(player);
     }
 
 

@@ -11,10 +11,12 @@ team:
     teamEffect: []
     # 自动分配
     maxPlayer: -1
-    # 被击杀后给予对方的积分
-    deathPoint: 1
+    # 被击杀后金钱数量
+    deathMoney: 10
     # 队伍每个玩家复活次数
     teamSpawnCount: 0
+    # 队伍中玩家复活的信息提示
+    teamSpawnMessage: []
     # 背包内物品
     inventory:
       armor:
@@ -35,6 +37,10 @@ team:
     canInfection: false
     teamEffect: []
     victoryWeight: 0
+    # 被击杀后给予对方的积分
+    deathPoint: 1
+    # 队伍中玩家复活的信息提示
+    teamSpawnMessage: ""
     inventory:
       armor:
         - "298:0"
