@@ -723,7 +723,7 @@ public class GameRoom {
     }
 
     private void onStart() {
-        hasStart = true;
+
         eventControl.run();
         if(loadTime == -1 && teamAll){
             //TODO 房间首次重置
@@ -756,9 +756,20 @@ public class GameRoom {
 
             loadTime = getRoomConfig().time;
             worldInfo = new WorldInfo(this,getRoomConfig().worldInfo);
-            GameRoomStartEvent event = new GameRoomStartEvent(this,TotalManager.getPlugin());
-            Server.getInstance().getPluginManager().callEvent(event);
-            displayGameStartMsg();
+            if(!hasStart) {
+                GameRoomStartEvent event = new GameRoomStartEvent(this, TotalManager.getPlugin());
+                Server.getInstance().getPluginManager().callEvent(event);
+                if(!event.isCancelled()){
+                    displayGameStartMsg();
+                    hasStart = true;
+                }else{
+                    onDisable();
+                }
+
+            }
+            for (TeamInfo teamInfo : teamInfos) {
+                teamInfo.onUpdate();
+            }
 
         }
         //TODO 可以在这里实现胜利的条件
@@ -786,9 +797,7 @@ public class GameRoom {
     private void demoGameEnd(){
         if(loadTime > 0) {
             //TODO 在房间倒计时内
-            for (TeamInfo teamInfo : teamInfos) {
-                teamInfo.onUpdate();
-            }
+
             if(getRoomConfig().teamConfigs.size() > 1) {
                 if (getLiveTeam().size() == 1) {
                     //当有多个队伍的时候 只剩余一个队伍时将这个队伍中所有的玩家都扔进 胜利的玩家列表。

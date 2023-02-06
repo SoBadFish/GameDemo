@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.event;
 
 
+import cn.nukkit.event.Cancellable;
 import cn.nukkit.plugin.Plugin;
 import org.sobadfish.gamedemo.room.GameRoom;
 
@@ -9,7 +10,7 @@ import org.sobadfish.gamedemo.room.GameRoom;
  * @author SoBadFish
  * 2022/1/15
  */
-public class GameRoomStartEvent extends GameRoomEvent {
+public class GameRoomStartEvent extends GameRoomEvent implements Cancellable {
 
     public GameRoomStartEvent(GameRoom room, Plugin plugin) {
         super(room, plugin);
