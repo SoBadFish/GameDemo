@@ -396,7 +396,7 @@ public class GameRoom {
         }
         int w = 0;
         while(noTeam.size() > 0){
-          if(w > teamInfos.size()){
+          if(w > playerInfos.size()){
               //TODO 防止服主不会设置导致的死循环
               break;
           }

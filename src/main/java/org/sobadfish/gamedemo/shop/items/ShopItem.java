@@ -35,8 +35,10 @@ public class ShopItem extends BaseShopButton {
     public boolean onClick(GameRoom room, Player player){
         PlayerInfo playerInfo = room.getPlayerInfo(player);
         if(playerInfo != null){
-            if(!room.roomConfig.moneyConfig.reduce(playerInfo,info.price)){
-                return false;
+            if(room.roomConfig.enableMoney) {
+                if (!room.roomConfig.moneyConfig.reduce(playerInfo, info.price)) {
+                    return false;
+                }
             }
             player.getInventory().addItem(getItem());
             return true;

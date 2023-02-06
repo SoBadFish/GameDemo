@@ -642,32 +642,37 @@ public class RoomManager implements Listener {
                 String roomName = playerJoin.get(player.getName());
                 GameRoom room = getRoom(roomName);
                 if (room != null) {
-                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("quitItem")){
-                        event.setCancelled();
-                        quitRoomItem(player, roomName, room);
-                        return;
-                    }
-                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("follow")){
-                        followPlayer(room.getPlayerInfo(player),room);
-                        event.setCancelled();
-                        return;
-                    }
-                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("openShop")){
-                        event.setCancelled();
-                        PlayerInfo info = room.getPlayerInfo(player);
-                        if(info != null && !info.isWatch() && info.isInRoom()){
-                            if(room.roomConfig.enableShop){
-                                room.getRoomConfig().shopManager.toDisPlay(room,player);
-                            }
+
+                    if(item.hasCompoundTag() && item.getNamedTag().contains(TotalManager.GAME_NAME)){
+                        switch (item.getNamedTag().getString(TotalManager.GAME_NAME)){
+                            case "quitItem":
+                                event.setCancelled();
+                                quitRoomItem(player, roomName, room);
+                                return;
+
+                            case "follow":
+                                followPlayer(room.getPlayerInfo(player),room);
+                                event.setCancelled();
+                                return;
+                            case "openShop":
+                                event.setCancelled();
+                                PlayerInfo info = room.getPlayerInfo(player);
+                                if(info != null && !info.isWatch() && info.isInRoom()){
+                                    if(room.roomConfig.enableShop){
+                                        room.getRoomConfig().shopManager.toDisPlay(room,player);
+                                    }
+                                }
+                                return;
+                            case "choseTeam":
+                                event.setCancelled();
+                                choseteamItem(player, room);
+                                return;
+                                default:break;
                         }
-                        return;
-                    }
-
-                    if(item.hasCompoundTag() && item.getNamedTag().getBoolean("choseTeam")){
-                        event.setCancelled();
-                        choseteamItem(player, room);
+//                        s && item.getNamedTag().getBoolean("quitItem")
 
                     }
+
                     Block block = event.getBlock();
 
                     if(room.roomConfig.items.size() > 0 && room.roomConfig.roundChest) {
@@ -742,17 +747,16 @@ public class RoomManager implements Listener {
         disPlayProtect(info, room);
     }
 
-    private boolean quitRoomItem(Player player, String roomName, GameRoom room) {
+    private void quitRoomItem(Player player, String roomName, GameRoom room) {
         if(!RoomQuitItem.clickAgain.contains(player)){
             RoomQuitItem.clickAgain.add(player);
             player.sendTip(language.getLanguage("chose-click-again","请再点击一次"));
-            return true;
+            return;
         }
         RoomQuitItem.clickAgain.remove(player);
         if(room.quitPlayerInfo(room.getPlayerInfo(player),true)){
             player.sendMessage(language.getLanguage("player-quit-room-success","你成功离开房间 [1]",roomName));
         }
-        return false;
     }
 
     @EventHandler
@@ -774,34 +778,6 @@ public class RoomManager implements Listener {
         }
     }
 
-
-    @EventHandler
-    public void onPlayerItemHeldEvent(PlayerItemHeldEvent event){
-        Player player = event.getPlayer();
-        if(playerJoin.containsKey(player.getName())){
-            String roomName = playerJoin.get(player.getName());
-            GameRoom room = getRoom(roomName);
-            if(room != null){
-                Item item = event.getItem();
-                if(item.hasCompoundTag() && "quitItem".equalsIgnoreCase(item.getNamedTag().getString(TotalManager.GAME_NAME))){
-                    player.getInventory().setHeldItemSlot(0);
-                    if (quitRoomItem(player, roomName, room)) {
-                        return;
-                    }
-                }
-                if(item.hasCompoundTag() && "choseTeam".equalsIgnoreCase(item.getNamedTag().getString(TotalManager.GAME_NAME))){
-                    player.getInventory().setHeldItemSlot(0);
-                    choseteamItem(player, room);
-
-
-                }
-                if(item.hasCompoundTag() && "follow".equalsIgnoreCase(item.getNamedTag().getString(TotalManager.GAME_NAME))){
-                    followPlayer(room.getPlayerInfo(player),room);
-                    player.getInventory().setHeldItemSlot(0);
-                }
-            }
-        }
-    }
 
 
 

@@ -32,8 +32,8 @@ public class OpenShopItem {
         CompoundTag tag = item.getNamedTag();
         tag.putString(TotalManager.GAME_NAME,"openShop");
         item.setNamedTag(tag);
-        item.setCustomName(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("quit-room-button",
-                "&r&l&e点我退出游戏")));
+        item.setCustomName(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("open-shop-button",
+                "&r&l&e点我打开商店")));
         return item;
 
     }
