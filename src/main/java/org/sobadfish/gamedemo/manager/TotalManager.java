@@ -248,9 +248,6 @@ public class TotalManager {
     }
 
     public static File getDataFolder() {
-        if(isDisabled()){
-            return new File("");
-        }
         return plugin.getDataFolder();
     }
 
