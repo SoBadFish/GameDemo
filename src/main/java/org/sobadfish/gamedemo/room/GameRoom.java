@@ -172,8 +172,8 @@ public class GameRoom {
 
         info.setMoveSpeed(1.5f);
         info.setPlayerType(PlayerInfo.PlayerType.WATCH);
-        info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
-        info.getPlayer().getInventory().setItem(FollowItem.getIndex(), FollowItem.get());
+        info.getPlayer().getInventory().setItem(8,ButtonItemManager.getItem(RoomQuitItem.class));
+        info.getPlayer().getInventory().setItem(5, ButtonItemManager.getItem(FollowItem.class));
         info.getPlayer().getInventory().setHeldItemSlot(0);
         sendMessage(TotalManager.getLanguage().getLanguage("watcher-join-room-message",
                 "&7[1]&7 成为了旁观者 （[2]）",
@@ -253,10 +253,10 @@ public class GameRoom {
                     ,(getRoomConfig().getMaxPlayerSize())+""));
             info.init();
             if(roomConfig.teamConfigs.size() > 1) {
-                info.getPlayer().getInventory().setItem(TeamChoseItem.getIndex(), TeamChoseItem.get());
+                info.getPlayer().getInventory().setItem(6, ButtonItemManager.getItem(TeamChoseItem.class));
 
             }
-            info.getPlayer().getInventory().setItem(RoomQuitItem.getIndex(),RoomQuitItem.get());
+            info.getPlayer().getInventory().setItem(8,ButtonItemManager.getItem(RoomQuitItem.class));
             info.setPlayerType(PlayerInfo.PlayerType.WAIT);
             info.setGameRoom(this);
             if(info.getPlayer() instanceof Player) {

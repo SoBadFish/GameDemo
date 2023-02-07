@@ -169,6 +169,8 @@ public class TotalManager {
         if(topManager != null){
             topManager.init();
         }
+        //TODO 初始化按键物品
+        ButtonItemManager.init();
 
     }
     public static PlayerDataManager getDataManager() {

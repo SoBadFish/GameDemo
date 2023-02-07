@@ -1,46 +1,41 @@
 package org.sobadfish.gamedemo.item.button;
 
-import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.manager.TotalManager;
-
-import java.util.ArrayList;
+import org.sobadfish.gamedemo.player.PlayerInfo;
+import org.sobadfish.gamedemo.room.GameRoom;
 
 /**
  * 玩家离开房间的物品
  * @author SoBadFish
  * 2022/1/3
  */
-public class RoomQuitItem {
+public class RoomQuitItem implements ICustomItem {
 
 
-    public static ArrayList<Player> clickAgain = new ArrayList<>();
-
-
-
-    /**
-     * 在物品栏的位置
-     * @return 位置
-     * */
-    public static int getIndex(){
-        return 8;
+    @Override
+    public void onClick(PlayerInfo player) {
+        GameRoom room = player.getGameRoom();
+        if(room != null) {
+            if (room.quitPlayerInfo(player, true)) {
+                player.sendMessage(TotalManager.getLanguage().getLanguage("player-quit-room-success", "你成功离开房间 [1]", room.roomConfig.getName()));
+            }
+        }
     }
 
-    /**
-     * 显示给玩家的物品，可以自定义修改
-     * @return 在物品栏的物品
-     * */
-    public static Item get(){
+    @Override
+    public boolean canBeUse() {
+        return false;
+    }
+
+    @Override
+    public Item getItem() {
         Item item = Item.get(324);
         item.addEnchantment(Enchantment.get(9));
-        CompoundTag tag = item.getNamedTag();
-        tag.putString(TotalManager.GAME_NAME,"quitItem");
-        item.setNamedTag(tag);
         item.setCustomName(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("quit-room-button","&r&l&e点我退出游戏")));
         return item;
-
     }
 }

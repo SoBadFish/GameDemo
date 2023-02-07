@@ -23,6 +23,7 @@ import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
 import org.sobadfish.gamedemo.event.PlayerGameDeathEvent;
 import org.sobadfish.gamedemo.item.button.OpenShopItem;
+import org.sobadfish.gamedemo.manager.ButtonItemManager;
 import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.message.ScoreBoardMessage;
@@ -487,7 +488,7 @@ public class PlayerInfo {
             player.getInventory().setItem(entry.getKey(), item);
         }
         if(gameRoom != null && gameRoom.roomConfig.enableShop){
-            player.getInventory().addItem(OpenShopItem.get());
+            player.getInventory().addItem(ButtonItemManager.getItem(OpenShopItem.class));
         }
         playerType = PlayerType.START;
 

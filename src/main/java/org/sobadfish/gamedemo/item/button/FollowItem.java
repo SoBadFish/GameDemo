@@ -1,10 +1,19 @@
 package org.sobadfish.gamedemo.item.button;
 
+import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
-import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
+import org.sobadfish.gamedemo.panel.from.button.BaseIButton;
+import org.sobadfish.gamedemo.panel.items.PlayerItem;
+import org.sobadfish.gamedemo.player.PlayerInfo;
+import org.sobadfish.gamedemo.room.GameRoom;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 跟随玩家的物品栏菜单
@@ -12,30 +21,41 @@ import org.sobadfish.gamedemo.manager.TotalManager;
  * @author SoBadFish
  * 2022/8/10
  */
-public class FollowItem {
+public class FollowItem implements ICustomItem {
 
 
 
-    /**
-     * 在物品栏的位置
-     * @return 位置
-     * */
-    public static int getIndex(){
-        return 5;
+    @Override
+    public void onClick(PlayerInfo info) {
+        GameRoom room = info.getGameRoom();
+        info.sendMessage(TotalManager.getLanguage().getLanguage("player-chose-teleport-player","选择要传送的玩家"));
+        if (room == null){
+            return;
+        }
+        List<BaseIButton> list = new ArrayList<>();
+        //手机玩家
+        for(PlayerInfo i: room.getLivePlayers()){
+            list.add(new BaseIButton(new PlayerItem(i).getGUIButton(info)) {
+                @Override
+                public void onClick(Player player) {
+                    player.teleport(i.getPlayer().getLocation());
+                }
+            });
+        }
+        DisPlayWindowsFrom.disPlayerCustomMenu((Player) info.getPlayer()
+                , TotalManager.getLanguage().getLanguage("player-from-teleport-player-title","传送玩家"), list);
     }
 
-    /**
-     * 显示给玩家的物品，可以自定义修改
-     * @return 在物品栏的物品
-     * */
-    public static Item get(){
+    @Override
+    public boolean canBeUse() {
+        return false;
+    }
+
+    @Override
+    public Item getItem() {
         Item item = Item.get(345);
         item.addEnchantment(Enchantment.get(9));
-        CompoundTag tag = item.getNamedTag();
-        tag.putString(TotalManager.GAME_NAME,"follow");
-        item.setNamedTag(tag);
         item.setCustomName(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("teleport-player-button","&r&l&e点我传送到玩家")));
         return item;
-
     }
 }

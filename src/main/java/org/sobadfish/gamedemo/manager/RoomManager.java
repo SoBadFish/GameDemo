@@ -20,10 +20,7 @@ import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
 import cn.nukkit.event.level.WeatherChangeEvent;
 import cn.nukkit.event.player.*;
-import cn.nukkit.form.element.ElementButton;
-import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.response.FormResponseSimple;
-import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.inventory.InventoryHolder;
 import cn.nukkit.inventory.PlayerInventory;
@@ -36,15 +33,12 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.entity.DamageFloatTextEntity;
 import org.sobadfish.gamedemo.entity.EntityTnt;
-import org.sobadfish.gamedemo.item.ItemIDSunName;
-import org.sobadfish.gamedemo.item.button.RoomQuitItem;
-import org.sobadfish.gamedemo.item.button.TeamChoseItem;
+import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.panel.ChestInventoryPanel;
 import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
 import org.sobadfish.gamedemo.panel.from.GameFrom;
 import org.sobadfish.gamedemo.panel.from.button.BaseIButton;
 import org.sobadfish.gamedemo.panel.items.BasePlayPanelItemInstance;
-import org.sobadfish.gamedemo.panel.items.PlayerItem;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
@@ -53,7 +47,10 @@ import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.ItemConfig;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 游戏房间管理类
@@ -642,35 +639,21 @@ public class RoomManager implements Listener {
                 String roomName = playerJoin.get(player.getName());
                 GameRoom room = getRoom(roomName);
                 if (room != null) {
-
-                    if(item.hasCompoundTag() && item.getNamedTag().contains(TotalManager.GAME_NAME)){
-                        switch (item.getNamedTag().getString(TotalManager.GAME_NAME)){
-                            case "quitItem":
-                                event.setCancelled();
-                                quitRoomItem(player, roomName, room);
-                                return;
-
-                            case "follow":
-                                followPlayer(room.getPlayerInfo(player),room);
-                                event.setCancelled();
-                                return;
-                            case "openShop":
-                                event.setCancelled();
-                                PlayerInfo info = room.getPlayerInfo(player);
-                                if(info != null && !info.isWatch() && info.isInRoom()){
-                                    if(room.roomConfig.enableShop){
-                                        room.getRoomConfig().shopManager.toDisPlay(room,player);
-                                    }
+                    PlayerInfo info = room.getPlayerInfo(player);
+                    if(info != null) {
+                        if(item.hasCompoundTag() && item.getNamedTag().contains(TotalManager.GAME_NAME)){
+                            event.setCancelled();
+                            String itemName = item.getNamedTag().getString(TotalManager.GAME_NAME);
+                            ICustomItem iButtonItem = ButtonItemManager.getButtonItem(itemName);
+                            if(iButtonItem != null){
+                                iButtonItem.onClick(info);
+                                if(iButtonItem.canBeUse()){
+                                    Item ic = item.clone();
+                                    ic.setCount(1);
+                                    player.getInventory().removeItem(ic);
                                 }
-                                return;
-                            case "choseTeam":
-                                event.setCancelled();
-                                choseteamItem(player, room);
-                                return;
-                                default:break;
+                            }
                         }
-//                        s && item.getNamedTag().getBoolean("quitItem")
-
                     }
 
                     Block block = event.getBlock();
@@ -697,67 +680,10 @@ public class RoomManager implements Listener {
 
     }
 
-    private void choseteamItem(Player player, GameRoom room) {
-        if(!TeamChoseItem.clickAgain.contains(player)){
-            TeamChoseItem.clickAgain.add(player);
-            player.sendTip(language.getLanguage("chose-click-again","请再点击一次"));
-            return;
-        }
-        FormWindowSimple simple = new FormWindowSimple(language.getLanguage("player-chose-team","请选择队伍"),"");
-        for(TeamInfo teamInfoConfig: room.getTeamInfos()){
-            Item wool = teamInfoConfig.getTeamConfig().getTeamConfig().getBlockWoolColor();
-            simple.addButton(new ElementButton(TextFormat.colorize('&', teamInfoConfig +" &r"+teamInfoConfig.getTeamPlayers().size()+" / "+(room.getRoomConfig().getMaxPlayerSize() / room.getTeamInfos().size())),
-                    new ElementButtonImageData("path",
-                            ItemIDSunName.getIDByPath(wool.getId(),wool.getDamage()))));
-        }
-        player.showFormWindow(simple,102);
-        TeamChoseItem.clickAgain.remove(player);
-    }
-
-    private void followPlayer(PlayerInfo info,GameRoom room){
-        info.sendMessage(language.getLanguage("player-chose-teleport-player","选择要传送的玩家"));
-        if (room == null){
-            return;
-        }
-        disPlayUI(info, room);
-
-    }
-
-    private void disPlayProtect(PlayerInfo info,GameRoom room){
-        List<BaseIButton> list = new ArrayList<>();
-        //手机玩家
-        for(PlayerInfo i: room.getLivePlayers()){
-            list.add(new BaseIButton(new PlayerItem(i).getGUIButton(info)) {
-                @Override
-                public void onClick(Player player) {
-                    player.teleport(i.getPlayer().getLocation());
-                }
-            });
-        }
-        DisPlayWindowsFrom.disPlayerCustomMenu((Player) info.getPlayer(), language.getLanguage("player-from-teleport-player-title","传送玩家"), list);
-
-    }
 
 
-    private void disPlayUI(PlayerInfo info, GameRoom room){
-        //WIN10 玩家 故障，，，，
-//        DisPlayerPanel playerPanel = new DisPlayerPanel();
-//        playerPanel.displayPlayer(info,DisPlayerPanel.displayPlayers(room),"传送玩家");
 
-        disPlayProtect(info, room);
-    }
 
-    private void quitRoomItem(Player player, String roomName, GameRoom room) {
-        if(!RoomQuitItem.clickAgain.contains(player)){
-            RoomQuitItem.clickAgain.add(player);
-            player.sendTip(language.getLanguage("chose-click-again","请再点击一次"));
-            return;
-        }
-        RoomQuitItem.clickAgain.remove(player);
-        if(room.quitPlayerInfo(room.getPlayerInfo(player),true)){
-            player.sendMessage(language.getLanguage("player-quit-room-success","你成功离开房间 [1]",roomName));
-        }
-    }
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent event){
