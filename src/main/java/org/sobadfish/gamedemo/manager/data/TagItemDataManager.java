@@ -1,8 +1,10 @@
 package org.sobadfish.gamedemo.manager.data;
 
 import cn.nukkit.item.Item;
+import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.item.tag.TagItem;
 import org.sobadfish.gamedemo.manager.BaseDataWriterGetterManager;
+import org.sobadfish.gamedemo.manager.ButtonItemManager;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -14,6 +16,7 @@ import java.util.List;
  */
 public class TagItemDataManager extends BaseDataWriterGetterManager<TagItem> {
 
+
     private static final LinkedHashMap<String,Item> cacheItem = new LinkedHashMap<>();
 
     public TagItemDataManager(List<TagItem> dataList, File file) {
@@ -22,7 +25,7 @@ public class TagItemDataManager extends BaseDataWriterGetterManager<TagItem> {
 
 
     public boolean hasItem(String name){
-        return dataList.contains(TagItem.asNameTag(name));
+        return dataList.contains(TagItem.asNameTag(name)) || ButtonItemManager.BUTTON_ITEM.containsKey(name);
     }
 
     public Item getItem(String name){
@@ -32,6 +35,12 @@ public class TagItemDataManager extends BaseDataWriterGetterManager<TagItem> {
         Item item = null;
         if(dataList.contains(TagItem.asNameTag(name))){
             item = dataList.get(dataList.indexOf(TagItem.asNameTag(name))).asItem();
+        }
+        if(item == null){
+            ICustomItem buttonItem = ButtonItemManager.getButtonItem(name);
+            if(buttonItem != null){
+                item = buttonItem.getItem();
+            }
         }
         if(item != null && item.getId() > 0){
             cacheItem.put(name,item);

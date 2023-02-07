@@ -3,7 +3,6 @@ package org.sobadfish.gamedemo.item.button;
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemEndCrystal;
-import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.manager.TotalManager;
@@ -36,10 +35,17 @@ public class OpenShopItem implements ICustomItem {
 
     @Override
     public Item getItem() {
-        Item item = new ItemEndCrystal();
-        item.addEnchantment(Enchantment.get(9));
-        item.setCustomName(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("open-shop-button",
-                "&r&l&e点我打开商店")));
-        return item;
+        return new ItemEndCrystal();
+    }
+
+    @Override
+    public String getName() {
+        return "openShop";
+    }
+
+    @Override
+    public String getCustomName() {
+        return TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("open-shop-button",
+                "&r&l&e点我打开商店"));
     }
 }

@@ -1,7 +1,6 @@
 package org.sobadfish.gamedemo.item.button;
 
 import cn.nukkit.item.Item;
-import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.manager.TotalManager;
@@ -33,9 +32,16 @@ public class RoomQuitItem implements ICustomItem {
 
     @Override
     public Item getItem() {
-        Item item = Item.get(324);
-        item.addEnchantment(Enchantment.get(9));
-        item.setCustomName(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("quit-room-button","&r&l&e点我退出游戏")));
-        return item;
+        return Item.get(324);
+    }
+
+    @Override
+    public String getName() {
+        return "quitRoom";
+    }
+
+    @Override
+    public String getCustomName() {
+        return TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("quit-room-button","&r&l&e点我退出游戏"));
     }
 }

@@ -27,4 +27,16 @@ public interface ICustomItem {
      * */
     Item getItem();
 
+    /**
+     * 通过这个方法可根据名称获取物品实体类
+     * @return 物品的名称
+     * */
+    String getName();
+
+    /**
+     * 显示的名称
+     * @return 自定义显示的名称
+     * */
+    String getCustomName();
+
 }

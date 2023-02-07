@@ -5,7 +5,6 @@ import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.item.Item;
-import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
@@ -46,10 +45,18 @@ public class TeamChoseItem implements ICustomItem {
 
     @Override
     public Item getItem() {
-        Item item = Item.get(69);
-        item.addEnchantment(Enchantment.get(9));
-        item.setCustomName(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("chose-team-button",
-                "&r&l&e点我选择队伍")));
-        return item;
+        return Item.get(69);
+    }
+
+
+    @Override
+    public String getName() {
+        return "teamChose";
+    }
+
+    @Override
+    public String getCustomName() {
+        return TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("chose-team-button",
+                "&r&l&e点我选择队伍"));
     }
 }

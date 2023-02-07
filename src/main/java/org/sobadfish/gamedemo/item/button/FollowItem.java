@@ -2,7 +2,6 @@ package org.sobadfish.gamedemo.item.button;
 
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
-import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.manager.TotalManager;
@@ -53,9 +52,16 @@ public class FollowItem implements ICustomItem {
 
     @Override
     public Item getItem() {
-        Item item = Item.get(345);
-        item.addEnchantment(Enchantment.get(9));
-        item.setCustomName(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("teleport-player-button","&r&l&e点我传送到玩家")));
-        return item;
+        return Item.get(345);
+    }
+
+    @Override
+    public String getName() {
+        return "follow";
+    }
+
+    @Override
+    public String getCustomName() {
+        return TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("teleport-player-button","&r&l&e点我传送到玩家"));
     }
 }

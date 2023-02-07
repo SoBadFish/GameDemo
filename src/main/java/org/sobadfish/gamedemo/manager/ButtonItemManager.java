@@ -23,7 +23,17 @@ public class ButtonItemManager {
      * @param item 物品类
      * */
     public static void registerItem(Class<? extends ICustomItem> item) {
-        BUTTON_ITEM.put(item.getSimpleName(), item);
+        try {
+            ICustomItem customItem = item.newInstance();
+            String name = customItem.getName();
+            if(name == null){
+                name = item.getSimpleName();
+            }
+            BUTTON_ITEM.put(name, item);
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -57,8 +67,11 @@ public class ButtonItemManager {
         if(iButtonItem != null){
             Item item = iButtonItem.getItem();
             CompoundTag tag = item.getNamedTag();
-            tag.putString(TotalManager.GAME_NAME,iButtonItem.getClass().getSimpleName());
+            tag.putString(TotalManager.GAME_NAME,iButtonItem.getName());
             item.setNamedTag(tag);
+            if(iButtonItem.getCustomName() != null){
+                item.setCustomName(iButtonItem.getCustomName());
+            }
             return item;
         }
         return Item.get(0);
