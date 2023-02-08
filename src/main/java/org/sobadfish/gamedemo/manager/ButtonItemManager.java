@@ -78,7 +78,6 @@ public class ButtonItemManager {
                 tag = item.getNamedTag();
             }
 
-
             tag.putString(TotalManager.GAME_NAME,iButtonItem.getName());
             item.setNamedTag(tag);
             if(iButtonItem.getCustomName() != null){
