@@ -912,7 +912,10 @@ public class PlayerInfo {
                 }else{
                     deathFinal();
                 }
+            }else{
+                deathFinal();
             }
+
         }
 
         damageByInfo = null;
