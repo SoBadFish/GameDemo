@@ -156,12 +156,12 @@ public class TeamInfo {
         //TODO 当队伍胜利
         TeamVictoryEvent event = new TeamVictoryEvent(this,room, TotalManager.getPlugin());
         Server.getInstance().getPluginManager().callEvent(event);
-        event.getTeamInfo().sendTitle(TotalManager.language.getLanguage("game-victory","&e&l胜利!"),5);
         String line = "■■■■■■■■■■■■■■■■■■■■■■■■■■";
         event.getRoom().sendTipMessage("&a"+line);
         event.getRoom().sendTipMessage(FunctionManager.getCentontString(TotalManager.language.getLanguage("game-end","&b游戏结束"),line.length()));
         event.getRoom().sendTipMessage("");
         for(PlayerInfo playerInfo: event.getTeamInfo().getVictoryPlayers()){
+            playerInfo.sendTitle(TotalManager.language.getLanguage("game-victory","&e&l胜利!"),5);
 //            "&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getData(PlayerData.DataType.KILL))+" 助攻: "+playerInfo.getData(PlayerData.DataType.ASSISTS)
             event.getRoom().sendTipMessage(FunctionManager.getCentontString(TotalManager.language.getLanguage("game-end-info","&7   [1] 击杀：[2] 助攻: [3]",
                     playerInfo.getPlayer().getName(),
@@ -171,9 +171,11 @@ public class TeamInfo {
         }
         event.getRoom().sendTipMessage("&a"+line);
 
-
-        event.getRoom().sendMessage(TotalManager.language.getLanguage("game-end-team-info","&a恭喜 [1] &a 获得了胜利!",event.getTeamInfo().getTeamConfig().getNameColor()+event.getTeamInfo().getTeamConfig().getName()));
-
+        if(room.getTeamInfos().size() == 1){
+            event.getRoom().sendMessage(TotalManager.language.getLanguage("game-end-team-info", "&a恭喜 [1] &a 获得了胜利!", event.getTeamInfo().victoryPlayers.get(0).toString()));
+        }else {
+            event.getRoom().sendMessage(TotalManager.language.getLanguage("game-end-team-info", "&a恭喜 [1] &a 获得了胜利!", event.getTeamInfo().getTeamConfig().getNameColor() + event.getTeamInfo().getTeamConfig().getName()));
+        }
     }
 
     public void echoDefeat(){

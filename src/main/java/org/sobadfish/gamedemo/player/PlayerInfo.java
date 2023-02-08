@@ -850,7 +850,7 @@ public class PlayerInfo {
             if (gameRoom != null && gameRoom.roomConfig.reSpawnTime >= 0) {
                 int roomReSpawnCount = gameRoom.getRoomConfig().reSpawnCount;
                 if (roomReSpawnCount > 0) {
-                    if (reSpawnCount > 0 && reSpawnCount < roomReSpawnCount) {
+                    if (reSpawnCount >= 0 && reSpawnCount < roomReSpawnCount) {
                         reSpawnCount++;
                         sendMessage(TotalManager.getLanguage().getLanguage("player-respawn-count", "&e你还能复活 &a[1] &e次",
                                 (roomReSpawnCount - reSpawnCount) + ""));
