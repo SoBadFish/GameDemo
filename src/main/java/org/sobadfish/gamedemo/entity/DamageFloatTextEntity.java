@@ -50,7 +50,7 @@ public class DamageFloatTextEntity extends Entity {
 
         if (this.isAlive()) {
             if (!this.isCollided) {
-                this.motionY -= 0.03;
+                this.motionY += 0.02;
             }else{
                 this.close();
                 return true;

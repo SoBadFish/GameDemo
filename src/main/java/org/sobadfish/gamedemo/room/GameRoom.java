@@ -799,7 +799,7 @@ public class GameRoom {
             //TODO 在房间倒计时内
 
             if(getRoomConfig().teamConfigs.size() > 1) {
-                if (getLiveTeam().size() == 1) {
+                if (getLiveTeam().size() <= 1) {
                     //当有多个队伍的时候 只剩余一个队伍时将这个队伍中所有的玩家都扔进 胜利的玩家列表。
                     TeamInfo teamInfo = getLiveTeam().get(0);
                     teamInfo.getVictoryPlayers().addAll(teamInfo.getTeamPlayers());
@@ -810,7 +810,7 @@ public class GameRoom {
                 TeamInfo teamInfo = getTeamInfos().get(0);
                 ArrayList<PlayerInfo> pl = teamInfo.getLivePlayer();
                 //判断是否为唯一幸存者
-                if(pl.size() == 1){
+                if(pl.size() <= 1){
                     teamInfo.getVictoryPlayers().add(pl.get(0));
                     gameEnd(teamInfo,false);
                 }

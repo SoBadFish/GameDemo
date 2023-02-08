@@ -830,6 +830,7 @@ public class PlayerInfo {
             ((Player) player).removeAllWindows();
             ((Player) player).getUIInventory().clearAll();
         }
+
         PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),TotalManager.getPlugin());
         Server.getInstance().getPluginManager().callEvent(event1);
 
@@ -859,18 +860,27 @@ public class PlayerInfo {
 
                     }
                 } else {
-                    deathCanRespawn();
+                    if(roomReSpawnCount == -1) {
+                        deathCanRespawn();
+                    }else{
+                        finalDeath = true;
+                    }
                 }
             } else {
                 finalDeath = true;
             }
         }
 
+
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
             cancel();
             return;
         }
         player.teleport(teamInfo.getSpawnLocation());
+        //防止共归于尽
+        if(finalDeath && gameRoom.getLivePlayers().size() == 1){
+            return;
+        }
         addData(PlayerData.DataType.DEATH);
 
         //死亡后是否掉落物品
