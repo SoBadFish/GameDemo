@@ -201,7 +201,7 @@ public class GameRoomConfig {
     /**
      * 经济配置
      * */
-    public MoneyConfig moneyConfig;
+    public MoneyConfig moneyConfig = new MoneyConfig();
 
 
 
