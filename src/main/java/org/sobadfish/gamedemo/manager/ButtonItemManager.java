@@ -73,7 +73,12 @@ public class ButtonItemManager {
         }
         if(iButtonItem != null){
             Item item = iButtonItem.getItem();
-            CompoundTag tag = item.getNamedTag();
+            CompoundTag tag = new CompoundTag();
+            if(item.hasCompoundTag()){
+                tag = item.getNamedTag();
+            }
+
+
             tag.putString(TotalManager.GAME_NAME,iButtonItem.getName());
             item.setNamedTag(tag);
             if(iButtonItem.getCustomName() != null){
