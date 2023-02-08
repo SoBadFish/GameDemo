@@ -65,7 +65,12 @@ public class ButtonItemManager {
      * @return {@link Item}
      * */
     public static Item getItem(Class<? extends ICustomItem> i) {
-        ICustomItem iButtonItem = getButtonItem(i.getSimpleName());
+        ICustomItem iButtonItem = null;
+        try {
+            iButtonItem = i.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         if(iButtonItem != null){
             Item item = iButtonItem.getItem();
             CompoundTag tag = item.getNamedTag();
