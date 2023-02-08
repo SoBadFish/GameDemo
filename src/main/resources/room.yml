@@ -25,6 +25,9 @@ waitTime: 120
 #游戏内等待 当游戏开始后会有一段时间的等待
 gameInWait: 10
 
+# 是否进行游戏内合成
+ban-craft: false
+
 # 是否启用饥饿值掉落
 enable-food: false
 

@@ -829,7 +829,7 @@ public class RoomManager implements Listener {
     public void onCraft(CraftItemEvent event){
         Player player = event.getPlayer();
         GameRoom room = getGameRoomByLevel(player.getLevel());
-        if(room != null) {
+        if(room != null && room.roomConfig.banCraft) {
             PlayerInfo info = room.getPlayerInfo(player);
             if (info != null) {
                 event.setCancelled();

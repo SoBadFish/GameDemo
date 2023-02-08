@@ -59,6 +59,11 @@ public class GameRoomConfig {
      * 满人等待时长
      * */
     private int maxWaitTime;
+
+    /**
+     * 是否禁止合成
+     * */
+    public boolean banCraft;
     /**
      * 是否掉落物品
      * */
@@ -249,6 +254,10 @@ public class GameRoomConfig {
         return round;
     }
 
+    public boolean isBanCraft() {
+        return banCraft;
+    }
+
     public void setWorldInfo(WorldInfoConfig worldInfo) {
         this.worldInfo = worldInfo;
     }
@@ -320,6 +329,7 @@ public class GameRoomConfig {
                 roomConfig.chestCanReset = room.getBoolean("chest-can-reset",true);
                 roomConfig.enableMoney = room.getBoolean("money.enable",false);
                 roomConfig.enableShop = room.getBoolean("enable-shop",false);
+                roomConfig.banCraft = room.getBoolean("ban-craft",false);
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
@@ -429,8 +439,18 @@ public class GameRoomConfig {
         config.set("waitTime",waitTime);
         config.set("gameInWait",gameInWait);
         config.set("reSpawnTime",reSpawnTime);
+        LinkedHashMap<String,Object> moneyConfig = new LinkedHashMap<>();
+        moneyConfig.put("enable",enableMoney);
+        moneyConfig.put("default-money",this.moneyConfig.defaultValue);
+        moneyConfig.put("unit",this.moneyConfig.moneyUnit);
+        config.set("money",moneyConfig);
         config.set("reSpawnCount",reSpawnCount);
+        config.set("deathDrop",deathDrop);
+        config.set("hasWatch",hasWatch);
+        config.set("ban-craft",banCraft);
         config.set("enable-food",enableFood);
+        config.set("enable-shop",enableShop);
+
         config.set("max-player-waitTime",maxWaitTime);
         config.set("minPlayerSize",minPlayerSize);
         config.set("maxPlayerSize",maxPlayerSize);
