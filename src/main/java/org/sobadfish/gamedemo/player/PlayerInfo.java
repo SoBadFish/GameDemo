@@ -822,7 +822,6 @@ public class PlayerInfo {
      * 玩家死亡后的一些操作
      * */
     public void death(EntityDamageEvent event){
-
         boolean finalDeath = false;
         //TODO 玩家死亡后可以做一些逻辑处理
         player.setHealth(player.getMaxHealth());
@@ -833,14 +832,11 @@ public class PlayerInfo {
 
         PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),TotalManager.getPlugin());
         Server.getInstance().getPluginManager().callEvent(event1);
-
-
         player.removeAllEffects();
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
             cancel();
             return;
         }
-
         if(health > 0){
             health--;
             sendMessage(TotalManager.getLanguage().getLanguage("player-respawn-health-count","&a你剩余 &e[1] &a条生命",
@@ -870,8 +866,6 @@ public class PlayerInfo {
                 finalDeath = true;
             }
         }
-
-
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
             cancel();
             return;
@@ -891,10 +885,8 @@ public class PlayerInfo {
                 }
             }
         }
-
         //玩家死亡后的信息
         echoPlayerDeathInfo(event);
-
         //被击杀后给予击杀者钱..
         if (damageByInfo != null && damageByInfo.teamInfo != null) {
             if(gameRoom.roomConfig.enableMoney){
@@ -905,21 +897,23 @@ public class PlayerInfo {
         if(finalDeath) {
             if (damageByInfo != null && damageByInfo.teamInfo != null) {
                 TeamInfoConfig targetTeam = damageByInfo.teamInfo.getTeamConfig();
-                if (targetTeam.getTeamConfig().isCanInfection()) {
-                    //TODO 被感染了
-                    damageByInfo.teamInfo.mjoin(this);
-                    gameRoom.addSound(Sound.MOB_ZOMBIE_SAY);
-                }else{
+                if(damageByInfo.teamInfo.equals(getTeamInfo())
+                        || gameRoom.getRoomConfig().teamConfigs.size() == 1){
                     deathFinal();
+                }else{
+                    if (targetTeam.getTeamConfig().isCanInfection()) {
+                        //TODO 被感染了
+                        damageByInfo.teamInfo.mjoin(this);
+                        gameRoom.addSound(Sound.MOB_ZOMBIE_SAY);
+                    }else{
+                        deathFinal();
+                    }
                 }
             }else{
                 deathFinal();
             }
-
         }
-
         damageByInfo = null;
-
         player.getInventory().clearAll();
         player.getOffhandInventory().clearAll();
         if(playerType == PlayerType.WATCH){
