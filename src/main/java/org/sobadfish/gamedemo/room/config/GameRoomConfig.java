@@ -389,6 +389,7 @@ public class GameRoomConfig {
 
             }catch (Exception e){
                 TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("load-room-error","加载房间出错: ")+e.getMessage());
+                e.printStackTrace();
 
                 return null;
 

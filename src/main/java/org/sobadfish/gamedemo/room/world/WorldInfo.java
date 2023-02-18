@@ -89,6 +89,9 @@ public class WorldInfo {
         ///////////////////DO Something////////////
         //TODO 地图更新 每秒更新一次 可实现一些定制化功能
 
+        if(room.close){
+            return;
+        }
         //更新浮空字与箱子刷新
         if(room.roomConfig.roundChest && room.roomConfig.chestCanReset){
             for (Map.Entry<Position,Long> chest:clickChest.entrySet()) {

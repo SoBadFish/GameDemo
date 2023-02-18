@@ -446,6 +446,8 @@ public class PlayerInfo {
                 playerType = PlayerType.LEAVE;
                 return;
             }
+        }else{
+            player.spawnToAll();
         }
 
         player.getInventory().clearAll();
@@ -960,10 +962,14 @@ public class PlayerInfo {
     public void deathCanRespawn(){
         if (getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(3);
+        }else{
+            getPlayer().kill();
         }
-        player.teleport(getGameRoom().worldInfo.getConfig().getGameWorld().getSafeSpawn());
-        Position position = teamInfo.getSpawnLocation();
-        player.teleport(new Position(player.x, position.y + 64, player.z, getLevel()));
+        if(player.isAlive()) {
+            player.teleport(getGameRoom().worldInfo.getConfig().getGameWorld().getSafeSpawn());
+            Position position = teamInfo.getSpawnLocation();
+            player.teleport(new Position(player.x, position.y + 64, player.z, getLevel()));
+        }
         sendTitle(TotalManager.getLanguage().getLanguage("player-death-info-title","&c你死了"),2);
         playerType = PlayerType.DEATH;
     }
@@ -974,6 +980,8 @@ public class PlayerInfo {
     public void deathFinal(){
         if (getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(3);
+        }else{
+            getPlayer().close();
         }
         playerType = PlayerType.WATCH;
         //当队伍仅有一个的时候，玩家死亡后就列入失败列表
