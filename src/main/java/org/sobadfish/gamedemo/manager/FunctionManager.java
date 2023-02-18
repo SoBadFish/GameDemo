@@ -191,7 +191,11 @@ public class FunctionManager {
         }
 
         if(item.getId() == 0){
-            item = Item.get(Integer.parseInt(sList[0]));
+            try {
+                item = Item.get(Integer.parseInt(sList[0]));
+            }catch (Exception e){
+                item = Item.fromString(sList[0].replace("_",":"));
+            }
             if(sList.length > 1){
                 item.setDamage(Integer.parseInt(sList[1]));
                 if(sList.length > 2){
