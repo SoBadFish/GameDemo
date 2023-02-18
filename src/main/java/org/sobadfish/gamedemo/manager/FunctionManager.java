@@ -194,7 +194,7 @@ public class FunctionManager {
             try {
                 item = Item.get(Integer.parseInt(sList[0]));
             }catch (Exception e){
-                item = Item.fromString(sList[0].replace("_",":"));
+                item = Item.fromString(sList[0].replace(".",":"));
             }
             if(sList.length > 1){
                 item.setDamage(Integer.parseInt(sList[1]));
