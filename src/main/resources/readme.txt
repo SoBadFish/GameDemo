@@ -1,14 +1,24 @@
 事件系统是作用在游戏中的事件是 event.yml 文件 这个决定着游戏的进程
+事件的配置格式如下:
 
-目前插件内置的事件有
+ - type: "事件类型"
+   eventTime: 需要多长时间触发事件（单位： 秒）
+   display: "显示的名称"
+   value: "执行的内容"
+
+
+
+案例
+ - type: "effect"
+   eventTime: 30
+   display: "一个药水效果"
+   value: "药水id:等级:时间"
+
+目前插件内置的事件类型有
 
 custom: 自定义
 effect: 药水效果
 command: 执行指令
-
-其中time事件的value参数格式为
-
-"名称:时间"
 
 
 custom 自定义事件
