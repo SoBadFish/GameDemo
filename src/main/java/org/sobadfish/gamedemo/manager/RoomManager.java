@@ -121,7 +121,8 @@ public class RoomManager implements Listener {
         if (hasRoom(roomName)) {
             if (!hasGameRoom(roomName)) {
                 if(!enableRoom(getRoomConfig(roomName))){
-                    player.sendForceMessage(language.getLanguage("room-enable-error","&c[1] 还没准备好",roomName));
+                    player.sendForceMessage(language.getLanguage("room-enable-error","&c[1] 还没准备好 code",roomName));
+
                     return false;
                 }
             }else{
@@ -188,6 +189,7 @@ public class RoomManager implements Listener {
      * */
     public boolean enableRoom(GameRoomConfig config){
         if(config.getWorldInfo().getGameWorld() == null){
+            TotalManager.getPlugin().getLogger().error("启动房间时出错: "+config.getName()+"游戏地图为空!");
             return false;
         }
         if(!RoomManager.LOCK_GAME.contains(config)){
@@ -196,12 +198,13 @@ public class RoomManager implements Listener {
             GameRoom room = GameRoom.enableRoom(config);
             if(room == null){
                 RoomManager.LOCK_GAME.remove(config);
+                TotalManager.getPlugin().getLogger().error("启动房间时出错: "+config.getName()+"游戏地图在初始化队列或游戏地图为空");
                 return false;
             }
             rooms.put(config.getName(),room);
             return true;
         }else{
-
+            TotalManager.getPlugin().getLogger().error("启动房间时出错: "+config.getName()+"游戏房间被锁定!");
             return false;
         }
 

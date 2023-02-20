@@ -76,6 +76,8 @@ chest-can-reset: true
 # 箱子重置时间(秒)
 chest-reset-time: 120
 
+# 游戏结束后是否重置地图
+resetWorld: true
 
 
 # 禁止破坏的方块

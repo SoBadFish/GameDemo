@@ -186,6 +186,11 @@ public class GameRoomConfig {
     public boolean chestCanReset = true;
 
     /**
+     * 游戏结束是否重置地图
+     * */
+    public boolean resetWorld = true;
+
+    /**
      * 房间内置商店
      * */
     public ShopManager shopManager;
@@ -324,6 +329,7 @@ public class GameRoomConfig {
                 roomConfig.canBreak = new ArrayList<>(room.getStringList("can-break"));
                 roomConfig.banBreak = new ArrayList<>(room.getStringList("ban-break"));
                 roomConfig.roundChest = room.getBoolean("roundChest",false);
+                roomConfig.resetWorld = room.getBoolean("resetWorld",true);
                 roomConfig.enableFood = room.getBoolean("enable-food",false);
                 roomConfig.chestResetTime = room.getInt("chest-reset-time",120);
                 roomConfig.chestCanReset = room.getBoolean("chest-can-reset",true);
@@ -471,6 +477,7 @@ public class GameRoomConfig {
         config.set("deathDrop",deathDrop);
         config.set("victoryCmd",victoryCommand);
         config.set("roundChest",roundChest);
+        config.set("resetWorld",resetWorld);
         config.set("chest-reset-time",chestResetTime);
         config.set("chest-can-reset",chestCanReset);
         config.set("roomStartMessage",gameStartMessage);

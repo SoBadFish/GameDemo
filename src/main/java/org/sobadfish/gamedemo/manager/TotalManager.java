@@ -14,6 +14,8 @@ import org.sobadfish.gamedemo.room.event.defaults.ChestResetEvent;
 import org.sobadfish.gamedemo.room.event.defaults.CommandEvent;
 import org.sobadfish.gamedemo.room.event.defaults.CustomEvent;
 import org.sobadfish.gamedemo.room.event.defaults.EffectEvent;
+import org.sobadfish.gamedemo.variable.GameNpcVariable;
+import org.sobadfish.gamedemo.variable.GameTipVariable;
 
 import java.io.File;
 
@@ -65,6 +67,7 @@ public class TotalManager {
         TotalManager.plugin = pluginBase;
         checkServer();
         loadConfig();
+        loadVariable();
         COMMAND_NAME = plugin.getConfig().getString("command-player","gd");
         COMMAND_ADMIN_NAME = plugin.getConfig().getString("command-admin","gda");
         COMMAND_MESSAGE_NAME = plugin.getConfig().getString("command-msg","gds");
@@ -73,6 +76,17 @@ public class TotalManager {
         RoomEventManager.register("command", CommandEvent.class);
         RoomEventManager.register("chest_reset", ChestResetEvent.class);
         ThreadManager.init();
+    }
+
+    private static void loadVariable() {
+        try{
+            Class.forName("com.smallaswater.npc.variable.BaseVariableV2");
+            GameNpcVariable.init();
+        }catch (Exception ignore){}
+        try{
+            Class.forName("tip.utils.variables.BaseVariable");
+            GameTipVariable.init();
+        }catch (Exception ignore){}
     }
 
     public static void initLanguage(PluginBase plugin) {

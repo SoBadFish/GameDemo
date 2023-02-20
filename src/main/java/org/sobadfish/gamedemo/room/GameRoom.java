@@ -990,7 +990,9 @@ public class GameRoom {
 //            level1.unloadChunks();
             worldInfo.setClose(true);
             worldInfo = null;
-            WorldResetManager.RESET_QUEUE.put(getRoomConfig().name,level);
+            if(roomConfig.resetWorld) {
+                WorldResetManager.RESET_QUEUE.put(getRoomConfig().name, level);
+            }
         }else{
             worldInfo.setClose(true);
             worldInfo = null;
