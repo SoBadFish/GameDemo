@@ -18,20 +18,13 @@ public class RobotEntity extends EntityHuman {
      * */
     @Override
     public boolean onUpdate(int currentTick) {
-        super.onUpdate(currentTick);
-        int tickDiff = currentTick - this.lastUpdate;
-        boolean hasUpdate = this.entityBaseTick(tickDiff);
-        if (tickDiff <= 0) {
-            return false;
-        } else {
-            this.lastUpdate = currentTick;
 
-            if (!this.isImmobile()) {
-                this.updateMovement();
-            }
+        if (this.attackTime > 0) {
+            this.move(this.motionX, this.motionY, this.motionZ);
+            this.motionY -= this.getGravity();
+            this.updateMovement();
         }
-
-        return hasUpdate;
+        return true;
     }
 
     @Override

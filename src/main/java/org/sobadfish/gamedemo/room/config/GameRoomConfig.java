@@ -490,6 +490,7 @@ public class GameRoomConfig {
         config.set("resetWorld",resetWorld);
         config.set("chest-reset-time",chestResetTime);
         config.set("chest-can-reset",chestCanReset);
+        config.set("kb-setting",knockConfig.saveConfig());
         config.set("roomStartMessage",gameStartMessage);
         List<Map<String,Object>> pos = new ArrayList<>();
         for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){
