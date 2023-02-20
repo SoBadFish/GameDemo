@@ -434,6 +434,9 @@ public class PlayerInfo {
     public void spawn() {
         //TODO 玩家复活进入游戏
         //游戏刚开始也会进入这个方法
+        if(playerType == PlayerType.WAIT){
+            playerType = PlayerType.START;
+        }
         if(isSendkey){
             isSendkey = false;
         }

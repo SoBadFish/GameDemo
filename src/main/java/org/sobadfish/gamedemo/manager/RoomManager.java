@@ -544,6 +544,15 @@ public class RoomManager implements Listener {
                     if (entity instanceof EntityPrimedTNT) {
                         event.setDamage(2);
                     }
+                    //击退..
+                    if(room.roomConfig.knockConfig.enable){
+
+                        FunctionManager.knockBack(event.getEntity(),entity,
+                                room.roomConfig.knockConfig.speed,
+                                room.roomConfig.knockConfig.force,
+                                room.roomConfig.knockConfig.motionY);
+                        ((EntityDamageByEntityEvent) event).setKnockBack(0f);
+                    }
 
                     if (entity instanceof EntityHuman) {
                         PlayerInfo damageInfo = room.getPlayerInfo((EntityHuman) entity);
@@ -977,8 +986,8 @@ public class RoomManager implements Listener {
                                         "[1]&7(死亡) &r>> [2]",
                                         info.toString(),msg));
                             }else {
-                                teamInfo.sendMessage(language.getLanguage("player-speak-in-room-message-team",  "[1][队伍]&7[2] &f>>&r [3]",
-                                        teamInfo.getTeamConfig().getNameColor(),
+                                teamInfo.sendMessage(language.getLanguage("player-speak-in-room-message-team",  "[1]&7[2] &f>>&r [3]",
+                                        teamInfo.getTeamConfig().getNameColor()+teamInfo.getTeamConfig().getName(),
                                         info.getPlayer().getName(),
                                         msg));
                             }

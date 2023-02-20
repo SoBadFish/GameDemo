@@ -13,6 +13,33 @@ public class RobotEntity extends EntityHuman {
         super(fullChunk, compoundTag);
     }
 
+    /**
+     * 增加点移动逻辑
+     * */
+    @Override
+    public boolean onUpdate(int currentTick) {
+        super.onUpdate(currentTick);
+        int tickDiff = currentTick - this.lastUpdate;
+        boolean hasUpdate = this.entityBaseTick(tickDiff);
+        if (tickDiff <= 0) {
+            return false;
+        } else {
+            this.lastUpdate = currentTick;
+
+            if (!this.isImmobile()) {
+                this.updateMovement();
+            }
+        }
+
+        return hasUpdate;
+    }
+
+    @Override
+    public void addMotion(double v, double v1, double v2) {
+        super.addMotion(v, v1, v2);
+        this.motionX = v;
+    }
+
     @Override
     public void saveNBT() {}
 }

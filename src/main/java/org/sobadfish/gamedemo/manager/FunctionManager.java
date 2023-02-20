@@ -1,6 +1,8 @@
 package org.sobadfish.gamedemo.manager;
 
+import cn.nukkit.entity.Entity;
 import cn.nukkit.item.Item;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.manager.data.TagItemDataManager;
 import org.sobadfish.gamedemo.room.config.ItemConfig;
@@ -239,6 +241,20 @@ public class FunctionManager {
         }else{
             return "00:"+sss+"";
         }
+
+    }
+
+    /**
+     * 击退逻辑实现
+     * */
+    public static void knockBack(Entity entity, Entity target,float speed, float force,float motionY){
+        double x = entity.x - target.x;
+        double z = entity.z - target.z;
+        double distance = Math.sqrt(x * x + z * z);
+        x /= distance * force;
+        z /= distance * force;
+        Vector3 v3 = entity.getMotion().multiply(speed).add(x,motionY,z);
+        entity.setMotion(v3);
 
     }
 

@@ -51,7 +51,6 @@ public class TotalManager {
     public static PluginBase plugin = null;
 
 
-
     private static PlayerDataManager dataManager;
 
     private static PlayerTopManager topManager;
@@ -208,6 +207,7 @@ public class TotalManager {
     }
 
     public static void sendMessageToObject(String msg, Object o){
+
         String message = TextFormat.colorize('&',getTitle()+" &b>>&r "+msg);
         sendTipMessageToObject(message,o);
     }

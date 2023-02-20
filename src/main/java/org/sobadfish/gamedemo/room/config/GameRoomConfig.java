@@ -111,6 +111,11 @@ public class GameRoomConfig {
     public int callbackY = 17;
 
     /**
+     * 击退设置
+     * */
+    public KnockConfig knockConfig = new KnockConfig();
+
+    /**
      * 游戏浮空字
      * */
     public List<FloatTextInfoConfig> floatTextInfoConfigs = new CopyOnWriteArrayList<>();
@@ -336,6 +341,11 @@ public class GameRoomConfig {
                 roomConfig.enableMoney = room.getBoolean("money.enable",false);
                 roomConfig.enableShop = room.getBoolean("enable-shop",false);
                 roomConfig.banCraft = room.getBoolean("ban-craft",false);
+
+                roomConfig.knockConfig.enable = room.getBoolean("kb-setting.enable",true);
+                roomConfig.knockConfig.force = (float) room.getDouble("kb-setting.force",0.4f);
+                roomConfig.knockConfig.speed = (float) room.getDouble("kb-setting.speed",0.5f);
+                roomConfig.knockConfig.motionY = (float) room.getDouble("kb-setting.motionY",0.1f);
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
