@@ -21,6 +21,7 @@ import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
+import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.event.PlayerGameDeathEvent;
 import org.sobadfish.gamedemo.item.button.OpenShopItem;
 import org.sobadfish.gamedemo.manager.ButtonItemManager;
@@ -807,6 +808,11 @@ public class PlayerInfo {
             sendScore(boardMessage);
         }else{
             sendScore(null);
+        }
+        if(getGameRoom().isStart()){
+            for(IGameRoomDlc dlc: getGameRoom().getGameRoomDlc()){
+               dlc.onPlayerUpdate(this);
+            }
         }
 
     }

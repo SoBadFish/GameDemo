@@ -3,6 +3,7 @@ package org.sobadfish.gamedemo.room.world;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.level.Position;
+import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.entity.GameFloatText;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.PlayerInfo;
@@ -87,6 +88,11 @@ public class WorldInfo {
 
     public void onUpdate() {
         ///////////////////DO Something////////////
+        if(room.isStart()){
+            for(IGameRoomDlc dlc: room.getGameRoomDlc()){
+                dlc.onWorldUpdate(this);
+            }
+        }
         //TODO 地图更新 每秒更新一次 可实现一些定制化功能
 
         if(room.close){

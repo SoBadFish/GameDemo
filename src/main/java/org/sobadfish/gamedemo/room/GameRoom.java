@@ -12,10 +12,8 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
-import org.sobadfish.gamedemo.event.GameCloseEvent;
-import org.sobadfish.gamedemo.event.GameRoomStartEvent;
-import org.sobadfish.gamedemo.event.PlayerJoinRoomEvent;
-import org.sobadfish.gamedemo.event.PlayerQuitRoomEvent;
+import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
+import org.sobadfish.gamedemo.event.*;
 import org.sobadfish.gamedemo.item.button.FollowItem;
 import org.sobadfish.gamedemo.item.button.RoomQuitItem;
 import org.sobadfish.gamedemo.item.button.TeamChoseItem;
@@ -67,6 +65,8 @@ public class GameRoom {
 
     private final ArrayList<TeamInfo> teamInfos = new ArrayList<>();
 
+    private List<IGameRoomDlc> gameRoomDlc = new ArrayList<>();
+
     /**
      * 地图配置
      * */
@@ -91,6 +91,10 @@ public class GameRoom {
         //启动事件
         eventControl = new EventControl(this,roomConfig.eventConfig);
         eventControl.initAll(this);
+    }
+
+    public List<IGameRoomDlc> getGameRoomDlc() {
+        return gameRoomDlc;
     }
 
     public ArrayList<FloatTextInfo> getFloatTextInfos() {
@@ -127,6 +131,10 @@ public class GameRoom {
 
     public GameType getType() {
         return type;
+    }
+
+    public boolean isStart() {
+        return getType() == GameType.START;
     }
 
     public enum GameType{
@@ -200,7 +208,11 @@ public class GameRoom {
         if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig.name)){
             return null;
         }
-        return new GameRoom(roomConfig);
+
+        GameRoom room = new GameRoom(roomConfig);
+        GameRoomCreateEvent createEvent = new GameRoomCreateEvent(room,TotalManager.getPlugin());
+        TotalManager.getPlugin().getServer().getPluginManager().callEvent(createEvent);
+        return room;
     }
 
     public JoinType joinPlayerInfo(PlayerInfo info,boolean sendMessage){
@@ -774,7 +786,15 @@ public class GameRoom {
         }
         //TODO 可以在这里实现胜利的条件
         ////////////////////////// 示例算法 ///////////////////////////
-        demoGameEnd();
+        boolean onRun = true;
+        for(IGameRoomDlc dlc: gameRoomDlc){
+            if(!dlc.onGameUpdate(this)){
+                onRun = false;
+            }
+        }
+        if(onRun) {
+            demoGameEnd();
+        }
 
         ////////////////////////// 示例算法 ///////////////////////////
     }
