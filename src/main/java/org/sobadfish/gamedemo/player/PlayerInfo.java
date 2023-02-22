@@ -626,7 +626,8 @@ public class PlayerInfo {
         return FunctionManager.formatTime(s);
     }
 
-    private ArrayList<String> getLore(boolean isWait){
+
+    public ArrayList<String> getDefaultLoreTitle(boolean isWait){
         ArrayList<String> lore = new ArrayList<>();
         String levelName = TotalManager.getMenuRoomManager().getNameByRoom(gameRoom.getRoomConfig());
         if(levelName == null){
@@ -637,15 +638,7 @@ public class PlayerInfo {
         lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-game-world","游戏模式: &a[1]",levelName));
 
         lore.add(" ");
-        if(isWait){
-//            "玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize()
-            lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-wait-player","玩家数: &a[1] &r/&a [2]",
-                    gameRoom.getPlayerInfos().size()+"",gameRoom.getRoomConfig().getMaxPlayerSize()+""
-            ));
-            lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-waiting","等待中...."));
-            lore.add("   ");
-
-        }else{
+        if(!isWait){
             IGameRoomEvent event = getGameRoom().getEventControl().getNextEvent();
             if(event != null){
                 lore.add(event.display()+" &a"+formatTime1(event.getEventTime() - getGameRoom().getEventControl().loadTime));
@@ -655,6 +648,22 @@ public class PlayerInfo {
                 lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-game-end","游戏结束: &a[1]",
                         formatTime1(getGameRoom().loadTime)));
             }
+        }
+        return lore;
+
+    }
+
+    private ArrayList<String> getLore(boolean isWait){
+        ArrayList<String> lore = new ArrayList<>(getDefaultLoreTitle(isWait));
+        if(isWait){
+//            "玩家数: &a"+gameRoom.getPlayerInfos().size()+" &r/&a "+gameRoom.getRoomConfig().getMaxPlayerSize()
+            lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-wait-player","玩家数: &a[1] &r/&a [2]",
+                    gameRoom.getPlayerInfos().size()+"",gameRoom.getRoomConfig().getMaxPlayerSize()+""
+            ));
+            lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-waiting","等待中...."));
+            lore.add("   ");
+
+        }else{
             if(gameRoom.roomConfig.teamConfigs.size() > 1){
                 for(TeamInfo teamInfo: gameRoom.getTeamInfos()){
                     String me = "";
