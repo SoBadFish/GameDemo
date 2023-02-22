@@ -501,6 +501,7 @@ public class RoomManager implements Listener {
             IGameRoomDlc dlc = GameRoomDlcManager.loadDlc(dlcName);
             if(dlc != null){
                 event.addDlc(dlc);
+                dlc.onEnable(event.getRoom());
             }
         }
     }

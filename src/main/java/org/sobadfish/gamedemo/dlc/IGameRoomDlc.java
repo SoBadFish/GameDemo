@@ -12,6 +12,11 @@ public interface IGameRoomDlc {
 
 
     /**
+     * 在房间中启动
+     * @param room 房间
+     * */
+    void onEnable(GameRoom room);
+    /**
      * dlc的名称
      * @return Dlc的名称
      * */
