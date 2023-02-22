@@ -31,17 +31,8 @@ public class TopItem {
     /**
      * 修复名称不匹配的BUG
      * */
-    public PlayerData.DataType getTopType() {
-        PlayerData.DataType dataType = PlayerData.DataType.byName(topType);
-        if(dataType == null){
-            try {
-                dataType = PlayerData.DataType.valueOf(topType);
-            }catch (Exception e){
-                dataType = PlayerData.DataType.GAME;
-            }
-
-        }
-        return dataType;
+    public String getTopType() {
+        return topType;
 
     }
 

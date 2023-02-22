@@ -59,7 +59,7 @@ public class PlayerInfo {
     public boolean isLeave;
 
     //记录信息
-    public LinkedHashMap<PlayerData.DataType,Integer> statistics = new LinkedHashMap<>();
+    public LinkedHashMap<String,Integer> statistics = new LinkedHashMap<>();
 
     //小游戏强制等待的时间
     public int waitTime = 0;
@@ -105,14 +105,14 @@ public class PlayerInfo {
         this.speed = player.getMovementSpeed();
     }
 
-    public int getData(PlayerData.DataType type){
+    public int getData(String type){
         if(statistics.containsKey(type)){
             return statistics.get(type);
         }
         return 0;
     }
 
-    public void addData(PlayerData.DataType type,int value){
+    public void addData(String type,int value){
         if(statistics.containsKey(type)){
             statistics.put(type,statistics.get(type) + value);
         }else{
@@ -120,7 +120,7 @@ public class PlayerInfo {
         }
     }
 
-    public void addData(PlayerData.DataType type){
+    public void addData(String type){
         if(statistics.containsKey(type)){
             statistics.put(type,statistics.get(type) + 1);
         }else{
@@ -212,13 +212,13 @@ public class PlayerInfo {
 
     private void addKill(PlayerInfo info){
 
-        info.addData(PlayerData.DataType.KILL);
+        info.addData(PlayerData.DataType.KILL.getName());
         //助攻累计
         for(PlayerInfo playerInfo: assistsPlayers.keySet()){
             if(playerInfo.equals(info)){
                 continue;
             }
-            info.addData(PlayerData.DataType.ASSISTS);
+            info.addData(PlayerData.DataType.ASSISTS.getName());
         }
     }
 
@@ -691,10 +691,10 @@ public class PlayerInfo {
 
             lore.add("      ");
             lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-kill","击杀数: &a[1]",
-                    getData(PlayerData.DataType.KILL)+""));
+                    getData(PlayerData.DataType.KILL.getName())+""));
             lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-assists",
                     "助攻数: &a[1]",
-                    getData(PlayerData.DataType.ASSISTS)+""));
+                    getData(PlayerData.DataType.ASSISTS.getName())+""));
 
             lore.add("        ");
         }
@@ -920,7 +920,7 @@ public class PlayerInfo {
         if(finalDeath && gameRoom.getLivePlayers().size() == 1){
             return;
         }
-        addData(PlayerData.DataType.DEATH);
+        addData(PlayerData.DataType.DEATH.getName());
 
         //死亡后是否掉落物品
         if(gameRoom != null){

@@ -151,8 +151,18 @@ public class TeamInfo {
         return playerInfos;
     }
 
+    public void givePlayerAward(){
+        for(PlayerInfo playerInfo: this.getVictoryPlayers()){
+            room.getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender()
+                    ,cmd.replace("@p",playerInfo.getName())));
+        }
+    }
 
     public void echoVictory(){
+        echoVictory(TotalManager.language.getLanguage("game-end-info"),PlayerData.DataType.KILL.getName(),PlayerData.DataType.ASSISTS.getName());
+    }
+
+    public void echoVictory(String value,String... types) {
         //TODO 当队伍胜利
         TeamVictoryEvent event = new TeamVictoryEvent(this,room, TotalManager.getPlugin());
         Server.getInstance().getPluginManager().callEvent(event);
@@ -160,14 +170,14 @@ public class TeamInfo {
         event.getRoom().sendTipMessage("&a"+line);
         event.getRoom().sendTipMessage(FunctionManager.getCentontString(TotalManager.language.getLanguage("game-end","&b游戏结束"),line.length()));
         event.getRoom().sendTipMessage("");
-        for(PlayerInfo playerInfo: event.getTeamInfo().getVictoryPlayers()){
+        for(PlayerInfo playerInfo: this.getVictoryPlayers()){
+            String v = value.replace("[1]",playerInfo.getName());
+            int i = 1;
             playerInfo.sendTitle(TotalManager.language.getLanguage("game-victory","&e&l胜利!"),5);
-//            "&7   "+playerInfo.getPlayer().getName()+" 击杀："+(playerInfo.getData(PlayerData.DataType.KILL))+" 助攻: "+playerInfo.getData(PlayerData.DataType.ASSISTS)
-            event.getRoom().sendTipMessage(FunctionManager.getCentontString(TotalManager.language.getLanguage("game-end-info","&7   [1] 击杀：[2] 助攻: [3]",
-                    playerInfo.getPlayer().getName(),
-                    playerInfo.getData(PlayerData.DataType.KILL)+"",
-                    playerInfo.getData(PlayerData.DataType.ASSISTS)+""),line.length()));
-            event.getRoom().getRoomConfig().victoryCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",playerInfo.getName())));
+            for(String type: types){
+                v = v.replace("["+(++i)+"]", playerInfo.getData(type)+"");
+            }
+            event.getRoom().sendTipMessage(FunctionManager.getCentontString(v,line.length()));
         }
         event.getRoom().sendTipMessage("&a"+line);
 

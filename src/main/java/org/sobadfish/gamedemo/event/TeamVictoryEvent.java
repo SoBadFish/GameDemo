@@ -14,6 +14,8 @@ public class TeamVictoryEvent extends GameRoomEvent{
 
     private final TeamInfo teamInfo;
 
+
+
     public TeamVictoryEvent(TeamInfo teamInfo, GameRoom room, Plugin plugin) {
         super(room, plugin);
         this.teamInfo = teamInfo;
@@ -22,4 +24,5 @@ public class TeamVictoryEvent extends GameRoomEvent{
     public TeamInfo getTeamInfo() {
         return teamInfo;
     }
+
 }

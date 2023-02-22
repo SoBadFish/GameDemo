@@ -728,11 +728,10 @@ public class GameRoom {
             teamInfo.echoDefeat();
         }
         teamInfo.echoVictory();
+        teamInfo.givePlayerAward();
 
 
-        type = GameType.END;
-        worldInfo.setClose(true);
-        loadTime = 5;
+
     }
 
     private void onStart() {
@@ -800,8 +799,9 @@ public class GameRoom {
         }else{
             endJudge.judgeGameEnd(this);
         }
-
-
+        type = GameType.END;
+        worldInfo.setClose(true);
+        loadTime = 5;
         ////////////////////////// 示例算法 ///////////////////////////
     }
 

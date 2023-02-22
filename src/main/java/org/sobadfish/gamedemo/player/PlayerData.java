@@ -37,7 +37,7 @@ public class PlayerData {
 
     public List<RoomData> roomData = new ArrayList<>();
 
-    public int getFinalData(DataType dataType){
+    public int getFinalData(String dataType){
         int c = 0;
         for(RoomData data: roomData){
             c += data.getInt(dataType);
@@ -190,13 +190,13 @@ public class PlayerData {
             return Objects.hash(roomName);
         }
 
-        public int getInt(DataType type){
+        public int getInt(String type){
             int c = 0;
             if(type == null){
                 return c;
             }
-            if(data.containsKey(type.getName())){
-                return data.get(type.getName());
+            if(data.containsKey(type)){
+                return data.get(type);
             }
             return c;
         }
@@ -216,12 +216,12 @@ public class PlayerData {
     public void setInfo(PlayerInfo info){
         RoomData data = getRoomData(info.getGameRoom().getRoomConfig().name);
         if(info.getPlayer() instanceof Player) {
-            for (DataType dataType : info.statistics.keySet()) {
-                if(data.data.containsKey(dataType.getName())){
-                    data.data.put(dataType.getName(), data.data.get(dataType.getName())
+            for (String dataType : info.statistics.keySet()) {
+                if(data.data.containsKey(dataType)){
+                    data.data.put(dataType, data.data.get(dataType)
                             + info.statistics.get(dataType));
                 }else{
-                    data.data.put(dataType.getName(),info.statistics.getOrDefault(dataType,0));
+                    data.data.put(dataType,info.statistics.getOrDefault(dataType,0));
                 }
 
             }

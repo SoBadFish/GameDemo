@@ -31,7 +31,7 @@ public class GameTipVariable extends BaseVariable {
         addStrReplaceString("%"+TotalManager.COMMAND_NAME+"-line%",data.getExpLine(10)+"");
         addStrReplaceString("%"+TotalManager.COMMAND_NAME+"-per%",String.format("%.2f",data.getExpPercent() * 100)+"");
         for(PlayerData.DataType dataType: PlayerData.DataType.values()){
-            addStrReplaceString("%"+TotalManager.COMMAND_NAME+"-"+dataType.getName()+"%",data.getFinalData(dataType)+"");
+            addStrReplaceString("%"+TotalManager.COMMAND_NAME+"-"+dataType.getName()+"%",data.getFinalData(dataType.getName())+"");
         }
     }
 }
