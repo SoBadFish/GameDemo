@@ -12,7 +12,16 @@ import org.sobadfish.gamedemo.room.GameRoom;
  */
 public class PlayerGameDeathEvent extends PlayerRoomInfoEvent{
 
+    private PlayerInfo damager;
     public PlayerGameDeathEvent(PlayerInfo playerInfo, GameRoom room, Plugin plugin) {
         super(playerInfo,room, plugin);
+    }
+
+    public void setDamager(PlayerInfo damager) {
+        this.damager = damager;
+    }
+
+    public PlayerInfo getDamager() {
+        return damager;
     }
 }

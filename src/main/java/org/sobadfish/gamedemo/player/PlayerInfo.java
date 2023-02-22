@@ -885,7 +885,16 @@ public class PlayerInfo {
         }
 
         PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),TotalManager.getPlugin());
-        Server.getInstance().getPluginManager().callEvent(event1);
+        if (event instanceof EntityDamageByEntityEvent) {
+            Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
+            if (entity instanceof Player) {
+                PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo((Player) entity);
+                if(info != null) {
+                    event1.setDamager(info);
+                    Server.getInstance().getPluginManager().callEvent(event1);
+                }
+            }
+        }
         player.removeAllEffects();
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
             cancel();
