@@ -10,10 +10,10 @@ import java.util.LinkedHashMap;
  */
 public class GameRoomDlcManager {
 
-    public static LinkedHashMap<String,Class<? extends IGameRoomDlc>> DLC_CLASS = new LinkedHashMap<>();
+    public static LinkedHashMap<String,IGameRoomDlc> DLC_CLASS = new LinkedHashMap<>();
 
 
-    public static void register(String name, Class<? extends IGameRoomDlc> dlc){
+    public static void register(String name,  IGameRoomDlc dlc){
         DLC_CLASS.put(name, dlc);
         TotalManager.sendMessageToConsole("&aLoad &7"+name);
     }
@@ -21,12 +21,7 @@ public class GameRoomDlcManager {
 
     public static IGameRoomDlc loadDlc(String name){
         if(DLC_CLASS.containsKey(name)){
-            Class<? extends IGameRoomDlc> dlc = DLC_CLASS.get(name);
-            try {
-                return dlc.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            return DLC_CLASS.get(name);
         }
         return null;
     }
