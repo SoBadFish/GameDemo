@@ -452,7 +452,10 @@ public class PlayerInfo {
                 return;
             }
         }else{
-            player.spawnToAll();
+            TotalManager.sendMessageToConsole("实体重生");
+            if(!player.isAlive()){
+                player.spawnToAll();
+            }
         }
 
         player.getInventory().clearAll();
@@ -1024,7 +1027,7 @@ public class PlayerInfo {
         if (getPlayer() instanceof Player) {
             ((Player) getPlayer()).setGamemode(3);
         }else{
-            getPlayer().kill();
+            player.despawnFromAll();
         }
         if(player.isAlive()) {
             player.teleport(getGameRoom().worldInfo.getConfig().getGameWorld().getSafeSpawn());

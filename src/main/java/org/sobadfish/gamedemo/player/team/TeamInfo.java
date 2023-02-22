@@ -162,6 +162,11 @@ public class TeamInfo {
         echoVictory(TotalManager.language.getLanguage("game-end-info"),PlayerData.DataType.KILL.getName(),PlayerData.DataType.ASSISTS.getName());
     }
 
+    /**
+     * value 可以填写自定义信息 其中[1]为玩家名 [2 ~ n]为 String数值的types
+     * @param value 显示的信息
+     * @param types 记录的数据类型
+     * */
     public void echoVictory(String value,String... types) {
         //TODO 当队伍胜利
         TeamVictoryEvent event = new TeamVictoryEvent(this,room, TotalManager.getPlugin());
@@ -171,7 +176,7 @@ public class TeamInfo {
         event.getRoom().sendTipMessage(FunctionManager.getCentontString(TotalManager.language.getLanguage("game-end","&b游戏结束"),line.length()));
         event.getRoom().sendTipMessage("");
         for(PlayerInfo playerInfo: this.getVictoryPlayers()){
-            String v = value.replace("[1]",playerInfo.getName());
+            String v = value.replace("[1]",playerInfo.toString());
             int i = 1;
             playerInfo.sendTitle(TotalManager.language.getLanguage("game-victory","&e&l胜利!"),5);
             for(String type: types){
