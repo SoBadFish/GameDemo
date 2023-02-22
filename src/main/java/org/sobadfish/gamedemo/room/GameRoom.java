@@ -958,6 +958,14 @@ public class GameRoom {
         }
     }
 
+
+    /**
+     * 房间是否为无团队模式
+     * */
+    public boolean isOnlyTeam(){
+        return getRoomConfig().teamConfigs.size() == 1;
+    }
+
     /**
      * 关闭房间
      * 已设计好算法，不建议修改
