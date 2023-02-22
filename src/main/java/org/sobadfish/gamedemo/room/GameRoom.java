@@ -807,7 +807,9 @@ public class GameRoom {
         if(endJudge == null) {
             demoGameEnd();
         }else{
-            endJudge.judgeGameEnd(this);
+            if(endJudge.judgeGameEnd(this)){
+                end();
+            }
         }
 
         ////////////////////////// 示例算法 ///////////////////////////
