@@ -729,9 +729,19 @@ public class GameRoom {
         }
         teamInfo.echoVictory();
         teamInfo.givePlayerAward();
+        end();
 
 
 
+    }
+
+    /**
+     * 执行次方法后，游戏结束
+     * */
+    public void end(){
+        type = GameType.END;
+        worldInfo.setClose(true);
+        loadTime = 5;
     }
 
     private void onStart() {
@@ -799,9 +809,7 @@ public class GameRoom {
         }else{
             endJudge.judgeGameEnd(this);
         }
-        type = GameType.END;
-        worldInfo.setClose(true);
-        loadTime = 5;
+
         ////////////////////////// 示例算法 ///////////////////////////
     }
 
