@@ -9,7 +9,6 @@ import org.sobadfish.gamedemo.manager.data.PlayerDataManager;
 import org.sobadfish.gamedemo.manager.data.PlayerTopManager;
 import org.sobadfish.gamedemo.manager.data.TagItemDataManager;
 import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
-import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.event.defaults.ChestResetEvent;
 import org.sobadfish.gamedemo.room.event.defaults.CommandEvent;
 import org.sobadfish.gamedemo.room.event.defaults.CustomEvent;
@@ -272,11 +271,11 @@ public class TotalManager {
         if(dataManager != null){
             dataManager.save();
         }
-        if(roomManager != null){
-            for (GameRoomConfig roomConfig: roomManager.getRoomConfigs()){
-                roomConfig.save();
-            }
-        }
+//        if(roomManager != null){
+//            for (GameRoomConfig roomConfig: roomManager.getRoomConfigs()){
+//                roomConfig.save();
+//            }
+//        }
     }
 
 

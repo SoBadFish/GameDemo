@@ -12,12 +12,16 @@ public interface IGameRoomDlc {
 
 
     /**
+     * dlc的名称
+     * @return Dlc的名称
+     * */
+    String getName();
+    /**
      * 游戏房间更新
      * 仅自定义游戏房间内的 onStart
      * @param room 游戏房间
-     * @return 是否执行默认房间结束逻辑
      * */
-    boolean onGameUpdate(GameRoom room);
+    void onGameUpdate(GameRoom room);
 
     /**
      * 玩家状态更新
@@ -30,6 +34,12 @@ public interface IGameRoomDlc {
      * @param room 地图
      * */
     void onWorldUpdate(WorldInfo room);
+
+
+
+
+
+
 
 
 }

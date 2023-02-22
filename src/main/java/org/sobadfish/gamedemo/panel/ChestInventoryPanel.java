@@ -23,7 +23,7 @@ public class ChestInventoryPanel extends DoubleChestFakeInventory implements Inv
 
     long id;
 
-    private PlayerInfo player;
+    private final PlayerInfo player;
 
     public int clickSolt;
 

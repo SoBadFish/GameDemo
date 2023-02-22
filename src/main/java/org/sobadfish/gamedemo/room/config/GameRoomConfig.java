@@ -169,6 +169,12 @@ public class GameRoomConfig {
 
 
     /**
+     * 游戏房间拓展Dlc
+     * */
+    public List<String> roomDlc = new ArrayList<String>();
+
+
+    /**
      * 箱子物品
      * */
     public Map<String,ItemConfig> items = new LinkedHashMap<>();
@@ -346,6 +352,7 @@ public class GameRoomConfig {
                 roomConfig.knockConfig.force = (float) room.getDouble("kb-setting.force",0.4f);
                 roomConfig.knockConfig.speed = (float) room.getDouble("kb-setting.speed",0.5f);
                 roomConfig.knockConfig.motionY = (float) room.getDouble("kb-setting.motionY",0.1f);
+                roomConfig.roomDlc = room.getStringList("enableDlc");
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
@@ -427,8 +434,20 @@ public class GameRoomConfig {
         return true;
     }
 
+    public void saveFloatText(){
+        List<Map<String,Object>> pos = new ArrayList<>();
+        for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){
+            pos.add(floatTextInfoConfig.toConfig());
+        }
+        Config config = new Config(TotalManager.getDataFolder()+"/rooms/"+getName()+"/room.yml",Config.YAML);
+        config.set("floatSpawnPos",pos);
+        config.save();
+    }
+
+
     public void removeFloatText(String name){
         floatTextInfoConfigs.removeIf(config -> config.name.equalsIgnoreCase(name));
+        saveFloatText();
     }
 
     public static ArrayList<String> defaultGameStartMessage(){
@@ -491,6 +510,7 @@ public class GameRoomConfig {
         config.set("chest-reset-time",chestResetTime);
         config.set("chest-can-reset",chestCanReset);
         config.set("kb-setting",knockConfig.saveConfig());
+        config.set("enableDlc",roomDlc);
         config.set("roomStartMessage",gameStartMessage);
         List<Map<String,Object>> pos = new ArrayList<>();
         for(FloatTextInfoConfig floatTextInfoConfig: floatTextInfoConfigs){

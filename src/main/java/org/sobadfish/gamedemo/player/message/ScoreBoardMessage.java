@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.player.message;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author SoBadFish
@@ -11,7 +12,7 @@ public class ScoreBoardMessage {
 
     private final String title;
 
-    private ArrayList<String> lore;
+    private List<String> lore;
 
     public ScoreBoardMessage(String title){
         this.title = title;
@@ -26,11 +27,11 @@ public class ScoreBoardMessage {
         return title;
     }
 
-    public ArrayList<String> getLore() {
+    public List<String> getLore() {
         return lore;
     }
 
-    public void setLore(ArrayList<String> lore) {
+    public void setLore(List<String> lore) {
         this.lore = lore;
     }
 }

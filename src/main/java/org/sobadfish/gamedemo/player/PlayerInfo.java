@@ -21,6 +21,7 @@ import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
+import org.sobadfish.gamedemo.dlc.IGamePlayerScoreBoard;
 import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.event.PlayerGameDeathEvent;
 import org.sobadfish.gamedemo.item.button.OpenShopItem;
@@ -334,7 +335,7 @@ public class PlayerInfo {
                     ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR,
                             "dumy", TextFormat.colorize('&', title));
 
-                    ArrayList<String> list = message.getLore();
+                    List<String> list = message.getLore();
                     for (int line = 0; line < list.size(); line++) {
                         String s = list.get(line);
 
@@ -804,7 +805,40 @@ public class PlayerInfo {
             //TODO 计分板的一些内容
 
             ScoreBoardMessage boardMessage = new ScoreBoardMessage(TotalManager.getScoreBoardTitle());
-            boardMessage.setLore(getLore(playerType == PlayerType.WAIT));
+            List<String> score;
+            IGamePlayerScoreBoard scoreBoard = null;
+
+            if(gameRoom != null){
+                for(IGameRoomDlc dlc : gameRoom.getGameRoomDlc()){
+                    if(dlc instanceof IGamePlayerScoreBoard){
+                        scoreBoard = (IGamePlayerScoreBoard) dlc;
+                        break;
+                    }
+                }
+            }
+            if(scoreBoard != null){
+                if(playerType == PlayerType.WAIT){
+                    score = scoreBoard.displayPlayerWaitGameScoreBoard(this);
+                    if(score != null && score.size() > 0){
+                        boardMessage.setLore(score);
+                    }else{
+                        boardMessage.setLore(getLore(true));
+                    }
+                }else{
+                    score = scoreBoard.displayPlayerGameStartScoreBoard(this);
+                    if(score != null && score.size() > 0){
+                        boardMessage.setLore(score);
+                    }else{
+                        boardMessage.setLore(getLore(false));
+                    }
+                }
+
+            }else{
+                boardMessage.setLore(getLore(playerType == PlayerType.WAIT));
+            }
+
+
+
             sendScore(boardMessage);
         }else{
             sendScore(null);

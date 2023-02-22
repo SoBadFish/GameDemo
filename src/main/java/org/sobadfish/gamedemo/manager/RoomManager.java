@@ -31,8 +31,10 @@ import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.entity.DamageFloatTextEntity;
 import org.sobadfish.gamedemo.entity.EntityTnt;
+import org.sobadfish.gamedemo.event.GameRoomCreateEvent;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.panel.ChestInventoryPanel;
 import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
@@ -486,6 +488,20 @@ public class RoomManager implements Listener {
                 }
             }
 
+        }
+    }
+
+
+
+    @EventHandler
+    public void onGameRoomCreateEvent(GameRoomCreateEvent event){
+        GameRoomConfig roomConfig = event.getRoom().roomConfig;
+        //TODO 从Manager中加载
+        for(String dlcName: roomConfig.roomDlc){
+            IGameRoomDlc dlc = GameRoomDlcManager.loadDlc(dlcName);
+            if(dlc != null){
+                event.addDlc(dlc);
+            }
         }
     }
 

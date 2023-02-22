@@ -10,6 +10,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
+import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.entity.RobotEntity;
 import org.sobadfish.gamedemo.item.tag.TagItem;
 import org.sobadfish.gamedemo.manager.LanguageManager;
@@ -349,6 +350,7 @@ public class GameAdminCommand extends Command {
                         if(roomConfig.notHasFloatText(strings[3])){
                             roomConfig.floatTextInfoConfigs.add(new FloatTextInfoConfig(strings[3], WorldInfoConfig.positionToString(((Player) commandSender).getPosition()),strings[4]));
                             commandSender.sendMessage(language.getLanguage("float-crate-success","成功添加浮空字"));
+                            roomConfig.saveFloatText();
                         }else{
                             commandSender.sendMessage(language.getLanguage("float-room-exists","房间存在 [1] 浮空字",strings[3]));
                         }
@@ -370,6 +372,13 @@ public class GameAdminCommand extends Command {
                     if(room != null){
 
                         TotalManager.sendMessageToObject("&a"+config.getName()+language.getLanguage("status-started"," (已启动) ")+room.getType()+" : &2"+room.getPlayerInfos().size(),commandSender);
+                        if(room.getGameRoomDlc().size() > 0) {
+                            StringBuilder dlcList = new StringBuilder();
+                            for (IGameRoomDlc dlc : room.getGameRoomDlc()) {
+                                dlcList.append(dlc.getName()).append(",");
+                            }
+                            TotalManager.sendMessageToObject("  - &aload: " + dlcList, commandSender);
+                        }
                     }else{
                         TotalManager.sendMessageToObject("&c"+config.getName()+language.getLanguage("status-unstarted"," (未启动) "),commandSender);
                     }

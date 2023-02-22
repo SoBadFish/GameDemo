@@ -98,6 +98,8 @@ kb-setting:
   speed: 0.5
   motionY: 0.1
 
+# 使用拓展插件列表
+enableDlc: []
 
 
 # 房间开始游戏时，给玩家发送的消息

@@ -12,6 +12,7 @@ import cn.nukkit.level.Sound;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.potion.Effect;
 import de.theamychan.scoreboard.network.Scoreboard;
+import org.sobadfish.gamedemo.dlc.IGameEndJudge;
 import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.event.*;
 import org.sobadfish.gamedemo.item.button.FollowItem;
@@ -786,15 +787,20 @@ public class GameRoom {
         }
         //TODO 可以在这里实现胜利的条件
         ////////////////////////// 示例算法 ///////////////////////////
-        boolean onRun = true;
+        IGameEndJudge endJudge = null;
+
         for(IGameRoomDlc dlc: gameRoomDlc){
-            if(!dlc.onGameUpdate(this)){
-                onRun = false;
+            if(dlc instanceof IGameEndJudge){
+                endJudge = (IGameEndJudge) dlc;
             }
+            dlc.onGameUpdate(this);
         }
-        if(onRun) {
+        if(endJudge == null) {
             demoGameEnd();
+        }else{
+            endJudge.judgeGameEnd(this);
         }
+
 
         ////////////////////////// 示例算法 ///////////////////////////
     }
@@ -963,7 +969,7 @@ public class GameRoom {
         close = true;
         type = GameType.CLOSE;
         if(hasStart) {
-            roomConfig.save();
+//            roomConfig.save();
             GameCloseEvent event = new GameCloseEvent(this, TotalManager.getPlugin());
             Server.getInstance().getPluginManager().callEvent(event);
             worldInfo.setClose(true);

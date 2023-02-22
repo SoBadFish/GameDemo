@@ -27,7 +27,7 @@ public abstract class AbstractFakeInventory extends ContainerInventory {
     private static final Map<Player, AbstractFakeInventory> OPEN = new ConcurrentHashMap<>();
 
     final Map<Player, List<BlockVector3>> blockPositions = new HashMap<>();
-    private String title;
+    private final String title;
 
     AbstractFakeInventory(InventoryType type, InventoryHolder holder, String title) {
         super(holder, type);

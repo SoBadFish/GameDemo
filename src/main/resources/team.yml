@@ -13,6 +13,8 @@ team:
     maxPlayer: -1
     # 被击杀后金钱数量
     deathMoney: 10
+    # 初始血量
+    defaultHealth: 40
     # 队伍每个玩家复活次数
     teamSpawnCount: 0
     # 队伍中玩家复活的信息提示
@@ -40,7 +42,9 @@ team:
     # 被击杀后给予对方的积分
     deathPoint: 1
     # 队伍中玩家复活的信息提示
+    defaultHealth: 40
     teamSpawnMessage: ""
+    # 初始血量
     inventory:
       armor:
         - "298:0"
