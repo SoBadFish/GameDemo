@@ -683,6 +683,19 @@ public class RoomManager implements Listener {
                                 }
                             }
                         }
+                        //TODO 投掷TNT
+                        if(item.getId() == new BlockTNT().getId()){
+                            event.setCancelled();
+                            Item ic = item.clone();
+                            ic.setCount(1);
+                            player.getInventory().removeItem(ic);
+                            EntityTnt entityTnt = new EntityTnt(player.chunk,Entity.getDefaultNBT(player.getPosition().add(0,player.getEyeHeight(),0)));
+                            entityTnt.setTick(60);
+                            entityTnt.spawnToAll();
+                            FunctionManager.knockBack(entityTnt,player,0.6f,0.4f,0.2f);
+
+                        }
+
                     }
 
                     Block block = event.getBlock();
@@ -974,6 +987,7 @@ public class RoomManager implements Listener {
                         }
                     }
                 }
+
             }
         }
     }
