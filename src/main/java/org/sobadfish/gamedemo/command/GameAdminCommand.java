@@ -201,7 +201,15 @@ public class GameAdminCommand extends Command {
                     Position pos = roomConfig.getWorldInfo().getWaitPosition();
                     CompoundTag tag = EntityHuman.getDefaultNBT(pos);
                     Skin skin;
-                    if(AbstractFakeInventory.IS_PM1E) {
+                    boolean c = true;
+                    Class<Skin> sl = Skin.class;
+                    try {
+                        sl.getMethod("initDefaultSkin");
+                    } catch (NoSuchMethodException e) {
+                        c = false;
+                    }
+                    if(AbstractFakeInventory.IS_PM1E && c) {
+
                         Skin.initDefaultSkin();
                         skin = Skin.NO_PERSONA_SKIN;
                     }else{

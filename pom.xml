@@ -105,6 +105,7 @@
 
 
     <build>
+        <finalName>${project.artifactId}_v${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
