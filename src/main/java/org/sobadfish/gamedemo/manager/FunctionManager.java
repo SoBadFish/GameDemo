@@ -1,6 +1,5 @@
 package org.sobadfish.gamedemo.manager;
 
-import cn.nukkit.entity.Entity;
 import cn.nukkit.item.Item;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.TextFormat;
@@ -244,17 +243,35 @@ public class FunctionManager {
 
     }
 
+
     /**
-     * 击退逻辑实现
+     * 计算位移向量
      * */
-    public static void knockBack(Entity entity, Entity target,float speed, float force,float motionY){
+    public static Vector3 k(Vector3 entity, Vector3 target,float speed, float force){
         double x = entity.x - target.x;
         double z = entity.z - target.z;
         double distance = Math.sqrt(x * x + z * z);
         x /= distance * force;
         z /= distance * force;
-        Vector3 v3 = entity.getMotion().multiply(speed).add(x,motionY,z);
-        entity.setMotion(v3);
+        Vector3 v3 = new Vector3(x, 0.3f, z);
+        return v3.multiply(speed).add(x,0.3f,z);
+
+
+    }
+
+
+    /**
+     * 击退逻辑实现
+     * */
+    public static Vector3 knockBack(Vector3 entity, Vector3 target,float speed, float force,float motionY){
+        double x = entity.x - target.x;
+        double z = entity.z - target.z;
+        double distance = Math.sqrt(x * x + z * z);
+        x /= distance * force;
+        z /= distance * force;
+        Vector3 v3 = new Vector3(x, motionY, z);
+        return v3.multiply(speed).add(x,motionY,z);
+
 
     }
 

@@ -104,6 +104,11 @@ public class GameRoomConfig {
      * */
     public boolean enableFood = false;
 
+    /**
+     * TNT伤害
+     * */
+    public int tntDamage = 8;
+
 
     /**
      * 等待大厅拉回坐标
@@ -347,6 +352,7 @@ public class GameRoomConfig {
                 roomConfig.enableMoney = room.getBoolean("money.enable",false);
                 roomConfig.enableShop = room.getBoolean("enable-shop",false);
                 roomConfig.banCraft = room.getBoolean("ban-craft",false);
+                roomConfig.tntDamage = room.getInt("tntDamage",8);
 
                 roomConfig.knockConfig.enable = room.getBoolean("kb-setting.enable",true);
                 roomConfig.knockConfig.force = (float) room.getDouble("kb-setting.force",0.4f);
@@ -486,6 +492,7 @@ public class GameRoomConfig {
         config.set("ban-craft",banCraft);
         config.set("enable-food",enableFood);
         config.set("enable-shop",enableShop);
+        config.set("tntDamage",tntDamage);
 
         config.set("max-player-waitTime",maxWaitTime);
         config.set("minPlayerSize",minPlayerSize);

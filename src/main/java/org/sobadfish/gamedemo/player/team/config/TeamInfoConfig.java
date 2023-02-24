@@ -1,7 +1,6 @@
 package org.sobadfish.gamedemo.player.team.config;
 
 import cn.nukkit.utils.BlockColor;
-import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,7 +12,7 @@ import java.util.Map;
  * @author SoBadFish
  * 2022/1/3
  */
-@Data
+
 public class TeamInfoConfig {
 
     //队伍的配置
@@ -24,7 +23,21 @@ public class TeamInfoConfig {
      * */
     private List<String> spawnPosition;
 
+    public TeamConfig getTeamConfig() {
+        return teamConfig;
+    }
 
+    public void setTeamConfig(TeamConfig teamConfig) {
+        this.teamConfig = teamConfig;
+    }
+
+    public List<String> getSpawnPosition() {
+        return spawnPosition;
+    }
+
+    public void setSpawnPosition(List<String> spawnPosition) {
+        this.spawnPosition = spawnPosition;
+    }
 
     public TeamInfoConfig(TeamConfig teamConfig, List<String> spawnPosition){
         this.teamConfig = teamConfig;

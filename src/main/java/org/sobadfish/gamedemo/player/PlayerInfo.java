@@ -889,14 +889,20 @@ public class PlayerInfo {
 
         PlayerGameDeathEvent event1 = new PlayerGameDeathEvent(this,getGameRoom(),TotalManager.getPlugin());
         if (event instanceof EntityDamageByEntityEvent) {
-            Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
-            if (entity instanceof Player) {
-                PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo((Player) entity);
-                if(info != null) {
-                    event1.setDamager(info);
-                    Server.getInstance().getPluginManager().callEvent(event1);
+            if(damageByInfo != null){
+                event1.setDamager(damageByInfo);
+                Server.getInstance().getPluginManager().callEvent(event1);
+            }else{
+                Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
+                if (entity instanceof Player) {
+                    PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo((Player) entity);
+                    if(info != null) {
+                        event1.setDamager(info);
+                        Server.getInstance().getPluginManager().callEvent(event1);
+                    }
                 }
             }
+
         }
         player.removeAllEffects();
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
@@ -1054,7 +1060,6 @@ public class PlayerInfo {
             teamInfo.getDefeatPlayers().add(this);
         }
     }
-
     public void echoPlayerDeathInfo(EntityDamageEvent event){
         if(event != null) {
 
@@ -1068,19 +1073,25 @@ public class PlayerInfo {
 
             } else if (event instanceof EntityDamageByEntityEvent) {
                 Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
-                if (entity instanceof Player) {
-                    PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo((Player) entity);
-                    String killInfo = TotalManager.getLanguage().getLanguage("death-by-damage","击杀");
-                    if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
-                        killInfo = TotalManager.getLanguage().getLanguage("death-by-arrow","射杀");
+                PlayerInfo info = null;
+                if(damageByInfo != null){
+                    info = damageByInfo;
+                }else{
+                    if(entity instanceof EntityHuman) {
+                        info = TotalManager.getRoomManager().getPlayerInfo((EntityHuman) entity);
                     }
-                    if (info != null) {
-                        addKill(info);
-                        gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-kill-player-info",
-                                "[1] &e被 &r[2] [3]了。",
-                                this.toString(),info.toString(),killInfo));
-                    }
-                } else {
+                }
+
+                String killInfo = TotalManager.getLanguage().getLanguage("death-by-damage","击杀");
+                if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
+                    killInfo = TotalManager.getLanguage().getLanguage("death-by-arrow","射杀");
+                }
+                if (info != null) {
+                    addKill(info);
+                    gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-kill-player-info",
+                            "[1] &e被 &r[2] [3]了。",
+                            this.toString(),info.toString(),killInfo));
+                }else{
                     gameRoom.sendMessage(TotalManager.getLanguage().getLanguage("player-death-by-player-kill","[1] &e被 &r[2] 击败了",
                             this.toString(),entity.getName()));
                 }
@@ -1111,5 +1122,6 @@ public class PlayerInfo {
             }
         }
     }
+
 
 }

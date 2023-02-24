@@ -10,10 +10,7 @@ import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 地图的实例化方法，当房间启动后，这个方法也随之启动
@@ -100,13 +97,18 @@ public class WorldInfo {
         }
         //更新浮空字与箱子刷新
         if(room.roomConfig.roundChest && room.roomConfig.chestCanReset){
-            for (Map.Entry<Position,Long> chest:clickChest.entrySet()) {
+            //TODO 迭代器防止空指针异常
+            Set<Map.Entry<Position, Long>> set= clickChest.entrySet();
+            Iterator<Map.Entry<Position, Long>> iterator=set.iterator();
+
+            while (iterator.hasNext()) {
+                Map.Entry<Position, Long> chest = iterator.next();
                 if(chest.getValue() + room.getRoomConfig().chestResetTime * 1000L <= System.currentTimeMillis()){
                     if(resetChestFloat.containsKey(chest.getKey())){
                         GameFloatText floatText = resetChestFloat.remove(chest.getKey());
                         floatText.toClose();
                     }
-                    clickChest.remove(chest.getKey());
+                    iterator.remove();
                 }else{
                     if(resetChestFloat.containsKey(chest.getKey())){
                         int time = (int) ((chest.getValue() + room.getRoomConfig().chestResetTime * 1000L

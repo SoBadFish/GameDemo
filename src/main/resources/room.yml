@@ -69,6 +69,9 @@ defeatCmd: []
 
 roundChest: false
 
+# TNT的伤害
+tntDamage: 8
+
 
 # 是否允许箱子重置
 chest-can-reset: true

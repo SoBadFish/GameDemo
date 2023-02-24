@@ -15,7 +15,10 @@ import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
-import cn.nukkit.event.entity.*;
+import cn.nukkit.event.entity.EntityDamageByEntityEvent;
+import cn.nukkit.event.entity.EntityDamageEvent;
+import cn.nukkit.event.entity.EntityExplodeEvent;
+import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
 import cn.nukkit.event.level.WeatherChangeEvent;
@@ -30,6 +33,10 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemColorArmor;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Sound;
+import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.nbt.tag.DoubleTag;
+import cn.nukkit.nbt.tag.FloatTag;
+import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.entity.DamageFloatTextEntity;
@@ -559,15 +566,25 @@ public class RoomManager implements Listener {
                     //TODO 免受TNT爆炸伤害
                     Entity entity = ((EntityDamageByEntityEvent) event).getDamager();
                     if (entity instanceof EntityPrimedTNT) {
-                        event.setDamage(2);
+                        event.setDamage(room.getRoomConfig().tntDamage);
+                    }
+                    if(entity instanceof EntityTnt){
+                        PlayerInfo target = ((EntityTnt) entity).getTarget();
+                        if(target != null){
+                            if(!target.equals(playerInfo) && (target.getTeamInfo() != null && !target.getTeamInfo().equals(playerInfo.getTeamInfo()))){
+                                playerInfo.setDamageByInfo(target);
+                            }else{
+                                event.setCancelled();
+                                return;
+                            }
+                        }
                     }
                     //击退..
                     if(room.roomConfig.knockConfig.enable){
-
-                        FunctionManager.knockBack(event.getEntity(),entity,
+                        event.getEntity().setMotion(FunctionManager.knockBack(event.getEntity(),entity,
                                 room.roomConfig.knockConfig.speed,
                                 room.roomConfig.knockConfig.force,
-                                room.roomConfig.knockConfig.motionY);
+                                room.roomConfig.knockConfig.motionY));
                         ((EntityDamageByEntityEvent) event).setKnockBack(0f);
                     }
 
@@ -689,10 +706,26 @@ public class RoomManager implements Listener {
                             Item ic = item.clone();
                             ic.setCount(1);
                             player.getInventory().removeItem(ic);
-                            EntityTnt entityTnt = new EntityTnt(player.chunk,Entity.getDefaultNBT(player.getPosition().add(0,player.getEyeHeight(),0)));
-                            entityTnt.setTick(60);
+//                            Block[] blocks = player.getLineOfSight(2);  // 这里的参数100表示最远搜索距离
+//                            Vector3 lastBlockPos = blocks[blocks.length - 1].getLocation();
+//                            Vector3 precisePos = lastBlockPos.add(player.getDirectionVector().multiply(0.5f));
+//                            Vector3 v3 = FunctionManager.k(precisePos,player,0.6f,2.0f);
+                            CompoundTag nbt = new CompoundTag()
+                                    .putList(new ListTag<DoubleTag>("Pos")
+                                            .add(new DoubleTag("", player.x))
+                                            .add(new DoubleTag("", player.y + player.getEyeHeight()))
+                                            .add(new DoubleTag("", player.z)))
+                                    .putList(new ListTag<DoubleTag>("Motion")
+                                            .add(new DoubleTag("", -Math.sin(player.yaw / 180 * Math.PI) * Math.cos(player.pitch / 180 * Math.PI) * 1.2))
+                                            .add(new DoubleTag("", -Math.sin(player.pitch / 180 * Math.PI) * 1.2))
+                                            .add(new DoubleTag("", Math.cos(player.yaw / 180 * Math.PI) * Math.cos(player.pitch / 180 * Math.PI) * 1.2)))
+                                    .putList(new ListTag<FloatTag>("Rotation")
+                                            .add(new FloatTag("", (player.yaw > 180 ? 360 : 0) - (float) player.yaw))
+                                            .add(new FloatTag("", (float) -player.pitch)));
+
+                            EntityTnt entityTnt = new EntityTnt(player.chunk,nbt,info,80);
                             entityTnt.spawnToAll();
-                            FunctionManager.knockBack(entityTnt,player,0.6f,0.4f,0.2f);
+
 
                         }
 
@@ -907,39 +940,24 @@ public class RoomManager implements Listener {
                 }
 
             }
-            //TODO 放置TNT
-            if (block instanceof BlockTNT) {
-                try{
-                    event.setCancelled();
-                    ((BlockTNT) block).prime(60);
-                    Item i2 = item.clone();
-                    i2.setCount(1);
-                    event.getPlayer().getInventory().removeItem(i2);
-                }catch (Exception e){
-                    event.setCancelled();
 
-                }
-
-            }
+//            //TODO 放置TNT
+//            if (block instanceof BlockTNT) {
+//                ((BlockTNT) block).prime();
+//                event.setCancelled();
+//                if(info != null) {
+//                    EntityTnt entityTnt = new EntityTnt(event.getBlock().getChunk(), Entity.getDefaultNBT(event.getBlock()));
+//                    entityTnt.setTick(60);
+//                    entityTnt.setTarget(info);
+//                    entityTnt.spawnToAll();
+//                    Item i2 = item.clone();
+//                    i2.setCount(1);
+//                    event.getPlayer().getInventory().removeItem(i2);
+//                }
+//            }
         }
     }
 
-    @EventHandler
-    public void onEntitySpawnEvent(EntitySpawnEvent event){
-        //TODO 监听TNT生成 以及判断是否在房间
-        Entity entity = event.getEntity();
-        GameRoom room = getGameRoomByLevel(entity.level);
-        if(room != null) {
-            if (entity instanceof EntityPrimedTNT && !(entity instanceof EntityTnt)) {
-                //由于这个是私有方法，，得反射
-                EntityTnt entityTnt = new EntityTnt(entity.chunk,entity.namedTag);
-                entityTnt.setTick(60);
-                entityTnt.spawnToAll();
-                entity.close();
-
-            }
-        }
-    }
 
     /**
      * 限制玩家放置方块事件
