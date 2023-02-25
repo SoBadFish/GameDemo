@@ -3,6 +3,7 @@ package org.sobadfish.gamedemo.dlc;
 import org.sobadfish.gamedemo.room.GameRoom;
 
 /**
+ * 重写房间结束判断条件
  * @author Sobadfish
  * 2023/2/22
  */

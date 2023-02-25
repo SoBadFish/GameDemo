@@ -16,7 +16,7 @@ public abstract class IGameRoomDlc {
      * 在房间中启动
      * @param room 房间
      * */
-    public abstract void onEnable(GameRoom room);
+    public void onEnable(GameRoom room){}
     /**
      * dlc的名称
      * @return Dlc的名称
@@ -40,6 +40,13 @@ public abstract class IGameRoomDlc {
      * @param room 地图
      * */
     public abstract void onWorldUpdate(WorldInfo room);
+
+
+    /**
+     * 游戏房间结束
+     * @param room 房间
+     * */
+    public void onDisable(GameRoom room){}
 
 
 

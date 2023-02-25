@@ -1037,6 +1037,10 @@ public class GameRoom {
         }
         close = true;
         type = GameType.CLOSE;
+        for(IGameRoomDlc dlc: gameRoomDlc){
+            dlc.onDisable(this);
+        }
+
         if(hasStart) {
 //            roomConfig.save();
             GameCloseEvent event = new GameCloseEvent(this, TotalManager.getPlugin());
