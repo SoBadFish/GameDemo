@@ -4,7 +4,6 @@ import cn.nukkit.Player;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -74,7 +73,7 @@ public class RandomJoinManager {
         }
 
         iPlayerInfo.name = name;
-        iPlayerInfo.time = new Date();
+        iPlayerInfo.time = System.currentTimeMillis();
         playerInfos.add(iPlayerInfo);
 
 
@@ -88,7 +87,7 @@ public class RandomJoinManager {
 
         public String name;
 
-        public Date time;
+        public Long time;
 
         public boolean cancel;
 
@@ -104,8 +103,11 @@ public class RandomJoinManager {
 
         @Override
         public boolean equals(Object o) {
+            if(o == null){
+                return false;
+            }
             if(o instanceof IPlayerInfo){
-                return ((IPlayerInfo) o).playerInfo.equals(playerInfo);
+                return ((IPlayerInfo) o).playerInfo.getName().equalsIgnoreCase(playerInfo.getName());
             }
             return false;
         }

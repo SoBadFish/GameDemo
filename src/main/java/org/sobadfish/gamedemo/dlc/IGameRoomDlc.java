@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.dlc;
 
 import org.sobadfish.gamedemo.player.PlayerInfo;
+import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.world.WorldInfo;
 
@@ -40,6 +41,12 @@ public abstract class IGameRoomDlc {
      * @param room 地图
      * */
     public void onWorldUpdate(WorldInfo room){}
+
+    /**
+     * 游戏地图内团队更新
+     * @param teamInfo 团队
+     * */
+    public void onTeamUpdate(TeamInfo teamInfo){}
 
 
     /**

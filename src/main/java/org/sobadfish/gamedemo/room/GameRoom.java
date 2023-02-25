@@ -838,10 +838,17 @@ public class GameRoom {
                 }
 
             }
-            for (TeamInfo teamInfo : teamInfos) {
-                teamInfo.onUpdate();
-            }
 
+
+        }
+
+        for (TeamInfo teamInfo : teamInfos) {
+            teamInfo.onUpdate();
+            for(IGameRoomDlc dlc: gameRoomDlc){
+                if(teamInfo.isLoading()){
+                    dlc.onTeamUpdate(teamInfo);
+                }
+            }
         }
         //TODO 可以在这里实现胜利的条件
         ////////////////////////// 示例算法 ///////////////////////////

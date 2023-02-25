@@ -19,6 +19,7 @@ import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
 import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
+import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.GameRoomCreator;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
@@ -389,6 +390,32 @@ public class GameAdminCommand extends Command {
                     if(room != null){
 
                         TotalManager.sendMessageToObject("&a"+config.getName()+language.getLanguage("status-started"," (已启动) ")+room.getType()+" : &2"+room.getPlayerInfos().size(),commandSender);
+                        StringBuilder team = new StringBuilder();
+
+                        for(TeamInfo teamInfo: room.getTeamInfos()){
+                            StringBuilder playerI = new StringBuilder();
+                            for(PlayerInfo playerInfo: teamInfo.getTeamPlayers()){
+                                String color;
+                                switch (playerInfo.getPlayerType()){
+                                    case DEATH:
+                                        color = "&c";
+                                        break;
+                                    case WAIT:
+                                        color = "&6";
+                                        break;
+                                    case START:
+                                        color = "&a";
+                                        break;
+                                    default:
+                                        color = "&7";
+                                        break;
+                                }
+                                playerI.append("     - ").append(color).append(playerInfo.getName()).append("\n");
+                            }
+                            team.append("   - ").append(teamInfo.getTeamConfig().getNameColor()).append(teamInfo.getTeamConfig().getName()).
+                                    append("\n").append(playerI).append("\n");
+                        }
+                        TotalManager.sendMessageToObject(" - &eTeam: \n"+team,commandSender);
                         if(room.getGameRoomDlc().size() > 0) {
                             StringBuilder dlcList = new StringBuilder();
                             for (IGameRoomDlc dlc : room.getGameRoomDlc()) {
@@ -396,8 +423,11 @@ public class GameAdminCommand extends Command {
                             }
                             TotalManager.sendMessageToObject("  - &aload: " + dlcList, commandSender);
                         }
+
                     }else{
                         TotalManager.sendMessageToObject("&c"+config.getName()+language.getLanguage("status-unstarted"," (未启动) "),commandSender);
+
+
                     }
                 }
                 break;

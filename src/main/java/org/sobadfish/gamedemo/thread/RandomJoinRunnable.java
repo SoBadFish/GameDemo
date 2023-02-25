@@ -86,7 +86,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
             return true;
         }
         info.sendForceTitle("&6匹配中",100);
-        info.sendSubTitle(PlayerInfo.formatTime1((int)(System.currentTimeMillis() - i.time.getTime()) / 1000));
+        info.sendSubTitle(PlayerInfo.formatTime1((int)(System.currentTimeMillis() - i.time) / 1000));
 
         String input = i.name;
         ArrayList<String> names = TotalManager.getMenuRoomManager().getNames();
@@ -101,7 +101,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
             info.sendForceTitle("匹配终止!");
             return true;
         }
-        if(System.currentTimeMillis() -  i.time.getTime() > 60 * 1000){
+        if(System.currentTimeMillis() -  i.time > 60 * 1000){
             //一分钟未找到
             info.sendForceMessage("&c暂时没有合适的房间");
             roomManager.cancel = true;
@@ -161,7 +161,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
                 if (TotalManager.getRoomManager().hasGameRoom(roomConfig.name)) {
                     GameRoom fg = TotalManager.getRoomManager().getRoom(roomConfig.name);
                     if (fg.joinPlayerInfo(info, false) == GameRoom.JoinType.CAN_JOIN) {
-                        info.sendForceTitle("&a匹配完成");
+                        info.sendForceTitle("&a匹配完成",100);
                         i.cancel = true;
                         lock.remove(roomManager);
                         return true;
@@ -179,7 +179,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
                     if(room != null && room.getType() == GameRoom.GameType.WAIT){
                         if (room.joinPlayerInfo(info, false) == GameRoom.JoinType.CAN_JOIN) {
                             lock.remove(roomManager);
-                            info.sendForceTitle("&a匹配完成");
+                            info.sendForceTitle("&a匹配完成",100);
                             i.cancel = true;
                             return true;
                         }
@@ -192,7 +192,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
                         continue;
                     }
                     if(startGameRoom(info, roomManager, roomConfig)){
-                        info.sendForceTitle("&a匹配完成");
+                        info.sendForceTitle("&a匹配完成",100);
                         i.cancel = true;
                         return true;
                     }

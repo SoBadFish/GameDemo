@@ -259,7 +259,6 @@ public class TeamInfo {
             }
         }
 
-
         if(d == getTeamPlayers().size()){
             //被淘汰了
             room.sendMessage(TotalManager.language.getLanguage("team-no-live","&r团灭 > [1]&c已被淘汰!",this.toString()));

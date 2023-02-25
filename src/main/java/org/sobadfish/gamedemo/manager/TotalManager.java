@@ -8,6 +8,7 @@ import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.manager.data.PlayerDataManager;
 import org.sobadfish.gamedemo.manager.data.PlayerTopManager;
 import org.sobadfish.gamedemo.manager.data.TagItemDataManager;
+import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
 import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
 import org.sobadfish.gamedemo.room.event.defaults.ChestResetEvent;
 import org.sobadfish.gamedemo.room.event.defaults.CommandEvent;
@@ -156,6 +157,9 @@ public class TotalManager {
         if(plugin == null){
             return;
         }
+        //TODO 得释放一些缓存
+        DisPlayWindowsFrom.FROM.clear();
+        RoomManager.LOCK_GAME.clear();
         upExp = getConfig().getInt("up-exp",500);
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
