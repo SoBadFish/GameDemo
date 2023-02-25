@@ -2,7 +2,7 @@ package org.sobadfish.gamedemo.shop;
 
 /**
  * @author Sobadfish
- * @date 2023/2/6
+ *  2023/2/6
  */
 public enum ShopButtonType {
     /**

@@ -6,7 +6,7 @@ import org.sobadfish.gamedemo.room.world.WorldInfo;
 
 /**
  * @author Sobadfish
- * @date 2023/2/21
+ *  2023/2/21
  */
 public interface IGameRoomDlc {
 

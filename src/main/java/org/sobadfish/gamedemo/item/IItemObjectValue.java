@@ -2,7 +2,7 @@ package org.sobadfish.gamedemo.item;
 
 /**
  * @author Sobadfish
- * @date 2023/2/7
+ * 2023/2/7
  */
 public interface IItemObjectValue {
 

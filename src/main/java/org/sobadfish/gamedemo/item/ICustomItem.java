@@ -5,7 +5,7 @@ import org.sobadfish.gamedemo.player.PlayerInfo;
 
 /**
  * @author Sobadfish
- * @date 2023/2/7
+ * 2023/2/7
  */
 public interface ICustomItem {
 

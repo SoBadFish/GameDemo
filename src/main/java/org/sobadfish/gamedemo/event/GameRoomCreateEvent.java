@@ -6,7 +6,7 @@ import org.sobadfish.gamedemo.room.GameRoom;
 
 /**
  * @author Sobadfish
- * @date 2023/2/21
+ *  2023/2/21
  */
 public class GameRoomCreateEvent extends GameRoomEvent{
 

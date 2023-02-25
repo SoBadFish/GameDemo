@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * @author Sobadfish
- * @date 2023/1/12
+ * 2023/1/12
  */
 public class RoomArea {
 

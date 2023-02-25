@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * @author Sobadfish
- * @date 2023/2/22
+ *  2023/2/22
  */
 public interface IGamePlayerScoreBoard {
 

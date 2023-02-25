@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * @author Sobadfish
- * @date 2022/9/23
+ * 2022/9/23
  */
 public class ItemConfig {
 

@@ -8,7 +8,6 @@ import cn.nukkit.entity.item.EntityFirework;
 import cn.nukkit.item.ItemFirework;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
-import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
@@ -31,32 +30,45 @@ public class Utils {
 
     private static final SplittableRandom RANDOM = new SplittableRandom(System.currentTimeMillis());
 
+    /**
+     * 获取一定范围的整数随机数
+     * @param min 最小值
+     * @param max 最大值
+     *
+     * @return 取得的随机数
+     * */
     public static int rand(int min, int max) {
         return min == max ? max : RANDOM.nextInt(max + 1 - min) + min;
     }
 
+    /**
+     * 获取一定范围的小数随机数
+     * @param min 最小值
+     * @param max 最大值
+     *
+     * @return 取得的随机数
+     * */
     public static double rand(double min, double max) {
         return min == max ? max : min + Math.random() * (max - min);
     }
 
+    /**
+     * 获取一定范围的小数随机数
+     * @param min 最小值
+     * @param max 最大值
+     *
+     * @return 取得的随机数
+     * */
     public static float rand(float min, float max) {
         return min == max ? max : min + (float) Math.random() * (max - min);
     }
 
+    /**
+     * 获取随机的true 或 false
+     * @return 随机的bool
+     * */
     public static boolean rand() {
         return RANDOM.nextBoolean();
-    }
-
-    public static double calLinearFunction(Vector3 pos1, Vector3 pos2, double element, int type) {
-        if (pos1.getFloorY() != pos2.getFloorY()) {
-            return 1.7976931348623157E308D;
-        } else if (pos1.getX() == pos2.getX()) {
-            return type == 1 ? pos1.getX() : 1.7976931348623157E308D;
-        } else if (pos1.getZ() == pos2.getZ()) {
-            return type == 0 ? pos1.getZ() : 1.7976931348623157E308D;
-        } else {
-            return type == 0 ? (element - pos1.getX()) * (pos1.getZ() - pos2.getZ()) / (pos1.getX() - pos2.getX()) + pos1.getZ() : (element - pos1.getZ()) * (pos1.getX() - pos2.getX()) / (pos1.getZ() - pos2.getZ()) + pos1.getX();
-        }
     }
 
     /**
@@ -97,6 +109,10 @@ public class Utils {
     }
 
 
+    /**
+     * 删除的文件
+     * @param file 文件
+     * */
     public static void toDelete(File file) {
         File[] files = file.listFiles();
         if (files != null) {
@@ -115,6 +131,7 @@ public class Utils {
 
     /**
      * 放烟花
+     * @param position 放烟花的位置
      */
     public static void spawnFirework(Position position) {
 
@@ -158,6 +175,10 @@ public class Utils {
 
     /**
      * 画一条自定义长度的线
+     * @param size 线的长度
+     * @param line 用于填充线条的字符
+     *
+     * @return 画出来的线
      * */
     public static String writeLine(int size,String line){
         StringBuilder s = new StringBuilder();
@@ -173,7 +194,11 @@ public class Utils {
 
 
     /**
-     * 复制文件
+     * 复制文件，将File文件复制到另一个文件路径上
+     * 不会覆盖文件
+     * @param old 复制的文件
+     * @param target 复制到的位置
+     * @return 是否复制成功
      * */
     public static boolean copyFiles(File old,File target){
 
@@ -181,7 +206,7 @@ public class Utils {
         File[] files = old.listFiles();
         if(files != null){
             for (File value : files) {
-                TotalManager.sendMessageToConsole("Coping world ... "+((load / (float)files.length) * 100) +"%");
+                TotalManager.sendMessageToConsole("Coping File ... "+((load / (float)files.length) * 100) +"%");
                 load++;
                 if (value.isFile()) {
                     // 复制文件
@@ -217,6 +242,7 @@ public class Utils {
         return true;
     }
 
+
     private static void copyFile(File source,File target)
             throws IOException{
 
@@ -245,7 +271,11 @@ public class Utils {
         destFile.close();
     }
 
-    /**复制文件夹   */
+    /**
+     * 复制文件夹
+     * @param sourceDir 复制的文件夹
+     * @param targetDir 目标文件夹
+     * */
     private static void copyDirectiory(String sourceDir, String targetDir)
             throws IOException {
         // 新建目标目录

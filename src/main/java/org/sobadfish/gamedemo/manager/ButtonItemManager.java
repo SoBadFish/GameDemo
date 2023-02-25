@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
  * 获取按键物品的管理类
  * 如果要赋予玩家按键物品，需要通过getItem方法
  * @author Sobadfish
- * @date 2023/2/7
+ * 2023/2/7
  */
 public class ButtonItemManager {
 
@@ -42,6 +42,7 @@ public class ButtonItemManager {
     /**
      * 根据类名获取按键物品
      * @param name 物品类名
+     * @return 触发功能的物品
      * */
     public static ICustomItem getButtonItem(String name) {
         if(BUTTON_ITEM.containsKey(name)){

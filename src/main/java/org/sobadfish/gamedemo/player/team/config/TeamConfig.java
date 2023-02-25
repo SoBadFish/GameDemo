@@ -184,6 +184,8 @@ public class TeamConfig {
 
     /**
      * 解析 team.yml 配置文件
+     * @param map 队伍的配置文件内容
+     * @return {@link TeamConfig} 队伍配置
      * */
     public static TeamConfig getInstance(Map<?,?> map){
         String name = map.get("name").toString();

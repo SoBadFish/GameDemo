@@ -9,7 +9,7 @@ import tip.utils.variables.BaseVariable;
 /**
  * 对接Tips变量
  * @author Sobadfish
- * @date 2023/2/20
+ *   2023/2/20
  */
 public class GameTipVariable extends BaseVariable {
 

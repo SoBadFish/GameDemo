@@ -6,7 +6,7 @@ import cn.nukkit.nbt.tag.CompoundTag;
 
 /**
  * @author Sobadfish
- * @date 2023/1/13
+ *  2023/1/13
  */
 public class RobotEntity extends EntityHuman {
     public RobotEntity(FullChunk fullChunk, CompoundTag compoundTag) {

@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * 语言文件
  * @author Sobadfish
- * @date 2023/1/10
+ * 2023/1/10
  */
 public class LanguageManager {
 

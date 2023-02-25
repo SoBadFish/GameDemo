@@ -67,7 +67,7 @@ import java.util.Map;
  * 房间事件监听
  *
  * @author Sobadfish
- * @date 2022/9/9
+ * 2022/9/9
  */
 public class RoomManager implements Listener {
 
@@ -377,8 +377,8 @@ public class RoomManager implements Listener {
 
     /**
      * 游戏地图的爆炸保护
+     * @param event 爆炸的事件
      * */
-
     @EventHandler
     public void onEntityExplodeEvent(EntityExplodeEvent event){
         Level level = event.getPosition().getLevel();
@@ -429,6 +429,8 @@ public class RoomManager implements Listener {
 
     /**
      * 进入地图就传送到游戏房间
+     * 这个事件主要实现玩家进入游戏房间的地图就加入游戏的功能
+     * @param event 实体传送地图的事件
      * */
     @EventHandler
     public void onLevelTransfer(EntityLevelChangeEvent event){
@@ -484,6 +486,9 @@ public class RoomManager implements Listener {
         }
 
     }
+
+
+
     @EventHandler(ignoreCancelled = true)
     public void onWeatherChange(WeatherChangeEvent event){
         for(GameRoomConfig gameRoomConfig: TotalManager.getRoomManager().roomConfig.values()){
@@ -500,6 +505,10 @@ public class RoomManager implements Listener {
 
 
 
+    /**
+     * 当游戏房间被初始化创建的时候触发该事件
+     * @param event 房间创建事件
+     * */
     @EventHandler
     public void onGameRoomCreateEvent(GameRoomCreateEvent event){
         GameRoomConfig roomConfig = event.getRoom().roomConfig;
@@ -516,7 +525,11 @@ public class RoomManager implements Listener {
 
 
     /**
+     * 这里实现了在游戏房间中实体受到伤害的处理事件
+     * 主要实现 队伍保护 等待保护 TNT伤害修改 弓箭反馈
+     * 自定义击退 伤害浮空字
      * TODO 玩家攻击事件
+     * @param event 实体收到伤害事件
      * */
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event){
@@ -909,8 +922,10 @@ public class RoomManager implements Listener {
     }
 
     /**
+     * 这个方法主要实现当玩家在游戏开始的时候
+     * 放置方块的逻辑判断
      * 限制玩家放置方块事件
-
+     * @param event 方块放置事件
      * */
     @EventHandler
     public void onPlaceBlock(BlockPlaceEvent event){
@@ -937,27 +952,13 @@ public class RoomManager implements Listener {
 
             }
 
-//            //TODO 放置TNT
-//            if (block instanceof BlockTNT) {
-//                ((BlockTNT) block).prime();
-//                event.setCancelled();
-//                if(info != null) {
-//                    EntityTnt entityTnt = new EntityTnt(event.getBlock().getChunk(), Entity.getDefaultNBT(event.getBlock()));
-//                    entityTnt.setTick(60);
-//                    entityTnt.setTarget(info);
-//                    entityTnt.spawnToAll();
-//                    Item i2 = item.clone();
-//                    i2.setCount(1);
-//                    event.getPlayer().getInventory().removeItem(i2);
-//                }
-//            }
         }
     }
 
 
     /**
-     * 限制玩家放置方块事件
-
+     * 限制玩家破坏方块事件
+     * @param event 方块破坏事件
      * */
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event){
@@ -1007,7 +1008,7 @@ public class RoomManager implements Listener {
     }
     /**
      * 修改玩家聊天信息事件
-
+     * @param event 玩家聊天事件
      * */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(PlayerChatEvent event){

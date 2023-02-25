@@ -14,7 +14,7 @@ import java.io.File;
  * 地图的一些配置信息
  * 可以增加游戏地图内的一些坐标点
  * @author Sobadfish
- * @date 2022/9/9
+ *  2022/9/9
  */
 public class WorldInfoConfig {
 
@@ -69,6 +69,9 @@ public class WorldInfoConfig {
 
     /**
      * 如果插件内不存在地图，则从worlds文件夹中备份，反之写入worlds文件夹
+     * @param roomName 房间名称
+     * @param levelName 地图名称
+     * @return 是否完成初始化地图
      * */
     public static boolean initWorld(String roomName,String levelName){
         //插件的地图

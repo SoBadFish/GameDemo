@@ -7,7 +7,7 @@ import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
 
 /**
  * @author Sobadfish
- * @date 2023/1/12
+ *  2023/1/12
  */
 public class ChestResetEvent extends IGameRoomEvent {
 

@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * 房间的基本配置，可以根据自身的需求修改
  * @author Sobadfish
- * @date 2022/9/9
+ * 2022/9/9
  */
 public class GameRoomConfig {
 

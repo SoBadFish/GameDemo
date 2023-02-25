@@ -242,6 +242,7 @@ public class GameRoomCreator {
     /**
      * 避免出现重复的名称
      * @param name 名称
+     * @return 避免重复后的名称
      * */
     public String getRoomName(String name){
         return getRoomName(name,0);

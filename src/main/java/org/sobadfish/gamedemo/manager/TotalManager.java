@@ -21,7 +21,7 @@ import java.io.File;
 /**
  * 插件启动控制器
  * @author Sobadfish
- * @date 2022/9/12
+ * 2022/9/12
  */
 public class TotalManager {
 

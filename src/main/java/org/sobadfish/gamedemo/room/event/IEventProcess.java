@@ -6,7 +6,7 @@ import org.sobadfish.gamedemo.room.GameRoom;
 /**
  * 通过接口解耦
  * @author Sobadfish
- * @date 2022/10/15
+ *  2022/10/15
  */
 public interface IEventProcess {
 

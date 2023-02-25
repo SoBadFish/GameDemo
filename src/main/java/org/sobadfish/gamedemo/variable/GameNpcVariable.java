@@ -12,7 +12,7 @@ import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 /**
  * 对接RSNPC
  * @author Sobadfish
- * @date 2023/2/20
+ *  2023/2/20
  */
 public class GameNpcVariable extends BaseVariableV2 {
 

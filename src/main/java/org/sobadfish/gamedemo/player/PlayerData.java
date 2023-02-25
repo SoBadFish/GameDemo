@@ -97,6 +97,7 @@ public class PlayerData {
 
     /**
      * 获取等级百分比
+     * @return 当前经验到下一级经验的百分比
      * */
     public double getExpPercent(){
         double r = 0;
@@ -108,6 +109,8 @@ public class PlayerData {
 
     /**
      * 获取等级条
+     * @param size 经验条长度
+     * @return 获取经验条的字符串
      * */
     public String getExpLine(int size){
         return FunctionManager.drawLine((float) getExpPercent(),size,"&b■","&7■");
@@ -115,6 +118,8 @@ public class PlayerData {
 
     /**
      * 根据等级获取颜色
+     * @param level 等级
+     * @return 等级对应的颜色字符
      * */
     public String getColorByLevel(int level){
         String[] color = new String[]{"&7","&f","&6","&b","&2","&3","&4","&d","&6","&e"};
@@ -126,6 +131,10 @@ public class PlayerData {
 
     }
 
+    /**
+     * 根据等级的星级图标
+     * @return 等级的星级
+     * */
     public String getLevelString(){
         String str = "✫";
         if(level > 1000){
@@ -134,6 +143,11 @@ public class PlayerData {
         return getColorByLevel(level)+level+str;
     }
 
+    /**
+     * 将数据过长的数值转换为单位显示
+     * @param exp 经验
+     * @return 单位
+     * */
     public String getExpString(int exp){
         double e = exp;
         e /= 1000;
@@ -151,6 +165,10 @@ public class PlayerData {
         }
     }
 
+    /**
+     * 获取下一个等级的经验
+     * @return 经验
+     * */
     public int getNextLevelExp(){
         double l = level;
          l+= 1;

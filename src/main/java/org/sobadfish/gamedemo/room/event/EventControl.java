@@ -134,13 +134,17 @@ public class EventControl {
 
     /**
      * 配置 roomEventList 内部事件
+     * @return 获取的事件内容
      * */
     public List<GameRoomEventConfig.GameRoomEventItem> getEventConfigList() {
         return eventItems;
     }
 
 
-
+    /**
+     * 获取下一个执行的世界
+     * @return 事件
+     * */
     public IGameRoomEvent getNextEvent() {
         if(hasEvent()){
             return events.get(position);

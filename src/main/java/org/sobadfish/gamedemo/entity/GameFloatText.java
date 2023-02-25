@@ -101,7 +101,7 @@ public class GameFloatText extends Entity {
      * @param position 浮空字位置
      * @param text 浮空字显示的文本信息
      *
-     * @return @{@link GameFloatText} 浮空字实体
+     * @return {@link GameFloatText} 浮空字实体
      * */
     public static GameFloatText showFloatText(String name, Position position, String text){
         GameFloatText text1;

@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * 地图的实例化方法，当房间启动后，这个方法也随之启动
  * @author Sobadfish
- * @date 2022/9/9
+ *  2022/9/9
  */
 public class WorldInfo {
 
@@ -42,6 +42,7 @@ public class WorldInfo {
 
     /**
      * 增加浮空字刷新
+     * @param position 浮空字的位置
      * */
     public void clickChest(Position position){
         clickChest.put(position,System.currentTimeMillis());

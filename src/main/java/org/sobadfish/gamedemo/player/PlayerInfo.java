@@ -40,7 +40,7 @@ import java.util.*;
 /**
  * 玩家对象的信息
  * @author Sobadfish
- * @date 2022/9/9
+ * 2022/9/9
  */
 public class PlayerInfo {
 
@@ -98,13 +98,19 @@ public class PlayerInfo {
 
 
     /**
-     * 实例化
+     * 实例化玩家对象 支持自定义实体
+     * @param player EntitHuman实体
      * */
     public PlayerInfo(EntityHuman player){
         this.player = player;
         this.speed = player.getMovementSpeed();
     }
 
+    /**
+     * 获取数据内容
+     * @param type 类型
+     * @return int 内容
+     * */
     public int getData(String type){
         if(statistics.containsKey(type)){
             return statistics.get(type);
@@ -112,6 +118,11 @@ public class PlayerInfo {
         return 0;
     }
 
+    /**
+     * 增加数据内容
+     * @param type 类型
+     * @param  value 数据
+     * */
     public void addData(String type,int value){
         if(statistics.containsKey(type)){
             statistics.put(type,statistics.get(type) + value);
@@ -119,7 +130,10 @@ public class PlayerInfo {
             statistics.put(type,value);
         }
     }
-
+    /**
+     * 增加数据内容
+     * @param type 类型
+     * */
     public void addData(String type){
         if(statistics.containsKey(type)){
             statistics.put(type,statistics.get(type) + 1);
@@ -225,6 +239,7 @@ public class PlayerInfo {
 
     /**
      * 发送无前缀信息
+     * @param msg 提示文本
      * */
     public void sendTipMessage(String msg){
         if(getGameRoom() != null) {
@@ -236,6 +251,7 @@ public class PlayerInfo {
     }
     /**
      * 发送信息
+     * @param msg 发送的信息
      * */
     public void sendMessage(String msg){
         if(getGameRoom() != null) {
@@ -247,6 +263,7 @@ public class PlayerInfo {
     }
     /**
      * 发送音效
+     * @param sound 发送音效
      * */
     public void addSound(Sound sound){
         if(cancel || isLeave){
@@ -256,7 +273,8 @@ public class PlayerInfo {
     }
 
     /**
-     * 增加效果
+     * 增加药水效果
+     * @param effect 增加药水效果
      * */
     public void addEffect(Effect effect) {
         if(cancel || isLeave){
@@ -266,7 +284,10 @@ public class PlayerInfo {
     }
 
     /**
-     * 发送信息
+     * 发送可控时长的标题
+     * @param msg 标题内容
+     * @param time 标题持续时长
+     *
      * */
     public void sendTitle(String msg,int time){
         if(cancel || isLeave){
@@ -277,13 +298,16 @@ public class PlayerInfo {
         }
     }
     /**
-     * 发送信息
+     * 发送标题内容
+     * @param msg 标题内容
+     *
      * */
     public void sendTitle(String msg){
         sendTitle(msg,1);
     }
     /**
-     * 发送信息
+     * 发送小标题
+     * @param msg 小标题内容
      * */
     public void sendSubTitle(String msg){
         if(cancel || isLeave ){
@@ -294,6 +318,9 @@ public class PlayerInfo {
         }
     }
 
+    /**
+     * 移除计分板显示信息
+     * */
     public void removeScoreBoard(){
         if(gameRoom != null) {
             if (gameRoom.getScoreboards().containsKey(this)) {
@@ -306,22 +333,40 @@ public class PlayerInfo {
             }
         }
     }
+    /**
+     * 获取玩家是否死亡状态
+     * @return 是否死亡
+     * */
     public boolean  isDeath(){
         return  playerType == PlayerType.DEATH;
     }
-
+    /**
+     * 获取玩家是否为旁观状态
+     * @return 是否旁观
+     * */
     public boolean isWatch(){
         return  playerType == PlayerType.WATCH;
     }
 
+    /**
+     * 获取玩家是否在游戏房间内
+     * @return 是否在游戏房间
+     * */
     public boolean isInRoom(){
         return !cancel && !isLeave;
     }
-
+    /**
+     * 获取玩家是否在游戏内
+     * @return 是否在游戏内
+     * */
     public boolean isLive(){
         return !cancel && !isLeave && playerType != PlayerType.WATCH;
     }
 
+    /**
+     * 发送计分板内容
+     * @param message 计分板内容
+     * */
     public void sendScore(ScoreBoardMessage message){
         if(getPlayer() instanceof Player) {
             if (message == null || getPlayer() == null || !((Player) getPlayer()).isOnline()) {
@@ -354,29 +399,49 @@ public class PlayerInfo {
 
     }
 
+    /**
+     * 获取游戏房间
+     * @return 游戏房间
+     * */
     public GameRoom getGameRoom() {
         return gameRoom;
     }
 
 
+    /**
+     * 获取玩家是否离开游戏
+     * @return 是否离开游戏
+     * */
     public boolean isLeave() {
         return isLeave;
     }
 
+    /**
+     * 设置玩家游戏房间
+     * @param gameRoom 游戏房间
+     * */
     public void setGameRoom(GameRoom gameRoom) {
         this.gameRoom = gameRoom;
     }
-
+    /**
+     * 设置玩家当前状态
+     * @param playerType 玩家在游戏内状态{@link PlayerType}
+     * */
     public void setPlayerType(PlayerType playerType) {
         this.playerType = playerType;
     }
 
+    /**
+     * 获取玩家游戏状态
+     * @return 游戏状态
+     * */
     public PlayerType getPlayerType() {
         return playerType;
     }
 
     /**
-     * 发送信息
+     * 发送底部信息
+     * @param msg 发送的信息
      * */
     public void sendActionBar(String msg){
         if(cancel || isLeave){
@@ -388,7 +453,8 @@ public class PlayerInfo {
     }
 
     /**
-     * 发送信息
+     * 发送底部信息
+     * @param msg 发送的信息
      * */
     public void sendTip(String msg){
         if(cancel || isLeave){
@@ -401,13 +467,15 @@ public class PlayerInfo {
 
     /**
      * 发送强制信息
+     * @param msg 信息
      * */
     public void sendForceMessage(String msg){
         TotalManager.sendMessageToObject(msg, getPlayer());
     }
 
     /**
-     * 发送强制信息
+     * 发送强制标题信息
+     * @param msg 信息
      * */
     public void sendForceTitle(String msg){
         if(player instanceof Player){
@@ -416,7 +484,9 @@ public class PlayerInfo {
     }
 
     /**
-     * 发送强制信息
+     * 发送可控时长的强制标题信息
+     * @param msg 信息
+     * @param time 时长
      * */
     public void sendForceTitle(String msg,int time){
         if(player instanceof Player){
@@ -425,7 +495,8 @@ public class PlayerInfo {
     }
 
     /**
-     * 发送强制信息
+     * 发送强制的小标题信息
+     * @param msg 小标题信息
      * */
     public void sendForceSubTitle(String msg){
         if(player instanceof Player){
@@ -433,6 +504,9 @@ public class PlayerInfo {
         }
     }
 
+    /**
+     * 玩家复活的方法
+     * */
     public void spawn() {
         //TODO 玩家复活进入游戏
         //游戏刚开始也会进入这个方法
@@ -529,6 +603,10 @@ public class PlayerInfo {
         playerType = PlayerType.LEAVE;
     }
 
+    /**
+     * 设置玩家离开的状态
+     * @param leave 是否离开
+     * */
     public void setLeave(boolean leave) {
         isLeave = leave;
         if(leave){
@@ -544,10 +622,18 @@ public class PlayerInfo {
         }
     }
 
+    /**
+     * 修改玩家移动速度
+     * @param speed 移动速度
+     * */
     public void setMoveSpeed(float speed){
         player.setMovementSpeed(speed);
     }
 
+    /**
+     * 清空游戏内玩家背包，药水效果
+     * 还原玩家之前的背包内容
+     * */
     public void clear(){
         if(player instanceof Player){
             if(((Player) player).isOnline()){
@@ -604,7 +690,11 @@ public class PlayerInfo {
     private int spawnTime = 0;
 
     /**
-     * 表现形式不好看
+     * 格式化时间显示 将秒格式化显示
+     * （表现形式不好看）
+     * 建议使用 {@link FunctionManager}内提供的方法
+     * @param s 秒
+     * @return 格式化的时间
      * */
     @Deprecated
     public static String formatTime(int s){
@@ -623,6 +713,8 @@ public class PlayerInfo {
 
     /**
      * 此方法移植到{@link FunctionManager}
+     * @param s 秒
+     * @return 格式化的时间
      * */
     @Deprecated
     public static String formatTime1(int s){
@@ -630,6 +722,12 @@ public class PlayerInfo {
     }
 
 
+    /**
+     * 获取默认的计分板前缀内容
+     * （减少开发 反正要显示时间游戏模式人数之类的）
+     * @param isWait 房间是否为等待状态
+     * @return 计分板显示的内容
+     * */
     public ArrayList<String> getDefaultLoreTitle(boolean isWait){
         ArrayList<String> lore = new ArrayList<>();
         String levelName = TotalManager.getMenuRoomManager().getNameByRoom(gameRoom.getRoomConfig());
@@ -878,6 +976,7 @@ public class PlayerInfo {
 
     /**
      * 玩家死亡后的一些操作
+     * @param event 玩家被攻击的事件
      * */
     public void death(EntityDamageEvent event){
         boolean finalDeath = false;
@@ -996,6 +1095,7 @@ public class PlayerInfo {
 
     /**
      * 设置玩家生命次数
+     * @param health 生命次数
      * */
     public void setHealth(int health) {
         this.health = health;
@@ -1003,6 +1103,7 @@ public class PlayerInfo {
 
     /**
      * 获取玩家生命次数
+     * @return 生命次数
      * */
     public int getHealth() {
         return health;
@@ -1010,13 +1111,15 @@ public class PlayerInfo {
 
     /**
      * 增加玩家生命次数
+     *  @param health 生命次数
      * */
     public void addHealth(int health) {
         this.health += health;
     }
 
     /**
-     * 增加玩家生命次数
+     * 减少玩家生命次数
+     *  @param health 生命次数
      * */
     public void reduceHealth(int health) {
         if(this.health >= health){
@@ -1061,6 +1164,11 @@ public class PlayerInfo {
             teamInfo.getDefeatPlayers().add(this);
         }
     }
+
+    /**
+     * 玩家死亡后执行的提示文本
+     * @param event 伤害事件
+     * */
     public void echoPlayerDeathInfo(EntityDamageEvent event){
         if(event != null) {
 

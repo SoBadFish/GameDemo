@@ -39,7 +39,7 @@ import java.util.Random;
  * 创建游戏房间的类参考{@link GameRoomCreator}
  *
  * @author Sobadfish
- * @date 2022/9/12
+ * 2022/9/12
  */
 public class GameAdminCommand extends Command {
 

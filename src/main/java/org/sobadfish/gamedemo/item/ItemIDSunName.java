@@ -2180,17 +2180,18 @@ public enum ItemIDSunName {
      * @return 尝试解析并获取物品贴图路径
      */
     public static String UnknownToPath(String string) {
-        if (UnknownToID(string) != null)
+        if (UnknownToID(string) != null) {
             return getIDByPath(UnknownToID(string));
-        else
+        } else {
             return string;
+        }
     }
 
 
     /**
      * 获取所有项目
      *
-     * @return
+     * @return 获取所有内容
      */
     public static ArrayList<HashMap<String, Object>> getAll() {
         return All;

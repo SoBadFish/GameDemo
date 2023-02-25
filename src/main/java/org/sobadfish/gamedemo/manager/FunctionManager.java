@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * 这个方法封装着一些算法功能
  * @author Sobadfish
- * @date 2022/9/28
+ * 2022/9/28
  */
 public class FunctionManager {
 
@@ -22,6 +22,7 @@ public class FunctionManager {
      * @param size 总长度
      * @param hasDataChar 自定义有数据图案 ■
      * @param noDataChar 自定义无数据图案 □
+     * @return 画出来的线
      * */
     public static String drawLine(float progress,int size,String hasDataChar,String noDataChar){
         int l = (int) (size * progress);
@@ -44,7 +45,9 @@ public class FunctionManager {
     /**
      * 获取百分比
      * 保留两位有效数字
-     *
+     * @param n 当前值
+     * @param max 最大值
+     * @return 计算出的百分比
      * */
     public static double getPercent(int n,int max){
         double r = 0;
@@ -134,8 +137,8 @@ public class FunctionManager {
 
     /**
      * 将加载箱子内随机物品的配置文件
-     *
-     *
+     * @param itemList 配置文件中的物品参数
+     * @return 加载为实体类的Map
      * */
     public static Map<String, ItemConfig> buildItem(List<Map> itemList){
         LinkedHashMap<String,ItemConfig> configLinkedHashMap = new LinkedHashMap<>();
@@ -207,13 +210,6 @@ public class FunctionManager {
             }
         }
 
-//        if(value.length > 1){
-//            //自定义随机附魔格式
-//            //-1(代表无)~9 or -1,3,9 : 0 ~ 3 or 0,2,3
-//            String[] ench = value[1].split(":");
-//
-//        }
-
         return item;
 
     }
@@ -244,24 +240,19 @@ public class FunctionManager {
     }
 
 
-    /**
-     * 计算位移向量
-     * */
-    public static Vector3 k(Vector3 entity, Vector3 target,float speed, float force){
-        double x = entity.x - target.x;
-        double z = entity.z - target.z;
-        double distance = Math.sqrt(x * x + z * z);
-        x /= distance * force;
-        z /= distance * force;
-        Vector3 v3 = new Vector3(x, 0.3f, z);
-        return v3.multiply(speed).add(x,0.3f,z);
 
-
-    }
 
 
     /**
      * 击退逻辑实现
+     * @param entity 被击退的实体
+     * @param target 击退的实体
+     * @param speed 击退的速度
+     * @param force 击退的力道
+     * @param motionY 击退的高度
+     *
+     * @return 击退的向量
+     *
      * */
     public static Vector3 knockBack(Vector3 entity, Vector3 target,float speed, float force,float motionY){
         double x = entity.x - target.x;

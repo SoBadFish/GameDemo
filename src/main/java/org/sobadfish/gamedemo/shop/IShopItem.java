@@ -5,13 +5,14 @@ import org.sobadfish.gamedemo.room.GameRoom;
 
 /**
  * @author Sobadfish
- * @date 2023/2/6
+ *  2023/2/6
  */
 public interface IShopItem {
 
     /**
      * 被玩家点击
      * @param player 点击的玩家
+     * @param room 游戏房间
      * @return 是否成功触发
      * */
     boolean onClick(GameRoom room,Player player);

@@ -51,6 +51,7 @@ public class ThreadManager {
 
     /**
      * 获取当前线程池线程数量
+     * @return 线程的数量
      */
     public static int getScheduledSize() {
         return SCHEDULED.getPoolSize();
@@ -58,6 +59,7 @@ public class ThreadManager {
 
     /**
      * 获取当前活动的线程数量
+     * @return 正在进行的线程数量
      */
     public static int getScheduledActiveCount() {
         return SCHEDULED.getActiveCount();

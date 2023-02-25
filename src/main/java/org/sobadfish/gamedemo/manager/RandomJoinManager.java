@@ -32,6 +32,7 @@ public class RandomJoinManager {
 
     /**
      * 当玩家在房间内时，调用这个方法匹配房间
+     * @param info 玩家
      * */
     public void nextJoin(PlayerInfo info){
         //TODO 匹配下一局 程序分配
@@ -45,11 +46,20 @@ public class RandomJoinManager {
     /**
      * 调用这个匹配房间
      * 这个是进入匹配队列
+     * @param info 准备加入游戏房间的玩家
+     * @param name 游戏模式的名称
      * */
     public void join(PlayerInfo info, String name){
         join(info, name,false);
     }
 
+    /**
+     * 调用这个匹配房间
+     * 这个是进入匹配队列
+     * @param info 准备加入游戏房间的玩家
+     * @param name 游戏模式的名称
+     * @param isNext 当进入房间失败后，是否传送回主大厅地图
+     * */
     public void join(PlayerInfo info, String name,boolean isNext){
         if(info.getGameRoom() != null && info.getGameRoom().getType() != GameRoom.GameType.END){
             return;

@@ -29,17 +29,27 @@ public class TopItem {
     }
 
     /**
-     * 修复名称不匹配的BUG
+     * 获取排行榜展示的数据类型
+     * @return 数据类型
      * */
     public String getTopType() {
         return topType;
 
     }
 
+    /**
+     * 获取排行榜的位置
+     * @return 排行榜位置
+     * */
     public Position getPosition() {
         return WorldInfoConfig.getPositionByString(position);
     }
 
+    /**
+     * 设置排行榜标题
+     * @param title 标题
+     *
+     * */
     public void setTitle(String title) {
         this.title = title;
     }

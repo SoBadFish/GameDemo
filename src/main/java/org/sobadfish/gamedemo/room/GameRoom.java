@@ -37,7 +37,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * 小游戏房间信息
  * @author Sobadfish
- * @date 2022/9/9
+ *  2022/9/9
  */
 public class GameRoom {
 
@@ -124,6 +124,7 @@ public class GameRoom {
     /**
      * 获取事件控制器
      *
+     * @return 事件的控制器
      * */
     public EventControl getEventControl() {
         return eventControl;
@@ -467,6 +468,7 @@ public class GameRoom {
 
     /**
      * 还在游戏内的玩家
+     * @return 在游戏内的玩家列表
      * */
     public ArrayList<PlayerInfo> getInRoomPlayers(){
         ArrayList<PlayerInfo> t = new ArrayList<>();
@@ -503,6 +505,7 @@ public class GameRoom {
     }
     /**
      * 旁观者们
+     * @return 旁观的玩家列表
      * */
     public ArrayList<PlayerInfo> getWatchPlayers(){
         ArrayList<PlayerInfo> t = new ArrayList<>();
@@ -516,6 +519,7 @@ public class GameRoom {
 
     /**
      * 还在游戏内的存活玩家
+     * @return 在游戏中存活的玩家列表
      * */
     public ArrayList<PlayerInfo> getLivePlayers(){
         ArrayList<PlayerInfo> t = new ArrayList<>();
@@ -530,7 +534,8 @@ public class GameRoom {
 
 
     /**
-     * 仅阵亡玩家观看
+     * 将消息发送给阵亡的玩家
+     * @param msg 消息
      * */
     public void sendMessageOnDeath(String msg){
         ArrayList<PlayerInfo> deathPlayer = new ArrayList<>();
@@ -542,46 +547,83 @@ public class GameRoom {
         deathPlayer.forEach(dp -> dp.sendMessage(msg));
     }
 
-
+    /**
+     * 向游戏房间内全体玩家发送信息
+     * 这个信息不带前缀
+     * @param msg 文本信息
+     * */
     public void sendTipMessage(String msg){
         for(PlayerInfo info: getPlayerInfos()){
             info.sendTipMessage(msg);
         }
     }
 
+    /**
+     * 向游戏房间内的玩家发送信息，不包含退出房间的玩家
+     * 这个信息带前缀
+     * @param msg 文本信息
+     * */
     public void sendMessage(String msg){
         for(PlayerInfo info: getPlayerInfos()){
             info.sendMessage(msg);
         }
     }
 
+    /**
+     * 向游戏房间内全体玩家发送信息包含退出房间的玩家
+     * 这个信息带前缀
+     * @param msg 文本信息
+     * */
     public void sendFaceMessage(String msg){
         for(PlayerInfo info: getPlayerInfos()){
             info.sendForceMessage(msg);
         }
     }
+
+    /**
+     * 向游戏房间内全体玩家发送标题
+     * @param msg 标题信息
+     * */
     public void sendTitle(String msg){
         for(PlayerInfo info: getPlayerInfos()){
             info.sendTitle(msg);
         }
     }
+
+    /**
+     * 向游戏房间内全体玩家发送小标题
+     * @param msg 小标题信息
+     * */
     public void sendSubTitle(String msg){
         for(PlayerInfo info: getPlayerInfos()){
             info.sendSubTitle(msg);
         }
     }
+
+    /**
+     * 向游戏房间内全体玩家发送底部信息提示
+     * @param msg 提示信息
+     * */
     public void sendTip(String msg){
         for(PlayerInfo info: getPlayerInfos()){
             info.sendTip(msg);
         }
     }
 
+    /**
+     * 向游戏房间内全体玩家发送底部信息提示
+     * @param msg 提示信息
+     * */
     public void sendActionBar(String msg){
         for(PlayerInfo info: getPlayerInfos()){
             info.sendActionBar(msg);
         }
     }
 
+    /**
+     * 向游戏房间内全体玩家发送声音
+     * @param sound 声音
+     * */
     public void addSound(Sound sound){
         for(PlayerInfo info: getPlayerInfos()){
             info.addSound(sound);
@@ -589,7 +631,8 @@ public class GameRoom {
     }
 
     /**
-     * 全队BUFF
+     * 给予游戏房间内的全部玩家药水效果
+     * @param effect 药水效果
      * */
     public void addEffect(Effect effect){
         for(PlayerInfo info: getLivePlayers()){
@@ -599,6 +642,9 @@ public class GameRoom {
 
     /**
      * 玩家离开游戏
+     * @param info 玩家
+     * @param teleport 是否传送回主出生点
+     * @return 是否成功离开
      * */
     public boolean quitPlayerInfo(PlayerInfo info,boolean teleport){
         if(info != null) {
@@ -653,7 +699,9 @@ public class GameRoom {
         }
     }
 
-    /** 房间被实例化后 */
+    /**
+     * 房间状态更新方法
+     * */
     public void onUpdate(){
         if(close){
             return;
@@ -722,6 +770,8 @@ public class GameRoom {
     /**
      * 执行这个可以将游戏直接结束
      * 传入胜利的队伍
+     * @param teamInfo 队伍信息
+     * @param more 在单队伍模式中填写 false 在多队伍模式中填写 true
      * */
     public void gameEnd(TeamInfo teamInfo,boolean more){
         if(!more){
@@ -730,7 +780,6 @@ public class GameRoom {
         teamInfo.echoVictory();
         teamInfo.givePlayerAward();
         end();
-
 
 
     }
@@ -971,6 +1020,8 @@ public class GameRoom {
 
     /**
      * 房间是否为无团队模式
+     * 也就是房间中的队伍是多队伍还是单一队伍
+     * @return 是否为无团队
      * */
     public boolean isOnlyTeam(){
         return getRoomConfig().teamConfigs.size() == 1;
@@ -1048,6 +1099,9 @@ public class GameRoom {
 
     /**
      * 设置资源箱的物品
+     * @param size 箱子的格子数量
+     * @param block 可以存放物品的容器
+     * @return 箱子内物品
      * */
     public LinkedHashMap<Integer, Item> getRandomItem(int size, Block block){
         LinkedHashMap<Integer,Item> itemLinkedHashMap = new LinkedHashMap<>();
@@ -1069,6 +1123,11 @@ public class GameRoom {
 
     }
 
+    /**
+     * 根据容器方块获取对应的物品列表
+     * @param block 容器方块
+     * @return 物品列表
+     * */
     public List<Item> getRoundItems(Block block){
         if(roomConfig.items.containsKey(block.getId()+"")){
             return roomConfig.items.get(block.getId()+"").items;

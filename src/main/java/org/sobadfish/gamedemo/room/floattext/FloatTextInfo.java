@@ -35,6 +35,7 @@ public class FloatTextInfo {
     /**
      * 游戏房间内浮空字更新
      * @param room 游戏房间
+     * @return 是否成功更新
      * */
     public boolean stringUpdate(GameRoom room){
         //TODO 房间内浮空字更新

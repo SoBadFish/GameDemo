@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * @author Sobadfish
- * @date 2023/2/20
+ *  2023/2/20
  */
 public class KnockConfig {
 
