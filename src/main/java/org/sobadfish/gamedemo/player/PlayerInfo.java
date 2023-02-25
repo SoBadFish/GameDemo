@@ -710,14 +710,7 @@ public class PlayerInfo {
 
             lore.add("        ");
         }
-        Object obj = TotalManager.getConfig().get("game-logo");
-        if(obj instanceof List){
-            for(Object s : (List<?>)obj){
-                lore.add(s.toString());
-            }
-        }else{
-            lore.add(TotalManager.getConfig().getString("game-logo","&l&cT&6o&eC&ar&ba&9f&dt"));
-        }
+
         return lore;
     }
 
@@ -849,7 +842,15 @@ public class PlayerInfo {
                 boardMessage.setLore(getLore(playerType == PlayerType.WAIT));
             }
 
-
+            List<String> lore = boardMessage.getLore();
+            Object obj = TotalManager.getConfig().get("game-logo");
+            if(obj instanceof List){
+                for(Object s : (List<?>)obj){
+                    lore.add(s.toString());
+                }
+            }else{
+                lore.add(TotalManager.getConfig().getString("game-logo",""));
+            }
 
             sendScore(boardMessage);
         }else{

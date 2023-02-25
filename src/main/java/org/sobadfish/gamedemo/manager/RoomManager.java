@@ -706,10 +706,6 @@ public class RoomManager implements Listener {
                             Item ic = item.clone();
                             ic.setCount(1);
                             player.getInventory().removeItem(ic);
-//                            Block[] blocks = player.getLineOfSight(2);  // 这里的参数100表示最远搜索距离
-//                            Vector3 lastBlockPos = blocks[blocks.length - 1].getLocation();
-//                            Vector3 precisePos = lastBlockPos.add(player.getDirectionVector().multiply(0.5f));
-//                            Vector3 v3 = FunctionManager.k(precisePos,player,0.6f,2.0f);
                             CompoundTag nbt = new CompoundTag()
                                     .putList(new ListTag<DoubleTag>("Pos")
                                             .add(new DoubleTag("", player.x))
