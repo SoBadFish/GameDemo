@@ -732,16 +732,11 @@ public class RoomManager implements Listener {
                                             .add(new FloatTag("", (player.yaw > 180 ? 360 : 0) - (float) player.yaw))
                                             .add(new FloatTag("", (float) -player.pitch)));
 
-                            EntityTnt entityTnt = new EntityTnt(player.chunk,nbt,info,80);
+                            EntityTnt entityTnt = new EntityTnt(player.chunk,nbt,info,room.roomConfig.tntExplodeTime * 20);
                             entityTnt.spawnToAll();
-
-
                         }
-
                     }
-
                     Block block = event.getBlock();
-
                     if(room.roomConfig.items.size() > 0 && room.roomConfig.roundChest) {
                         if (room.getType() == GameType.START) {
                             ItemConfig config = room.getRandomItemConfig(block);
@@ -754,7 +749,6 @@ public class RoomManager implements Listener {
                                         ((InventoryHolder) entityChest).getInventory().setContents(items);
                                     }
                                 }
-
                             }
                         }
                     }

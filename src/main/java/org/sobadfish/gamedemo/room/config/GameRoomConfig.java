@@ -109,6 +109,11 @@ public class GameRoomConfig {
      * */
     public int tntDamage = 8;
 
+    /**
+     * TNT爆炸时间
+     * */
+    public int tntExplodeTime = 5;
+
 
     /**
      * 等待大厅拉回坐标
@@ -353,7 +358,7 @@ public class GameRoomConfig {
                 roomConfig.enableShop = room.getBoolean("enable-shop",false);
                 roomConfig.banCraft = room.getBoolean("ban-craft",false);
                 roomConfig.tntDamage = room.getInt("tntDamage",8);
-
+                roomConfig.tntExplodeTime = room.getInt("tntExplodeTime",5);
                 roomConfig.knockConfig.enable = room.getBoolean("kb-setting.enable",true);
                 roomConfig.knockConfig.force = (float) room.getDouble("kb-setting.force",0.4f);
                 roomConfig.knockConfig.speed = (float) room.getDouble("kb-setting.speed",0.5f);

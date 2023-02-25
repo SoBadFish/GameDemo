@@ -271,11 +271,7 @@ public class TotalManager {
         if(dataManager != null){
             dataManager.save();
         }
-//        if(roomManager != null){
-//            for (GameRoomConfig roomConfig: roomManager.getRoomConfigs()){
-//                roomConfig.save();
-//            }
-//        }
+
     }
 
 

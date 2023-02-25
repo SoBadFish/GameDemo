@@ -65,8 +65,6 @@ public class EntityTnt extends EntityProjectile implements EntityExplosive {
     protected int fuse;
 
 
-
-
     public PlayerInfo target;
 
     public EntityTnt(FullChunk fullChunk, CompoundTag compoundTag,PlayerInfo playerInfo,int fuse) {
@@ -76,18 +74,13 @@ public class EntityTnt extends EntityProjectile implements EntityExplosive {
         this.setNameTagVisible(true);
         this.setNameTagAlwaysVisible(true);
         resetNameTag();
+        this.setDataProperty(new IntEntityData(55, this.fuse));
+        this.getLevel().addLevelSoundEvent(this, 27);
     }
 
     @Override
     protected void initEntity() {
         super.initEntity();
-
-        if (namedTag.contains("Fuse")) {
-            fuse = namedTag.getByte("Fuse");
-        } else {
-            fuse = 80;
-        }
-
         this.setDataFlag(DATA_FLAGS, DATA_FLAG_IGNITED, true);
         this.setDataProperty(new IntEntityData(DATA_FUSE_LENGTH, fuse));
 
@@ -112,6 +105,9 @@ public class EntityTnt extends EntityProjectile implements EntityExplosive {
 
         updateMovement();
         fuse -= var2;
+        if (this.fuse % 5 == 0) {
+            this.setDataProperty(new IntEntityData(55, this.fuse));
+        }
         if (fuse <= 0) {
             if (this.level.getGameRules().getBoolean(GameRule.TNT_EXPLODES)) {
                 explode();

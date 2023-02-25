@@ -123,6 +123,7 @@ public class GameAdminCommand extends Command {
             commandSender.sendMessage(language.getLanguage("command-admin-end","/[1] end 停止模板预设",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-float","/[1] float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-cancel","/[1] cancel 终止房间创建",valueData));
+            commandSender.sendMessage(language.getLanguage("command-admin-reset","/[1] reset 重置房间配置文件",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-robot","/[1] robot [房间名称] [数量] 向游戏房间内增加测试机器人",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-top","/[1] top add/remove [名称] [类型] [房间(可不填)] 创建/删除排行榜",valueData));
             StringBuilder v = new StringBuilder(language.getLanguage("top-type","类型: "));
@@ -161,6 +162,14 @@ public class GameAdminCommand extends Command {
                     commandSender.sendMessage(language.getLanguage("do-not-console","请不要在控制台执行"));
                     return false;
                 }
+                break;
+            case "reset":
+                if(TotalManager.getRoomManager() != null){
+                    for (GameRoomConfig roomConfig: TotalManager.getRoomManager().getRoomConfigs()){
+                        roomConfig.save();
+                    }
+                }
+                commandSender.sendMessage("success");
                 break;
             case "back":
                 if(commandSender instanceof Player) {
