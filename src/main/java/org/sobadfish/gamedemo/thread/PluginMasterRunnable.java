@@ -103,13 +103,17 @@ public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
                 public void onRun() {
                     List<GameRoomConfig> bufferQueue = new ArrayList<>();
                     try {
+                        GameRoomConfig roomConfig;
                         for(Map.Entry<String,String> map: WorldResetManager.RESET_QUEUE.entrySet()){
-                            if (WorldInfoConfig.toPathWorld(map.getKey(), map.getValue())) {
-                                TotalManager.sendMessageToConsole("&a" + map.getKey() + " 地图已还原");
+                            roomConfig = TotalManager.getRoomManager().getRoomConfig(map.getKey());
+                            if(roomConfig != null && roomConfig.resetWorld) {
+                                if (WorldInfoConfig.toPathWorld(map.getKey(), map.getValue())) {
+                                    TotalManager.sendMessageToConsole("&a" + map.getKey() + " 地图已还原");
+                                }
+                                Server.getInstance().loadLevel(map.getValue());
+                                TotalManager.sendMessageToConsole("&r释放房间 " + map.getKey());
+                                TotalManager.sendMessageToConsole("&r房间 " + map.getKey() + " 已回收");
                             }
-                            Server.getInstance().loadLevel(map.getValue());
-                            TotalManager.sendMessageToConsole("&r释放房间 " + map.getKey());
-                            TotalManager.sendMessageToConsole("&r房间 " + map.getKey() + " 已回收");
                             bufferQueue.add(TotalManager.getRoomManager().getRoomConfig(map.getKey()));
                         }
                         //TODO 从列表中移除
