@@ -37,6 +37,12 @@ public class GameRoomConfig {
      * 游戏时长
      * */
     public int time;
+
+    /**
+     * 是否允许队伍内PVP
+     * */
+    public boolean pvp;
+
     /**
      * 等待时长
      * */
@@ -280,6 +286,14 @@ public class GameRoomConfig {
         return round;
     }
 
+    public boolean isPvp() {
+        return pvp;
+    }
+
+    public void setPvp(boolean pvp) {
+        this.pvp = pvp;
+    }
+
     public boolean isBanCraft() {
         return banCraft;
     }
@@ -341,6 +355,7 @@ public class GameRoomConfig {
                 roomConfig.gameInWait = room.getInt("gameInWait",10);
                 roomConfig.reSpawnTime = room.getInt("reSpawnTime",0);
                 roomConfig.reSpawnCount = room.getInt("reSpawnCount",0);
+                roomConfig.pvp = room.getBoolean("pvp",true);
                 roomConfig.banCommand = new ArrayList<>(room.getStringList("ban-command"));
                 roomConfig.isAutomaticNextRound = room.getBoolean("AutomaticNextRound",true);
                 roomConfig.quitRoomCommand = new ArrayList<>(room.getStringList("QuitRoom"));
@@ -485,6 +500,7 @@ public class GameRoomConfig {
         config.set("callbackY",callbackY);
         config.set("waitTime",waitTime);
         config.set("gameInWait",gameInWait);
+        config.set("pvp",pvp);
         config.set("reSpawnTime",reSpawnTime);
         LinkedHashMap<String,Object> moneyConfig = new LinkedHashMap<>();
         moneyConfig.put("enable",enableMoney);

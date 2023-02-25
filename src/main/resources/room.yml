@@ -7,6 +7,9 @@ callbackY: 17
 # 玩家复活时间 若设置-1则玩家无法复活
 reSpawnTime: 5
 
+# 队伍之间是否PVP
+pvp: true
+
 # 是否启用内置经济系统
 money:
   enable: false

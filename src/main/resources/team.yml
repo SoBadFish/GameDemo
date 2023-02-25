@@ -9,6 +9,8 @@ team:
     victoryWeight: 0
     # 团队永久Buff
     teamEffect: []
+    # 仅允许攻击的队伍
+    onlyDamageTeam: []
     # 自动分配
     maxPlayer: -1
     # 被击杀后金钱数量

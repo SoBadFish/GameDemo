@@ -5,10 +5,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.BlockColor;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /** 团队的基本数据
  * @author SoBadFish
@@ -37,6 +34,11 @@ public class TeamConfig {
      * 队伍初始物品
      * */
     private LinkedHashMap<Integer,Item> inventoryItem = new LinkedHashMap<>();
+
+    /**
+     * 限制队伍攻击其他队伍
+     * */
+    private List<String> onlyDamageTeam = new ArrayList<>();
 
 
     /**
@@ -150,6 +152,14 @@ public class TeamConfig {
         return blockWoolColor;
     }
 
+    public void setOnlyDamageTeam(List<String> onlyDamageTeam) {
+        this.onlyDamageTeam = onlyDamageTeam;
+    }
+
+    public List<String> getOnlyDamageTeam() {
+        return onlyDamageTeam;
+    }
+
     public BlockColor getRgb() {
         return rgb;
     }
@@ -213,6 +223,13 @@ public class TeamConfig {
         }
         if(map.containsKey("deathMoney")){
             teamConfig.setDeathMoney(Double.parseDouble(map.get("deathMoney").toString()));
+        }
+        if(map.containsKey("onlyDamageTeam")){
+            List<String> ts = new ArrayList<>();
+            for(Object obj: (List<?>)map.get("onlyDamageTeam")){
+                ts.add(obj.toString());
+            }
+            teamConfig.setOnlyDamageTeam(ts);
         }
         if(map.containsKey("teamEffect")){
             List<Effect> effect = new ArrayList<>();

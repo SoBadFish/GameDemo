@@ -613,11 +613,25 @@ public class RoomManager implements Listener {
                             TeamInfo t1 = playerInfo.getTeamInfo();
                             TeamInfo t2 = damageInfo.getTeamInfo();
                             if (t1 != null && t2 != null) {
-                                if (t1.getTeamConfig().getName().equalsIgnoreCase(t2.getTeamConfig().getName())) {
-                                    if(!t1.getTeamConfig().getTeamConfig().isCanPvp()) {
-                                        event.setCancelled();
-                                        return;
+                                if(room.roomConfig.isPvp()) {
+
+                                    if (t1.getTeamConfig().getName().equalsIgnoreCase(t2.getTeamConfig().getName())) {
+                                        if (!t1.getTeamConfig().getTeamConfig().isCanPvp()) {
+                                            event.setCancelled();
+                                            return;
+                                        }
+                                    } else {
+                                        List<String> tc = t2.getTeamConfig().getTeamConfig().getOnlyDamageTeam();
+                                        if (tc.size() > 0) {
+                                            if (!tc.contains(t1.getTeamConfig().getName())) {
+                                                event.setCancelled();
+                                                return;
+                                            }
+                                        }
                                     }
+                                }else{
+                                    event.setCancelled();
+                                    return;
                                 }
                             }
                             ///////////////// 阻止队伍PVP///////////////
