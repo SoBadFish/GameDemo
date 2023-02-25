@@ -27,19 +27,19 @@ public abstract class IGameRoomDlc {
      * 仅自定义游戏房间内的 onStart
      * @param room 游戏房间
      * */
-    public abstract void onGameUpdate(GameRoom room);
+    public void onGameUpdate(GameRoom room){}
 
     /**
      * 玩家状态更新
      * @param player 玩家
      * */
-    public abstract void onPlayerUpdate(PlayerInfo player);
+    public void onPlayerUpdate(PlayerInfo player){}
 
     /**
      * 游戏地图内的房间更新
      * @param room 地图
      * */
-    public abstract void onWorldUpdate(WorldInfo room);
+    public void onWorldUpdate(WorldInfo room){}
 
 
     /**
