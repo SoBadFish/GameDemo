@@ -858,7 +858,9 @@ public class GameRoom {
         }else{
             if(endJudge.judgeGameEnd(this)){
                 end();
+                return;
             }
+            demoGameEnd();
         }
 
         ////////////////////////// 示例算法 ///////////////////////////
