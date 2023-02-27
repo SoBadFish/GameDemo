@@ -25,22 +25,24 @@ import java.util.concurrent.TimeUnit;
 public class ThreadManager {
 
 
-    public static final List<AbstractBedWarRunnable> RUNNABLES = new CopyOnWriteArrayList<>();
+    public static final List<AbstractBedWarRunnable> RUNNABLE = new CopyOnWriteArrayList<>();
 
-    // 线程池核心线程数
-    private final static Integer CORE_POOLSIZE = 5;
+    /**
+     * 线程池数量
+     * */
+    private final static Integer CORE_POOL_SIZE = 5;
 
 
-    private static final ScheduledThreadPoolExecutor SCHEDULED = new ScheduledThreadPoolExecutor(CORE_POOLSIZE,new ThreadPoolExecutor.AbortPolicy());
+    private static final ScheduledThreadPoolExecutor SCHEDULED = new ScheduledThreadPoolExecutor(CORE_POOL_SIZE,new ThreadPoolExecutor.AbortPolicy());
 
 
     public static void cancel(AbstractBedWarRunnable r) {
-        RUNNABLES.remove(r);
+        RUNNABLE.remove(r);
         SCHEDULED.remove(r);
     }
 
     private static void schedule(AbstractBedWarRunnable r,int delay) {
-        RUNNABLES.add(r);
+        RUNNABLE.add(r);
         SCHEDULED.scheduleAtFixedRate(r,delay,1,TimeUnit.SECONDS);
     }
 
@@ -92,7 +94,7 @@ public class ThreadManager {
     private static Map<String,List<AbstractBedWarRunnable>> getRunnables(){
         LinkedHashMap<String, List<AbstractBedWarRunnable>> threadList = new LinkedHashMap<>();
 
-        for(AbstractBedWarRunnable workerValue: RUNNABLES) {
+        for(AbstractBedWarRunnable workerValue: RUNNABLE) {
             GameRoom room = workerValue.getRoom();
             if (room != null) {
                 if (!threadList.containsKey(room.getRoomConfig().name)) {
@@ -128,8 +130,16 @@ public class ThreadManager {
 
         public boolean isClose;
 
+        /**
+         * 游戏房间
+         * @return 房间
+         * */
         abstract public GameRoom getRoom();
 
+        /**
+         * 获取线程名称
+         * @return 线程名称
+         * */
         abstract public String getThreadName();
 
         public boolean isClose() {
@@ -161,7 +171,7 @@ public class ThreadManager {
                 isClose = true;
                 return;
             }
-            for (AbstractBedWarRunnable runnable : RUNNABLES) {
+            for (AbstractBedWarRunnable runnable : RUNNABLE) {
                 if (runnable.isClose) {
                     cancel(runnable);
                 }
