@@ -83,7 +83,7 @@ public class RoomManager implements Listener {
         return rooms;
     }
 
-    private Map<String, GameRoom> rooms = new LinkedHashMap<>();
+    private final Map<String, GameRoom> rooms = new LinkedHashMap<>();
 
     public boolean hasRoom(String room){
         return roomConfig.containsKey(room);

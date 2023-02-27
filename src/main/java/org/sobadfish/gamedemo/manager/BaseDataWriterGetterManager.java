@@ -2,6 +2,7 @@ package org.sobadfish.gamedemo.manager;
 
 import com.google.common.base.Throwables;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -61,7 +62,7 @@ public class BaseDataWriterGetterManager<T>{
     }
 
     public void save(){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         if(!file.exists()){
             try {
                 if(!file.createNewFile()){
@@ -72,6 +73,7 @@ public class BaseDataWriterGetterManager<T>{
             }
         }
         try {
+
             OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file));
             String json = gson.toJson(dataList);
             writer.write(json,0,json.length());

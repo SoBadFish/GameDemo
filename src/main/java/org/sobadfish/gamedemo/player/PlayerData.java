@@ -7,10 +7,7 @@ import org.sobadfish.gamedemo.event.PlayerLevelChangeEvent;
 import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 玩家数据
@@ -34,13 +31,28 @@ public class PlayerData {
 
     public PlayerData(){}
 
+    public Map<String,Integer> data = new LinkedHashMap<>();
 
     public List<RoomData> roomData = new ArrayList<>();
+
+
+
+    public int getDataByRoom(String room,String dataType){
+        for(RoomData data: roomData){
+            if(data.roomName.equalsIgnoreCase(room)){
+                return data.getInt(dataType);
+            }
+        }
+        return 0;
+    }
 
     public int getFinalData(String dataType){
         int c = 0;
         for(RoomData data: roomData){
             c += data.getInt(dataType);
+        }
+        if(data.containsKey(dataType)){
+            c += data.get(dataType);
         }
         return c;
     }
@@ -50,6 +62,12 @@ public class PlayerData {
             exp = 0;
         }
         return exp;
+    }
+
+
+
+    public List<RoomData> getRoomData() {
+        return roomData;
     }
 
     public String getName() {
