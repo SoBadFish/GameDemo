@@ -7,6 +7,7 @@ import org.sobadfish.gamedemo.command.GameAdminCommand;
 import org.sobadfish.gamedemo.command.GameCommand;
 import org.sobadfish.gamedemo.command.GameSpeakCommand;
 import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.proxy.ItemProxy;
 
 /**
 
@@ -31,6 +32,7 @@ public class GameDemoMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&e"));
         this.getLogger().info(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("version","&e正在加载[1] 插件 本版本为&av[2]"
                 ,TotalManager.GAME_NAME,this.getDescription().getVersion())));
+        ItemProxy.init();
 
         TotalManager.init(this);
         this.getServer().getCommandMap().register(TotalManager.GAME_NAME,new GameAdminCommand(TotalManager.COMMAND_ADMIN_NAME));
