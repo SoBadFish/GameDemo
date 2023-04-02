@@ -276,7 +276,7 @@ public class TeamConfig {
                     itemDamage = Integer.parseInt(s[1]);
                 }catch (Exception ignored){}
             }
-            int itemCount = 0;
+            int itemCount = 1;
             if(s.length > 2){
                 try {
                     itemCount = Integer.parseInt(s[2]);
