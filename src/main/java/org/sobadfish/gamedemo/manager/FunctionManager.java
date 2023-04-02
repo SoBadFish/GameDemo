@@ -180,7 +180,7 @@ public class FunctionManager {
         return items;
     }
 
-    private static Item stringToItem(String s){
+    public static Item stringToItem(String s){
         String[] sList = s.split(":");
         //tag物品截胡检测一下
         Item item = Item.get(0);

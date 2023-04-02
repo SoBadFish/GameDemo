@@ -4,6 +4,7 @@ package org.sobadfish.gamedemo.player.team.config;
 import cn.nukkit.item.Item;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.BlockColor;
+import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.proxy.ItemProxy;
 
 import java.util.*;
@@ -265,30 +266,7 @@ public class TeamConfig {
         LinkedHashMap<Integer,Item> items = new LinkedHashMap<>();
         int i = 0;
         for(Object o: list){
-            String[] s = o.toString().split(":");
-            int itemId = 0;
-            try{
-                itemId = Integer.parseInt(s[0]);
-            }catch (Exception ignored){}
-            int itemDamage = 0;
-            if(s.length > 1){
-                try {
-                    itemDamage = Integer.parseInt(s[1]);
-                }catch (Exception ignored){}
-            }
-            int itemCount = 1;
-            if(s.length > 2){
-                try {
-                    itemCount = Integer.parseInt(s[2]);
-                }catch (Exception ignored){}
-            }
-
-            Item item =  Item.get(itemId,itemDamage);
-            item.setCount(itemCount);
-
-            if(item.getId() > 0) {
-                items.put(i,item);
-            }
+            items.put(i++, FunctionManager.stringToItem(o.toString()));
             i++;
         }
         return items;
