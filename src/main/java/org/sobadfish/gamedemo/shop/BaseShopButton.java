@@ -1,6 +1,10 @@
 package org.sobadfish.gamedemo.shop;
 
+import cn.nukkit.Player;
+import org.sobadfish.gamedemo.player.PlayerInfo;
+import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.shop.items.ShopButton;
+import org.sobadfish.gamedemo.shop.items.ShopCommand;
 import org.sobadfish.gamedemo.shop.items.ShopItem;
 
 import java.util.Map;
@@ -29,6 +33,16 @@ public abstract class BaseShopButton implements IShopItem{
         return buttonType;
     }
 
+    public boolean reduce(GameRoom room, Player player){
+        PlayerInfo playerInfo = room.getPlayerInfo(player);
+        if(playerInfo != null) {
+            if (room.roomConfig.enableMoney) {
+                return room.roomConfig.moneyConfig.reduce(playerInfo, getInfo().price);
+            }
+        }
+        return true;
+    }
+
     public static BaseShopButton build(Map<?,?> config){
         if(config.containsKey("type")){
             ShopButtonType type;
@@ -43,6 +57,8 @@ public abstract class BaseShopButton implements IShopItem{
                     return ShopItem.build(config);
                 case BUTTON:
                     return ShopButton.build(config);
+                case COMMAND:
+                    return ShopCommand.build(config);
                 default:break;
             }
         }

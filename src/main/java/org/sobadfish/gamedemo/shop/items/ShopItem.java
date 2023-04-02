@@ -3,7 +3,6 @@ package org.sobadfish.gamedemo.shop.items;
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import org.sobadfish.gamedemo.manager.TotalManager;
-import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.shop.BaseShopButton;
 import org.sobadfish.gamedemo.shop.ButtonInfo;
@@ -33,16 +32,9 @@ public class ShopItem extends BaseShopButton {
 
     @Override
     public boolean onClick(GameRoom room, Player player){
-        PlayerInfo playerInfo = room.getPlayerInfo(player);
-        if(playerInfo != null){
-            if(room.roomConfig.enableMoney) {
-                if (!room.roomConfig.moneyConfig.reduce(playerInfo, info.price)) {
-                    return false;
-                }
-            }
+        if(reduce(room, player)) {
             player.getInventory().addItem(getItem());
             return true;
-
         }
         return false;
 

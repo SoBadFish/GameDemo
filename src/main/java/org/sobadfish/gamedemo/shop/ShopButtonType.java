@@ -12,5 +12,9 @@ public enum ShopButtonType {
     /**
      * 可以购买的物品
      * */
-    ITEM
+    ITEM,
+    /**
+     * 可以购买的指令
+     * */
+    COMMAND
 }

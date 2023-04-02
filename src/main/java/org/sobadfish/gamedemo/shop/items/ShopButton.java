@@ -4,7 +4,6 @@ import cn.nukkit.Player;
 import org.sobadfish.gamedemo.manager.ShopManager;
 import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
 import org.sobadfish.gamedemo.panel.from.GameFrom;
-import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.shop.BaseShopButton;
 import org.sobadfish.gamedemo.shop.ButtonInfo;
@@ -37,20 +36,14 @@ public class ShopButton extends BaseShopButton {
 
     @Override
     public boolean onClick(GameRoom room, Player player){
-        PlayerInfo playerInfo = room.getPlayerInfo(player);
-        if(playerInfo != null){
-            if(room.roomConfig.enableMoney){
-                if(!room.roomConfig.moneyConfig.reduce(playerInfo,getInfo().price)){
-                    return false;
-                }
-            }
+        if(reduce(room, player)) {
             GameFrom gameFrom = new GameFrom(getInfo().displayName, "");
-            ShopManager.addGameFromButton(room,gameFrom,menu);
-            DisPlayWindowsFrom.disPlayFrom(player,gameFrom);
+            ShopManager.addGameFromButton(room, gameFrom, menu);
+            DisPlayWindowsFrom.disPlayFrom(player, gameFrom);
             return true;
-
         }
         return false;
+
 
     }
 

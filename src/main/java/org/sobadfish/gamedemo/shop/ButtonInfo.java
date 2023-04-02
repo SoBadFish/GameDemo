@@ -26,8 +26,8 @@ public class ButtonInfo {
 
     public static ButtonInfo asInfo(Map<?,?> config){
         double price = 0;
-        if(config.containsKey("price")){
-            price = Double.parseDouble(config.get("price").toString());
+        if(config.containsKey("money")){
+            price = Double.parseDouble(config.get("money").toString());
         }
         String display = "";
         if(config.containsKey("display")){
