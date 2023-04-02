@@ -39,6 +39,11 @@ public class GameRoomConfig {
     public int time;
 
     /**
+     * 无限时间
+     * */
+    public boolean infiniteTime = false;
+
+    /**
      * 是否允许队伍内PVP
      * */
     public boolean pvp;
@@ -385,6 +390,7 @@ public class GameRoomConfig {
                 roomConfig.knockConfig.speed = (float) room.getDouble("kb-setting.speed",0.5f);
                 roomConfig.knockConfig.motionY = (float) room.getDouble("kb-setting.motionY",0.1f);
                 roomConfig.roomDlc = room.getStringList("enableDlc");
+                roomConfig.infiniteTime = room.getBoolean("infinite-time",false);
                 roomConfig.playerCutIn = room.getBoolean("player-cut-in",false);
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
@@ -503,7 +509,7 @@ public class GameRoomConfig {
         Config config = new Config(TotalManager.getDataFolder()+"/rooms/"+getName()+"/room.yml",Config.YAML);
         config.set("world",worldInfo.getLevel());
         config.set("gameTime",time);
-
+        config.set("infinite-time",infiniteTime);
         config.set("callbackY",callbackY);
         config.set("waitTime",waitTime);
         config.set("gameInWait",gameInWait);

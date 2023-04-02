@@ -931,24 +931,30 @@ public class GameRoom {
      * 这个方法的主要实现逻辑为 PVP，存活到最后为胜利条件
      * */
     private void demoGameEnd(){
+
         if(loadTime > 0) {
             //TODO 在房间倒计时内
-
-            if(getRoomConfig().teamConfigs.size() > 1) {
-                if (getLiveTeam().size() <= 1) {
-                    //当有多个队伍的时候 只剩余一个队伍时将这个队伍中所有的玩家都扔进 胜利的玩家列表。
-                    TeamInfo teamInfo = getLiveTeam().get(0);
-                    teamInfo.getVictoryPlayers().addAll(teamInfo.getTeamPlayers());
-                    gameEnd(teamInfo,true);
+            if(!roomConfig.infiniteTime) {
+                if (getRoomConfig().teamConfigs.size() > 1) {
+                    if (getLiveTeam().size() <= 1) {
+                        //当有多个队伍的时候 只剩余一个队伍时将这个队伍中所有的玩家都扔进 胜利的玩家列表。
+                        TeamInfo teamInfo = getLiveTeam().get(0);
+                        teamInfo.getVictoryPlayers().addAll(teamInfo.getTeamPlayers());
+                        gameEnd(teamInfo, true);
+                    }
+                } else {
+                    //当仅有一个队伍时，把最终存活的玩家放到胜利列表中
+                    TeamInfo teamInfo = getTeamInfos().get(0);
+                    ArrayList<PlayerInfo> pl = teamInfo.getLivePlayer();
+                    //判断是否为唯一幸存者
+                    if (pl.size() <= 1) {
+                        teamInfo.getVictoryPlayers().add(pl.get(0));
+                        gameEnd(teamInfo, false);
+                    }
                 }
             }else{
-                //当仅有一个队伍时，把最终存活的玩家放到胜利列表中
-                TeamInfo teamInfo = getTeamInfos().get(0);
-                ArrayList<PlayerInfo> pl = teamInfo.getLivePlayer();
-                //判断是否为唯一幸存者
-                if(pl.size() <= 1){
-                    teamInfo.getVictoryPlayers().add(pl.get(0));
-                    gameEnd(teamInfo,false);
+                if(getInRoomPlayers().size() == 0){
+                    end();
                 }
             }
         } else{

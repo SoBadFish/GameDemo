@@ -746,8 +746,9 @@ public class PlayerInfo {
                 lore.add("    ");
             }else{
 
+
                 lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-game-end","游戏结束: &a[1]",
-                        formatTime1(getGameRoom().loadTime)));
+                        gameRoom.roomConfig.infiniteTime?"":formatTime1(getGameRoom().loadTime)));
             }
         }
         return lore;

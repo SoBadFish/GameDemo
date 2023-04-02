@@ -72,7 +72,10 @@ public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
 
                 if (room.loadTime > 0) {
                     if (!room.getEventControl().hasEvent()) {
-                        room.loadTime--;
+                        if(!room.getRoomConfig().infiniteTime || room.getType() != GameRoom.GameType.START){
+                            room.loadTime--;
+                        }
+
                     }
                 }
                 try {
