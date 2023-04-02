@@ -62,6 +62,25 @@ QuitRoom: []
 # 房间结束后玩家是否自动匹配下一个游戏房间
 AutomaticNextRound: true
 
+#是否允许玩家中途加入
+player-cut-in: false
+
+# 后期版本加入
+# 玩家是否可以被其他玩家救起
+# 开启后复活时间将不再起作用
+# 开启后会出现尸体功能
+#player-help-respawn:
+#  enable: false
+#  # 多长时间没有玩家救起进入观战状态(秒)
+#  final-death-time: 60
+# # 救起时间(秒)
+#  help-time: 10
+#  # 救起后血量
+#  respawn-health: 10
+
+
+
+
 # 队伍/玩家取得胜利时执行的指令
 victoryCmd: []
 

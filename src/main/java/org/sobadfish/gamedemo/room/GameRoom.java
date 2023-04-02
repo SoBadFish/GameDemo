@@ -221,6 +221,7 @@ public class GameRoom {
         if(WorldResetManager.RESET_QUEUE.containsKey(roomConfig.name)){
             return JoinType.NO_JOIN;
         }
+        boolean cutIn = false;
         if(info.getGameRoom() == null){
             if(info.getPlayer() instanceof Player) {
                 if(!((Player) info.getPlayer()).isOnline()){
@@ -232,7 +233,16 @@ public class GameRoom {
                 if(getType() == GameType.END || getType() == GameType.CLOSE){
                     return JoinType.NO_JOIN;
                 }
-                return JoinType.CAN_WATCH;
+                if(roomConfig.playerCutIn){
+                    if(getRoomConfig().getMaxPlayerSize() > getInRoomPlayers().size()){
+                        cutIn = true;
+                    }else{
+                        return JoinType.CAN_WATCH;
+                    }
+                }else{
+                    return JoinType.CAN_WATCH;
+                }
+
             }
             if(getWorldInfo().getConfig().getGameWorld() == null || getWorldInfo().getConfig().getGameWorld().getSafeSpawn() == null){
                 return JoinType.NO_LEVEL;
@@ -256,31 +266,63 @@ public class GameRoom {
                 tag.putString("room",getRoomConfig().getName());
 
             }
-
-
             info.sendForceTitle("",1);
             info.sendForceSubTitle("");
-            sendMessage(TotalManager.getLanguage().getLanguage("player-join-room",
-                    "[1]&e加入了游戏 &7([2]/[3])"
-                    ,info.toString()
-                    ,(playerInfos.size()+1)+""
-                    ,(getRoomConfig().getMaxPlayerSize())+""));
+
             info.init();
-            if(roomConfig.teamConfigs.size() > 1) {
-                info.getPlayer().getInventory().setItem(6, ButtonItemManager.getItem(TeamChoseItem.class));
+            info.setGameRoom(this);
+            if(!cutIn) {
+                if (roomConfig.teamConfigs.size() > 1) {
+                    info.getPlayer().getInventory().setItem(6, ButtonItemManager.getItem(TeamChoseItem.class));
+
+                }
+                info.getPlayer().getInventory().setItem(8, ButtonItemManager.getItem(RoomQuitItem.class));
+                info.setPlayerType(PlayerInfo.PlayerType.WAIT);
+                info.getPlayer().teleport(getWorldInfo().getConfig().getWaitPosition());
+                if(info.getPlayer() instanceof Player) {
+                    ((Player)info.getPlayer()).setGamemode(2);
+                }
+                sendMessage(TotalManager.getLanguage().getLanguage("player-join-room",
+                        "[1]&e加入了游戏 &7([2]/[3])"
+                        ,info.toString()
+                        ,(playerInfos.size()+1)+""
+                        ,(getRoomConfig().getMaxPlayerSize())+""));
+            }else{
+                if (teamInfos.size() > 1) {
+                    //TODO 找到玩家最少的队伍
+                    int lowPlayer = 0;
+                    TeamInfo low = teamInfos.get(0);
+                    for(TeamInfo teamInfo: teamInfos){
+                        int size = teamInfo.getInRoomPlayer().size();
+                        if(lowPlayer == 0){
+                            lowPlayer = size;
+                        }
+                        if(size > 0 && lowPlayer >= size){
+                            low = teamInfo;
+                            lowPlayer = size;
+                        }
+                    }
+                    low.mjoin(info);
+                }else{
+                    TeamInfo teamInfo = teamInfos.get(0);
+                    teamInfo.mjoin(info);
+
+                }
+                sendMessage(TotalManager.getLanguage().getLanguage("player-cut-join-room",
+                        "[1]&e中途加入了游戏 &7([2]/[3])"
+                        ,info.toString()
+                        ,(playerInfos.size()+1)+""
+                        ,(getRoomConfig().getMaxPlayerSize())+""));
+                info.spawn();
 
             }
-            info.getPlayer().getInventory().setItem(8,ButtonItemManager.getItem(RoomQuitItem.class));
-            info.setPlayerType(PlayerInfo.PlayerType.WAIT);
-            info.setGameRoom(this);
+
             if(info.getPlayer() instanceof Player) {
                 TotalManager.getRoomManager().playerJoin.put(info.getPlayer().getName(),getRoomConfig().name);
             }
             playerInfos.add(info);
-            info.getPlayer().teleport(getWorldInfo().getConfig().getWaitPosition());
-            if(info.getPlayer() instanceof Player) {
-                ((Player)info.getPlayer()).setGamemode(2);
-            }
+
+
             if(isInit){
                 isInit = false;
             }
@@ -1096,7 +1138,6 @@ public class GameRoom {
             }
             //卸载区块就炸...
 //            level1.unloadChunks();
-            worldInfo.setClose(true);
             worldInfo = null;
             WorldResetManager.RESET_QUEUE.put(getRoomConfig().name, level);
         }else{

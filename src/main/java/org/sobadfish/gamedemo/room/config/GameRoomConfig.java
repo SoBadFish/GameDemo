@@ -120,6 +120,12 @@ public class GameRoomConfig {
      * */
     public int tntExplodeTime = 5;
 
+    /**
+     * 是否允许玩家中途加入房间
+     * */
+    public boolean playerCutIn = false;
+
+
 
     /**
      * 等待大厅拉回坐标
@@ -379,6 +385,7 @@ public class GameRoomConfig {
                 roomConfig.knockConfig.speed = (float) room.getDouble("kb-setting.speed",0.5f);
                 roomConfig.knockConfig.motionY = (float) room.getDouble("kb-setting.motionY",0.1f);
                 roomConfig.roomDlc = room.getStringList("enableDlc");
+                roomConfig.playerCutIn = room.getBoolean("player-cut-in",false);
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
@@ -511,6 +518,7 @@ public class GameRoomConfig {
         config.set("deathDrop",deathDrop);
         config.set("hasWatch",hasWatch);
         config.set("ban-craft",banCraft);
+        config.set("player-cut-in",playerCutIn);
         config.set("enable-food",enableFood);
         config.set("enable-shop",enableShop);
         config.set("tntDamage",tntDamage);

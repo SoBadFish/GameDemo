@@ -965,8 +965,9 @@ public class PlayerInfo {
     public enum PlayerType{
         /**
          * WAIT: 等待 START: 开始 DEATH: 死亡(等待复活)  LEAVE: 离开 WATCH 观察(真正的死亡)
+         * WAIT_HELP 等待救起状态
          * */
-        WAIT,START,DEATH,LEAVE,WATCH
+        WAIT,START,DEATH,LEAVE,WATCH,WAIT_HELP
     }
 
     @Override

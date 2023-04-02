@@ -21,6 +21,7 @@ team:
     teamSpawnCount: 0
     # 队伍中玩家复活的信息提示
     teamSpawnMessage: []
+
     # 背包内物品
     inventory:
       armor:

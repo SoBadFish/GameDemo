@@ -69,6 +69,11 @@ public class WorldInfo {
 
     public void setClose(boolean close) {
         isClose = close;
+        clickChest.clear();
+        for(GameFloatText gameFloatText: resetChestFloat.values()){
+            gameFloatText.toClose();
+        }
+        resetChestFloat.clear();
     }
 
     public void onChangeBlock(Block block, boolean isPlace){
@@ -94,6 +99,7 @@ public class WorldInfo {
         //TODO 地图更新 每秒更新一次 可实现一些定制化功能
 
         if(room.close){
+
             return;
         }
         //更新浮空字与箱子刷新
