@@ -233,16 +233,16 @@ public class GameRoom {
                 if(getType() == GameType.END || getType() == GameType.CLOSE){
                     return JoinType.NO_JOIN;
                 }
-                if(roomConfig.playerCutIn){
+                if(roomConfig.playerCutIn && !getPlayerInfos().contains(info)){
                     if(getRoomConfig().getMaxPlayerSize() > getInRoomPlayers().size()){
                         cutIn = true;
                     }else{
                         return JoinType.CAN_WATCH;
                     }
-                }else{
+                }
+                if(!cutIn) {
                     return JoinType.CAN_WATCH;
                 }
-
             }
             if(getWorldInfo().getConfig().getGameWorld() == null || getWorldInfo().getConfig().getGameWorld().getSafeSpawn() == null){
                 return JoinType.NO_LEVEL;
@@ -271,6 +271,10 @@ public class GameRoom {
 
             info.init();
             info.setGameRoom(this);
+            if(info.getPlayer() instanceof Player) {
+                TotalManager.getRoomManager().playerJoin.put(info.getPlayer().getName(),getRoomConfig().name);
+            }
+
             if(!cutIn) {
                 if (roomConfig.teamConfigs.size() > 1) {
                     info.getPlayer().getInventory().setItem(6, ButtonItemManager.getItem(TeamChoseItem.class));
@@ -278,6 +282,7 @@ public class GameRoom {
                 }
                 info.getPlayer().getInventory().setItem(8, ButtonItemManager.getItem(RoomQuitItem.class));
                 info.setPlayerType(PlayerInfo.PlayerType.WAIT);
+                playerInfos.add(info);
                 info.getPlayer().teleport(getWorldInfo().getConfig().getWaitPosition());
                 if(info.getPlayer() instanceof Player) {
                     ((Player)info.getPlayer()).setGamemode(2);
@@ -285,7 +290,7 @@ public class GameRoom {
                 sendMessage(TotalManager.getLanguage().getLanguage("player-join-room",
                         "[1]&e加入了游戏 &7([2]/[3])"
                         ,info.toString()
-                        ,(playerInfos.size()+1)+""
+                        ,(playerInfos.size())+""
                         ,(getRoomConfig().getMaxPlayerSize())+""));
             }else{
                 if (teamInfos.size() > 1) {
@@ -313,14 +318,11 @@ public class GameRoom {
                         ,info.toString()
                         ,(playerInfos.size()+1)+""
                         ,(getRoomConfig().getMaxPlayerSize())+""));
+                playerInfos.add(info);
                 info.spawn();
 
             }
 
-            if(info.getPlayer() instanceof Player) {
-                TotalManager.getRoomManager().playerJoin.put(info.getPlayer().getName(),getRoomConfig().name);
-            }
-            playerInfos.add(info);
 
 
             if(isInit){
@@ -328,6 +330,7 @@ public class GameRoom {
             }
 
         }else {
+            System.out.println("房间不为空?");
             if(info.getGameRoom().getType() != GameType.END && info.getGameRoom() == this){
                 return JoinType.NO_JOIN;
             }else{
@@ -1194,5 +1197,14 @@ public class GameRoom {
     }
 
 
-
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof GameRoom){
+            if(((GameRoom) obj).roomConfig == null || this.roomConfig == null){
+                return false;
+            }
+            return ((GameRoom) obj).roomConfig.equals(this.roomConfig);
+        }
+        return false;
+    }
 }

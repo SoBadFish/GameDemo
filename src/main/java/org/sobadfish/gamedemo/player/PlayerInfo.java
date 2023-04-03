@@ -58,6 +58,7 @@ public class PlayerInfo {
 
     public boolean isLeave;
 
+
     //记录信息
     public LinkedHashMap<String,Integer> statistics = new LinkedHashMap<>();
 

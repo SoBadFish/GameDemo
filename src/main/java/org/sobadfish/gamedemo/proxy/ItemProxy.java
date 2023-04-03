@@ -3,6 +3,7 @@ package org.sobadfish.gamedemo.proxy;
 import cn.nukkit.item.Item;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 由于pnx与其他版本的羊毛id不同
@@ -32,18 +33,29 @@ public class ItemProxy {
 
     }
 
+    public static String asNewWool(String id){
+        for(Map.Entry<String, String> dv: DICT.entrySet()){
+            if(dv.getValue().equalsIgnoreCase(id)){
+                return dv.getKey();
+            }
+
+        }
+        return null;
+    }
 
     public static Item getItem(String id){
         //检查核心是否为PNX
-        boolean isPnx = false;
-        try {
-            Class<?> c = Class.forName("cn.nukkit.Nukkit");
-            c.getField("CODENAME");
-            isPnx = true;
-        } catch (ClassNotFoundException | NoSuchFieldException ignore) {
-        }
+        boolean isNewVersion = false;
 
-        if(isPnx && DICT.containsKey(id)){
+        try {
+           Item i = Item.get(35,14);
+           if(i.getId() <= 0){
+               isNewVersion = true;
+           }
+        } catch (Exception e) {
+            isNewVersion = true;
+        }
+        if(isNewVersion && DICT.containsKey(id)){
             return Item.fromString(DICT.get(id));
         }
         return Item.fromString(id);

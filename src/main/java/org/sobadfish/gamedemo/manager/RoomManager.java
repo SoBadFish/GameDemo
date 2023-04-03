@@ -442,6 +442,7 @@ public class RoomManager implements Listener {
             if(info == null){
                 info = new PlayerInfo((Player) entity);
             }
+
             if (room != null) {
                 //不能阻止正常进入游戏
                 if(info.getPlayerType() == PlayerInfo.PlayerType.WAIT){
@@ -450,6 +451,10 @@ public class RoomManager implements Listener {
                     }
                 }else if(room.equals(info.getGameRoom())){
                     //断线重连
+                    return;
+                }
+                if(info.getGameRoom() != null && room.equals(info.getGameRoom())){
+                    //相同的房间就证明进入了等待大厅触发了传送事件
                     return;
                 }
                 if(info.getGameRoom() != null){

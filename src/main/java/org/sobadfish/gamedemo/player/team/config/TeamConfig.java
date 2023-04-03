@@ -267,7 +267,6 @@ public class TeamConfig {
         int i = 0;
         for(Object o: list){
             items.put(i++, FunctionManager.stringToItem(o.toString()));
-            i++;
         }
         return items;
     }
