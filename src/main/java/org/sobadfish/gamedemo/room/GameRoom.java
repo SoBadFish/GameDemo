@@ -251,13 +251,13 @@ public class GameRoom {
             PlayerJoinRoomEvent event = new PlayerJoinRoomEvent(info,this,TotalManager.getPlugin());
             event.setSend(sendMessage);
             Server.getInstance().getPluginManager().callEvent(event);
-
             if(event.isCancelled()){
                 return JoinType.NO_JOIN;
             }
             if(!eventToJoinPlayer(event)){
                 return JoinType.NO_JOIN;
             }
+
             if(info.getPlayer() instanceof Player) {
                 ((Player) info.getPlayer()).setFoodEnabled(false);
                 ((Player) info.getPlayer()).setGamemode(2);
@@ -330,7 +330,7 @@ public class GameRoom {
             }
 
         }else {
-            System.out.println("房间不为空?");
+
             if(info.getGameRoom().getType() != GameType.END && info.getGameRoom() == this){
                 return JoinType.NO_JOIN;
             }else{
@@ -371,13 +371,18 @@ public class GameRoom {
             }
         }
         if(gameRoom.getType() != GameRoom.GameType.WAIT){
+
             if(GameType.END != gameRoom.getType()){
-                //TODO 或许还能旁观
-                if(gameRoom.getRoomConfig().hasWatch){
+//                //TODO 中途加入
+                if(!gameRoom.roomConfig.playerCutIn){
                     event.setCancelled();
                     return false;
                 }
-
+//                if(!gameRoom.getRoomConfig().hasWatch){
+//                    event.setCancelled();
+//                    return false;
+//                }
+//
             }
             if(event.isSend()) {
                 info.sendForceMessage(TotalManager.language.getLanguage("player-join-in-room-started","&c游戏已经开始了"));

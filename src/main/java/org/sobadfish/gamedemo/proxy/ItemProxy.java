@@ -48,12 +48,11 @@ public class ItemProxy {
         boolean isNewVersion = false;
 
         try {
-           Item i = Item.get(35,14);
-           if(i.getId() <= 0){
-               isNewVersion = true;
-           }
-        } catch (Exception e) {
+            Class<?> c = Class.forName("cn.nukkit.Nukkit");
+            c.getField("CODENAME");
             isNewVersion = true;
+
+        } catch (Exception ignored) {
         }
         if(isNewVersion && DICT.containsKey(id)){
             return Item.fromString(DICT.get(id));
