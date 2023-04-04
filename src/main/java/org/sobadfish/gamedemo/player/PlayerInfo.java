@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
+import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
@@ -27,6 +28,7 @@ import org.sobadfish.gamedemo.event.PlayerGameDeathEvent;
 import org.sobadfish.gamedemo.item.button.OpenShopItem;
 import org.sobadfish.gamedemo.manager.ButtonItemManager;
 import org.sobadfish.gamedemo.manager.FunctionManager;
+import org.sobadfish.gamedemo.manager.SkinManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.message.ScoreBoardMessage;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
@@ -534,6 +536,16 @@ public class PlayerInfo {
         }
 
         player.getInventory().clearAll();
+        //设置皮肤
+        if(teamInfo != null ){
+            String skinName = teamInfo.getTeamConfig().getTeamConfig().skinName;
+            if(skinName != null && !"".equalsIgnoreCase(skinName)){
+                Skin skin = SkinManager.getSkinByName(skinName);
+                if(skin != null){
+                    player.setSkin(skin);
+                }
+            }
+        }
 
 
         boolean teleport;

@@ -21,6 +21,8 @@ team:
     teamSpawnCount: 0
     # 队伍中玩家复活的信息提示
     teamSpawnMessage: []
+    # 自定义皮肤文件
+    customSkin: ""
 
     # 背包内物品
     inventory:

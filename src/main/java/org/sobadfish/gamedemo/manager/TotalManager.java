@@ -187,6 +187,8 @@ public class TotalManager {
         }
         //TODO 初始化按键物品
         ButtonItemManager.init();
+        //TODO 初始化皮肤
+        SkinManager.init();
 
     }
     public static PlayerDataManager getDataManager() {

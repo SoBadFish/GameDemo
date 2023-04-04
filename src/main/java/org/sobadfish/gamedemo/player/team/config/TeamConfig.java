@@ -85,6 +85,11 @@ public class TeamConfig {
      * */
     public double deathMoney = 10;
 
+    /**
+     * 队伍自定义皮肤
+     * */
+    public String skinName = "";
+
 
     /**
      * 团队皮革衣服的颜色
@@ -162,6 +167,10 @@ public class TeamConfig {
         return onlyDamageTeam;
     }
 
+    public void setSkinName(String skinName) {
+        this.skinName = skinName;
+    }
+
     public BlockColor getRgb() {
         return rgb;
     }
@@ -225,6 +234,9 @@ public class TeamConfig {
         }
         if(map.containsKey("deathMoney")){
             teamConfig.setDeathMoney(Double.parseDouble(map.get("deathMoney").toString()));
+        }
+        if(map.containsKey("customSkin")){
+            teamConfig.setSkinName(map.get("customSkin").toString());
         }
         if(map.containsKey("onlyDamageTeam")){
             List<String> ts = new ArrayList<>();
