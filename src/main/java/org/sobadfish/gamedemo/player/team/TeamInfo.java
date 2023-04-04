@@ -254,7 +254,7 @@ public class TeamInfo {
                 d++;
             }
             for(Effect effect: getTeamConfig().getTeamConfig().getTeamEffect()){
-                effect.setDuration(20 * 5);
+                effect.setDuration(20 * 50);
                 info.addEffect(effect);
             }
         }
