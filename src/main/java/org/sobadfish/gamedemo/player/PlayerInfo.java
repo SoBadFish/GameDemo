@@ -874,7 +874,7 @@ public class PlayerInfo {
         if(damageByInfo != null){
 
             sendTip(TotalManager.getLanguage().getLanguage("player-attack-player-msg","[1]  &a[2] / [3]",
-                    damageByInfo.toString(),damageByInfo.getPlayer().getHealth()+"",
+                    damageByInfo.toString(),String.format("%.2f",damageByInfo.getPlayer().getHealth()),
                     damageByInfo.getPlayer().getMaxHealth()+""));
         }
 
