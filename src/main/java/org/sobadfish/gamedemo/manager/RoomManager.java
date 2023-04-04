@@ -541,7 +541,6 @@ public class RoomManager implements Listener {
         if(event.getEntity() instanceof EntityHuman){
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
             if(playerInfo != null) {
-
                 if (playerInfo.isWatch()) {
                     playerInfo.sendForceMessage(language.getLanguage("player-gamemode-3","&c你处于观察者模式"));
                     event.setCancelled();

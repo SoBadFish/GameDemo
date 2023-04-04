@@ -377,6 +377,8 @@ public class GameRoom {
                 if(!gameRoom.roomConfig.playerCutIn){
                     event.setCancelled();
                     return false;
+                }else{
+                    return true;
                 }
 //                if(!gameRoom.getRoomConfig().hasWatch){
 //                    event.setCancelled();
