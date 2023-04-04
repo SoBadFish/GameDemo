@@ -69,7 +69,12 @@ public class GameRoomConfig {
     /**
      * 满人等待时长
      * */
-    private int maxWaitTime;
+    public int maxWaitTime;
+
+    /**
+     * 是否允许玩家选择队伍
+     * */
+    public boolean playerChoseTeam = true;
 
     /**
      * 是否禁止合成
@@ -88,7 +93,7 @@ public class GameRoomConfig {
     /**
      * 最大人数
      * */
-    private int maxPlayerSize;
+    public int maxPlayerSize;
 
 
     //自动进入下一局
@@ -392,6 +397,7 @@ public class GameRoomConfig {
                 roomConfig.roomDlc = room.getStringList("enableDlc");
                 roomConfig.infiniteTime = room.getBoolean("infinite-time",false);
                 roomConfig.playerCutIn = room.getBoolean("player-cut-in",false);
+                roomConfig.playerChoseTeam = room.getBoolean("player-chose-team",true);
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
@@ -528,7 +534,7 @@ public class GameRoomConfig {
         config.set("enable-food",enableFood);
         config.set("enable-shop",enableShop);
         config.set("tntDamage",tntDamage);
-
+        config.set("player-chose-team",playerChoseTeam);
         config.set("max-player-waitTime",maxWaitTime);
         config.set("minPlayerSize",minPlayerSize);
         config.set("maxPlayerSize",maxPlayerSize);

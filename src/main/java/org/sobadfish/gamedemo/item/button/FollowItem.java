@@ -2,6 +2,7 @@ package org.sobadfish.gamedemo.item.button;
 
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
+import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.manager.TotalManager;
@@ -52,7 +53,9 @@ public class FollowItem implements ICustomItem {
 
     @Override
     public Item getItem() {
-        return Item.get(345);
+        Item i = Item.get(345);
+        i.addEnchantment(Enchantment.getEnchantment(0));
+        return i;
     }
 
     @Override

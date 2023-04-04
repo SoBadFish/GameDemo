@@ -5,6 +5,7 @@ import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.element.ElementButtonImageData;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.item.Item;
+import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.item.ItemIDSunName;
@@ -57,7 +58,9 @@ public class TeamChoseItem implements ICustomItem {
 
     @Override
     public Item getItem() {
-        return Item.get(69);
+        Item i = Item.get(69);
+        i.addEnchantment(Enchantment.getEnchantment(0));
+        return i;
     }
 
 

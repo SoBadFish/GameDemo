@@ -276,7 +276,7 @@ public class GameRoom {
             }
 
             if(!cutIn) {
-                if (roomConfig.teamConfigs.size() > 1) {
+                if (roomConfig.teamConfigs.size() > 1 && roomConfig.playerChoseTeam) {
                     info.getPlayer().getInventory().setItem(6, ButtonItemManager.getItem(TeamChoseItem.class));
 
                 }
@@ -979,25 +979,32 @@ public class GameRoom {
 
                     int pl = 0;
                     double dh = 0;
+
+                    int vw = 0;
                     successInfo = teamInfos.get(0);
                     for (TeamInfo info : teamInfos) {
                         //TODO 先找到权重高的
-                        if(info.getTeamConfig().getTeamConfig().victoryWeight > 0){
+                        if (info.getTeamConfig().getTeamConfig().victoryWeight > 0) {
+                            if(info.getTeamConfig().getTeamConfig().victoryWeight > vw){
+                                vw = info.getTeamConfig().getTeamConfig().victoryWeight;
+                            }
                             successInfo = info;
-                            break;
                         }
-
-                        ArrayList<PlayerInfo> successInfos = info.getLivePlayer();
-                        if (successInfos.size() > pl) {
-                            pl = successInfos.size();
-                            successInfo = info;
-                            dh = info.getAllHealth();
-
-                        }else if(successInfos.size() == pl && pl > 0){
-                            double dh2 = info.getAllHealth();
-                            if(dh2 > dh){
+                    }
+                    if(vw == 0){
+                        for (TeamInfo info : teamInfos) {
+                            ArrayList<PlayerInfo> successInfos = info.getLivePlayer();
+                            if (successInfos.size() > pl) {
+                                pl = successInfos.size();
                                 successInfo = info;
-                                dh = dh2;
+                                dh = info.getAllHealth();
+
+                            } else if (successInfos.size() == pl && pl > 0) {
+                                double dh2 = info.getAllHealth();
+                                if (dh2 > dh) {
+                                    successInfo = info;
+                                    dh = dh2;
+                                }
                             }
                         }
                     }

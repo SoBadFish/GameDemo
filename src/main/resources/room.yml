@@ -101,6 +101,8 @@ tntDamage: 8
 # TNT爆炸时间（秒）
 tntExplodeTime: 5
 
+# 是否允许玩家选择队伍
+player-chose-team: true
 
 # 是否允许箱子重置
 chest-can-reset: true

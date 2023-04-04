@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.item.button;
 
 import cn.nukkit.item.Item;
+import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.manager.TotalManager;
@@ -32,7 +33,9 @@ public class RoomQuitItem implements ICustomItem {
 
     @Override
     public Item getItem() {
-        return Item.get(324);
+        Item i = Item.get(324);
+        i.addEnchantment(Enchantment.getEnchantment(0));
+        return i;
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.sobadfish.gamedemo.item.button;
 import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemEndCrystal;
+import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.manager.TotalManager;
@@ -35,7 +36,9 @@ public class OpenShopItem implements ICustomItem {
 
     @Override
     public Item getItem() {
-        return new ItemEndCrystal();
+        Item i = new ItemEndCrystal();
+        i.addEnchantment(Enchantment.getEnchantment(0));
+        return i;
     }
 
     @Override
