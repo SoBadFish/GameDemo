@@ -60,6 +60,8 @@ public class PlayerInfo {
 
     public boolean isLeave;
 
+    public Skin lastSkin = null;
+
 
     //记录信息
     public LinkedHashMap<String,Integer> statistics = new LinkedHashMap<>();
@@ -542,6 +544,7 @@ public class PlayerInfo {
             if(skinName != null && !"".equalsIgnoreCase(skinName)){
                 Skin skin = SkinManager.getSkinByName(skinName);
                 if(skin != null){
+                    lastSkin = player.getSkin();
                     player.setSkin(skin);
                 }
             }
@@ -603,6 +606,12 @@ public class PlayerInfo {
     public void cancel(){
         leave();
 
+        //还原皮肤
+        if(player instanceof Player){
+            if(((Player) player).isOnline() && lastSkin != null){
+                player.setSkin(lastSkin);
+            }
+        }
         cancel = true;
         disable = true;
         if(getGameRoom() != null) {

@@ -28,6 +28,8 @@ public class TeamChoseItem implements ICustomItem {
         if(player.getPlayer() instanceof Player) {
             GameRoom room = player.getGameRoom();
             if(room != null) {
+                int usePlayer = room.roomConfig.maxPlayerSize;
+                int teamSize = room.getTeamInfos().size();
                 FormWindowSimple simple = new FormWindowSimple(TotalManager.getLanguage().getLanguage("player-chose-team", "请选择队伍"), "");
                 for (TeamInfo teamInfoConfig : room.getTeamInfos()) {
                     Item wool = teamInfoConfig.getTeamConfig().getTeamConfig().getBlockWoolColor();
@@ -42,7 +44,16 @@ public class TeamChoseItem implements ICustomItem {
                         damage = wool.getDamage();
                     }
 
-                    simple.addButton(new ElementButton(TextFormat.colorize('&', teamInfoConfig + " &r" + teamInfoConfig.getTeamPlayers().size() + " / " + (room.getRoomConfig().getMaxPlayerSize() / room.getTeamInfos().size())),
+                    int max;
+                    if(teamInfoConfig.getTeamConfig().getTeamConfig().maxPlayer > 0){
+                        max = teamInfoConfig.getTeamConfig().getTeamConfig().maxPlayer;
+                        usePlayer -= max;
+                        teamSize--;
+                    }else{
+                        max = (usePlayer / teamSize);
+                    }
+
+                    simple.addButton(new ElementButton(TextFormat.colorize('&', teamInfoConfig + " &r" + teamInfoConfig.getTeamPlayers().size() + " / " +max ),
                             new ElementButtonImageData("path",
                                     ItemIDSunName.getIDByPath(id,damage))));
                 }
