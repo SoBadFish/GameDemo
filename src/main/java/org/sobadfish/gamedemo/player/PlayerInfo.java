@@ -550,7 +550,12 @@ public class PlayerInfo {
 
         boolean teleport;
         try {
-            teleport = player.teleport(teamInfo.getSpawnLocation());
+            if(teamInfo != null){
+                teleport = player.teleport(teamInfo.getSpawnLocation());
+            }else{
+                teleport = false;
+            }
+
         }catch (Exception e){
             teleport = false;
         }
