@@ -22,7 +22,7 @@ public class TopItem {
 
 
     public TopItem(String name, PlayerData.DataType topType, Position position, String title){
-        this.topType = topType.toString();
+        this.topType = topType.getName();
         this.position = WorldInfoConfig.positionToString(position);
         this.name = name;
         this.title = title;
