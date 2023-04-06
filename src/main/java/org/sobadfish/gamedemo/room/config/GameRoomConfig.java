@@ -250,6 +250,10 @@ public class GameRoomConfig {
      * 经济配置
      * */
     public MoneyConfig moneyConfig = new MoneyConfig();
+    /**
+     * 倒地
+     * */
+    public PlayerHelperConfig playerHelperConfig = new PlayerHelperConfig();
 
 
 

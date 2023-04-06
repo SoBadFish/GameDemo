@@ -81,6 +81,10 @@ player-cut-in: false
 #  help-time: 10
 #  # 救起后血量
 #  respawn-health: 10
+#  # 倒地血量
+#  collapse-health: 10
+#  # 是否允许补刀
+#  can-last: true
 
 
 

@@ -35,6 +35,7 @@ import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
+import org.sobadfish.gamedemo.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -45,6 +46,8 @@ import java.util.*;
  * 2022/9/9
  */
 public class PlayerInfo {
+
+
 
     public EntityHuman player;
 
@@ -62,6 +65,7 @@ public class PlayerInfo {
 
     public Skin lastSkin = null;
 
+    public EntityDamageEvent causeCollapse;
 
     //记录信息
     public LinkedHashMap<String,Integer> statistics = new LinkedHashMap<>();
@@ -100,6 +104,11 @@ public class PlayerInfo {
      * 背包初始物品
      * */
     public LinkedHashMap<Integer,Item> inventoryItem = new LinkedHashMap<>();
+
+    /**
+     * 等待救起时间
+     * */
+    public int waitHelpTime;
 
 
     /**
@@ -518,6 +527,8 @@ public class PlayerInfo {
         if(playerType == PlayerType.WAIT){
             playerType = PlayerType.START;
         }
+        Utils.removeSitEntity(player);
+        player.setImmobile(false);
         if(isSendkey){
             isSendkey = false;
         }
@@ -605,6 +616,8 @@ public class PlayerInfo {
      * */
     public void cancel(){
         leave();
+        player.setImmobile(false);
+        Utils.removeSitEntity(player);
 
         //还原皮肤
         if(player instanceof Player){
@@ -866,6 +879,8 @@ public class PlayerInfo {
                 assistsPlayers.remove(entry.getKey());
             }
         }
+
+
         if(damageTime > 0){
             damageTime--;
         }else{
@@ -905,6 +920,16 @@ public class PlayerInfo {
             }
         }
 
+        if(playerType == PlayerType.WAIT_HELP){
+            if(waitHelpTime > 0){
+                waitHelpTime--;
+            }else{
+                if(waitHelpTime != -1) {
+                    waitHelpTime = -1;
+                    death(causeCollapse);
+                }
+            }
+        }
         //TODO 玩家更新线程
         if(playerType == PlayerType.START){
             //TODO 游戏开始后 可以弄一些buff
@@ -1008,6 +1033,24 @@ public class PlayerInfo {
     public void death(EntityDamageEvent event){
         boolean finalDeath = false;
         //TODO 玩家死亡后可以做一些逻辑处理
+        if(gameRoom.roomConfig.playerHelperConfig.enable && event.getCause() != EntityDamageEvent.DamageCause.VOID){
+            //开启倒地状态且不是因为虚空死亡
+            if(getPlayerType() != PlayerType.WAIT_HELP){
+                setPlayerType(PlayerType.WAIT_HELP);
+                waitHelpTime = gameRoom.roomConfig.playerHelperConfig.finalDeathTime;
+                player.setHealth(gameRoom.roomConfig.playerHelperConfig.collapseHealth);
+                Utils.sitDown(player,player.add(0,1).getLevelBlock());
+                causeCollapse = event;
+                player.setYaw(-90);
+                player.setImmobile(true);
+                return;
+            }
+
+        }
+        Utils.removeSitEntity(player);
+
+
+
         player.setHealth(player.getMaxHealth());
         if(player instanceof Player){
             ((Player) player).removeAllWindows();
@@ -1036,12 +1079,12 @@ public class PlayerInfo {
             cancel();
             return;
         }
-        if(health > 0){
+        if (health > 0) {
             health--;
-            sendMessage(TotalManager.getLanguage().getLanguage("player-respawn-health-count","&a你剩余 &e[1] &a条生命",
-                     health+""));
+            sendMessage(TotalManager.getLanguage().getLanguage("player-respawn-health-count", "&a你剩余 &e[1] &a条生命",
+                    health + ""));
             deathCanRespawn();
-        }else {
+        } else {
             if (gameRoom != null && gameRoom.roomConfig.reSpawnTime >= 0) {
                 int roomReSpawnCount = gameRoom.getRoomConfig().reSpawnCount;
                 if (roomReSpawnCount > 0) {
@@ -1055,9 +1098,9 @@ public class PlayerInfo {
 
                     }
                 } else {
-                    if(roomReSpawnCount == -1) {
+                    if (roomReSpawnCount == -1) {
                         deathCanRespawn();
-                    }else{
+                    } else {
                         finalDeath = true;
                     }
                 }
@@ -1065,6 +1108,8 @@ public class PlayerInfo {
                 finalDeath = true;
             }
         }
+
+
         if(getGameRoom().getWorldInfo().getConfig().getGameWorld() == null){
             cancel();
             return;
