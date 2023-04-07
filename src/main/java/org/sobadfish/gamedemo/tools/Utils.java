@@ -369,7 +369,7 @@ public class Utils {
         if (player.namedTag.getBoolean("Click")) {
             player.namedTag.remove("Click");
         }
-        player.teleport(player.getPosition().add(1,1,0));
+        player.teleport(player.getPosition().add(1,1,1));
     }
 
 

@@ -1029,8 +1029,12 @@ public class PlayerInfo {
                 return;
             }
         }
+
        if(helpInfo.helpPlayer != null && helpInfo.helpPlayer.getPlayer().distance(getPlayer()) <= 1.5 && getPlayer().isSneaking()){
            //TODO 开始扶起
+           if(helpInfo.helpPlayer.equals(this)){
+               return;
+           }
            if(helpInfo.helpPlayer.isWaitHelper()){
 
                if(helpInfo.loadTime < gameRoom.roomConfig.playerHelperConfig.helperTime) {
@@ -1069,19 +1073,21 @@ public class PlayerInfo {
         double dis = -1;
         PlayerInfo c = null;
         //找到最近的实体
-        for(PlayerInfo playerInfo: teamInfo.getWaitHelperPlayer()){
-            double va =  playerInfo.getPlayer().distance(getPlayer());
-            if(dis == -1) {
-                dis = va;
-                if(dis <= 1.5f) {
+        if(teamInfo !=null) {
+            for (PlayerInfo playerInfo : teamInfo.getWaitHelperPlayer()) {
+                double va = playerInfo.getPlayer().distance(getPlayer());
+                if (dis == -1) {
+                    dis = va;
+                    if (dis <= 1.5f) {
+                        c = playerInfo;
+                    }
+                }
+                if (va < dis && dis <= 1.5f) {
+                    dis = va;
                     c = playerInfo;
                 }
-            }
-            if(va < dis && dis <= 1.5f){
-                dis = va;
-                c = playerInfo;
-            }
 
+            }
         }
        return c;
 
@@ -1113,7 +1119,7 @@ public class PlayerInfo {
                 waitHelpTime = gameRoom.roomConfig.playerHelperConfig.finalDeathTime;
                 setPlayerType(PlayerType.WAIT_HELP);
                 player.setHealth(gameRoom.roomConfig.playerHelperConfig.collapseHealth);
-                Utils.sitDown(player,player.add(0,0.5).getLevelBlock());
+                Utils.sitDown(player,player.add(0,1).getLevelBlock());
                 causeCollapse = event;
                 player.setYaw(-90);
                 player.setImmobile(true);
