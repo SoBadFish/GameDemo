@@ -1110,8 +1110,8 @@ public class PlayerInfo {
         if(gameRoom.roomConfig.playerHelperConfig.enable && event.getCause() != EntityDamageEvent.DamageCause.VOID){
             //开启倒地状态且不是因为虚空死亡
             if(getPlayerType() != PlayerType.WAIT_HELP){
-                setPlayerType(PlayerType.WAIT_HELP);
                 waitHelpTime = gameRoom.roomConfig.playerHelperConfig.finalDeathTime;
+                setPlayerType(PlayerType.WAIT_HELP);
                 player.setHealth(gameRoom.roomConfig.playerHelperConfig.collapseHealth);
                 Utils.sitDown(player,player.add(0,1).getLevelBlock());
                 causeCollapse = event;
@@ -1190,8 +1190,10 @@ public class PlayerInfo {
         }
         player.teleport(teamInfo.getSpawnLocation());
         //防止共归于尽
-        if(finalDeath && gameRoom.getLivePlayers().size() == 1){
-            return;
+        if(!gameRoom.roomConfig.infiniteTime) {
+            if (finalDeath && gameRoom.getLivePlayers().size() == 1) {
+                return;
+            }
         }
         addData(PlayerData.DataType.DEATH.getName());
 

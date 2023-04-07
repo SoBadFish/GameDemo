@@ -608,6 +608,10 @@ public class RoomManager implements Listener {
                     if (entity instanceof EntityHuman) {
                         PlayerInfo damageInfo = room.getPlayerInfo((EntityHuman) entity);
                         if (damageInfo != null) {
+                            if(damageInfo.isWaitHelper()){
+                                event.setCancelled();
+                                return;
+                            }
                             if (damageInfo.isWatch()) {
                                 event.setCancelled();
                                 return;
