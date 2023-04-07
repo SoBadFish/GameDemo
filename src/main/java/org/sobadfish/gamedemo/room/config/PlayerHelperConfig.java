@@ -1,5 +1,8 @@
 package org.sobadfish.gamedemo.room.config;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * @author Sobadfish
  * @date 2023/4/6
@@ -35,6 +38,19 @@ public class PlayerHelperConfig {
      * 是否允许补刀
      * */
     public boolean canLast = true;
+
+
+    public Map<String, Object> saveConfig(){
+        Map<String, Object> config = new LinkedHashMap<>();
+        config.put("enable",enable);
+        config.put("final-death-time",finalDeathTime);
+        config.put("help-time",helperTime);
+        config.put("respawn-health",respawnHealth);
+        config.put("collapse-health",collapseHealth);
+        config.put("can-last",canLast);
+        return config;
+
+    }
 
 
 

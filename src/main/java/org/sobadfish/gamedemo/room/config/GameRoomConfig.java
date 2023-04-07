@@ -402,6 +402,15 @@ public class GameRoomConfig {
                 roomConfig.infiniteTime = room.getBoolean("infinite-time",false);
                 roomConfig.playerCutIn = room.getBoolean("player-cut-in",false);
                 roomConfig.playerChoseTeam = room.getBoolean("player-chose-team",true);
+                PlayerHelperConfig playerHelperConfig = new PlayerHelperConfig();
+                playerHelperConfig.enable = room.getBoolean("player-help-respawn.enable",false);
+                playerHelperConfig.finalDeathTime = room.getInt("player-help-respawn.final-death-time",60);
+                playerHelperConfig.helperTime = room.getInt("player-help-respawn.help-time",10);
+                playerHelperConfig.respawnHealth = room.getInt("player-help-respawn.respawn-health",10);
+                playerHelperConfig.collapseHealth = room.getInt("player-help-respawn.collapse-health",10);
+                playerHelperConfig.canLast = room.getBoolean("player-help-respawn.can-last",false);
+
+                roomConfig.playerHelperConfig = playerHelperConfig;
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
@@ -547,7 +556,7 @@ public class GameRoomConfig {
             teamSpawn.add(infoConfig.save());
         }
         config.set("teamSpawn",teamSpawn);
-
+        config.set("player-help-respawn",playerHelperConfig.saveConfig());
 
         config.set("waitPosition",WorldInfoConfig.positionToString(worldInfo.getWaitPosition()));
         config.set("ban-command",banCommand);
