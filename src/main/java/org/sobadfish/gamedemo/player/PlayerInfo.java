@@ -9,10 +9,7 @@ import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemColorArmor;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
-import cn.nukkit.level.Sound;
+import cn.nukkit.level.*;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.potion.Effect;
@@ -26,10 +23,7 @@ import org.sobadfish.gamedemo.dlc.IGamePlayerScoreBoard;
 import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.event.PlayerGameDeathEvent;
 import org.sobadfish.gamedemo.item.button.OpenShopItem;
-import org.sobadfish.gamedemo.manager.ButtonItemManager;
-import org.sobadfish.gamedemo.manager.FunctionManager;
-import org.sobadfish.gamedemo.manager.SkinManager;
-import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.manager.*;
 import org.sobadfish.gamedemo.player.message.ScoreBoardMessage;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
@@ -94,6 +88,8 @@ public class PlayerInfo {
 
     //内置经济系统
     public double money;
+
+    public HelpInfo helpInfo = new HelpInfo();
 
     //助攻
     public LinkedHashMap<PlayerInfo,Long> assistsPlayers = new LinkedHashMap<>();
@@ -376,6 +372,13 @@ public class PlayerInfo {
     public boolean isLive(){
         return !cancel && !isLeave && playerType != PlayerType.WATCH;
     }
+    /**
+     * 获取玩家是否倒地
+     * @return 是否在游戏内
+     * */
+    public boolean isWaitHelper(){
+        return !cancel && !isLeave && playerType == PlayerType.WAIT_HELP;
+    }
 
     /**
      * 发送计分板内容
@@ -542,7 +545,6 @@ public class PlayerInfo {
                 return;
             }
         }else{
-            TotalManager.sendMessageToConsole("实体重生");
             if(!player.isAlive()){
                 player.spawnToAll();
             }
@@ -880,6 +882,9 @@ public class PlayerInfo {
             }
         }
 
+        //TODO 救起过程
+        toHelperPlayer();
+
 
         if(damageTime > 0){
             damageTime--;
@@ -1010,6 +1015,75 @@ public class PlayerInfo {
                dlc.onPlayerUpdate(this);
             }
         }
+
+    }
+
+    private void toHelperPlayer() {
+        LanguageManager languageManager = TotalManager.getLanguage();
+        PlayerInfo playerInfo = helpInfo.helpPlayer;
+        if(playerInfo == null && getPlayer().isSneaking()){
+            playerInfo = getHelperPlayer();
+            if(playerInfo != null){
+                helpInfo.helpPlayer = playerInfo;
+            }else{
+                return;
+            }
+        }
+       if(helpInfo.helpPlayer != null && helpInfo.helpPlayer.getPlayer().distance(getPlayer()) <= 1.5 && getPlayer().isSneaking()){
+           //TODO 开始扶起
+           if(helpInfo.helpPlayer.isWaitHelper()){
+
+               if(helpInfo.loadTime < gameRoom.roomConfig.playerHelperConfig.helperTime) {
+                   sendTitle(languageManager.getLanguage("player-helping-title",
+                           "&a扶起中.."),5);
+                   sendSubTitle(languageManager.getLanguage("player-helping-sub-title",
+                           "&7正在扶起[1] 剩余 &2[2]&7秒",helpInfo.helpPlayer.toString(),
+                           (gameRoom.roomConfig.playerHelperConfig.helperTime - helpInfo.loadTime)+""));
+
+                   //TODO 还活着，没被补刀
+                   helpInfo.helpPlayer.sendTitle(languageManager.getLanguage("player-helping-target-title",
+                           "&2你正在被扶起.."), 5);
+                   helpInfo.helpPlayer.sendSubTitle(languageManager.getLanguage("player-helping-target-sub-title",
+                           "&7[1] 正在将你扶起", getPlayer().toString()));
+
+                   helpInfo.loadTime++;
+               }else{
+                   helpInfo.helpPlayer.setHealth(getGameRoom().roomConfig.playerHelperConfig.respawnHealth);
+                   helpInfo.helpPlayer.playerType = PlayerType.START;
+                   Utils.removeSitEntity(player);
+                   player.setImmobile(false);
+               }
+               //加点粒子
+               helpInfo.helpPlayer.getLevel().addParticleEffect( helpInfo.helpPlayer.getPlayer().add(0,1.2f),
+                       ParticleEffect.VILLAGER_HAPPY);
+
+           }else{
+               helpInfo.clear();
+           }
+       }else{
+           helpInfo.clear();
+       }
+    }
+
+    private PlayerInfo getHelperPlayer() {
+        double dis = -1;
+        PlayerInfo c = null;
+        //找到最近的实体
+        for(PlayerInfo playerInfo: teamInfo.getWaitHelperPlayer()){
+            double va =  playerInfo.getPlayer().distance(getPlayer());
+            if(dis == -1) {
+                dis = va;
+                if(dis <= 1.5f) {
+                    c = playerInfo;
+                }
+            }
+            if(va < dis && dis <= 1.5f){
+                dis = va;
+                c = playerInfo;
+            }
+
+        }
+       return c;
 
     }
 

@@ -532,6 +532,20 @@ public class GameRoom {
         return t;
     }
 
+    /**
+     * 获取等待救起的玩家
+     * @return 等待救起的玩家列表
+     * */
+    public ArrayList<PlayerInfo> getWaitHelperPlayers(){
+        ArrayList<PlayerInfo> t = new ArrayList<>();
+        for(PlayerInfo playerInfo: playerInfos){
+            if(playerInfo.isWaitHelper()){
+                t.add(playerInfo);
+            }
+        }
+        return t;
+    }
+
 
     public ArrayList<TeamInfo> getLiveTeam(){
         ArrayList<TeamInfo> t = new ArrayList<>();

@@ -141,6 +141,16 @@ public class TeamInfo {
         return playerInfos;
     }
 
+    public ArrayList<PlayerInfo> getWaitHelperPlayer(){
+        ArrayList<PlayerInfo> playerInfos = new ArrayList<>();
+        for(PlayerInfo playerInfo: getTeamPlayers()){
+            if(playerInfo.isWaitHelper()){
+                playerInfos.add(playerInfo);
+            }
+        }
+        return playerInfos;
+    }
+
     public ArrayList<PlayerInfo> getLivePlayer(){
         ArrayList<PlayerInfo> playerInfos = new ArrayList<>();
         for(PlayerInfo playerInfo: getTeamPlayers()){

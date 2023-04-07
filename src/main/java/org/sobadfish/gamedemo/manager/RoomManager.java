@@ -612,6 +612,13 @@ public class RoomManager implements Listener {
                                 event.setCancelled();
                                 return;
                             }
+                            //TODO 倒地补刀
+                            if(playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT_HELP){
+                                if(!room.roomConfig.playerHelperConfig.canLast){
+                                    event.setCancelled();
+                                    return;
+                                }
+                            }
                             ///////////////// 阻止队伍PVP///////////////
                             //TODO 阻止队伍PVP
                             TeamInfo t1 = playerInfo.getTeamInfo();
@@ -646,6 +653,7 @@ public class RoomManager implements Listener {
                     }
 
                 }
+
                 if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     event.setCancelled();
                     playerInfo.death(event);
