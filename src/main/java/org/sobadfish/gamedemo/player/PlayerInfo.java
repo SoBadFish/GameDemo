@@ -29,7 +29,6 @@ import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
-import org.sobadfish.gamedemo.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -530,7 +529,7 @@ public class PlayerInfo {
         if(playerType == PlayerType.WAIT){
             playerType = PlayerType.START;
         }
-        Utils.removeSitEntity(player);
+        player.setGliding(false);
         player.setImmobile(false);
         if(isSendkey){
             isSendkey = false;
@@ -619,7 +618,7 @@ public class PlayerInfo {
     public void cancel(){
         leave();
         player.setImmobile(false);
-        Utils.removeSitEntity(player);
+        player.setGliding(false);
 
         //还原皮肤
         if(player instanceof Player){
@@ -1054,8 +1053,9 @@ public class PlayerInfo {
                }else{
                    helpInfo.helpPlayer.setHealth(getGameRoom().roomConfig.playerHelperConfig.respawnHealth);
                    helpInfo.helpPlayer.playerType = PlayerType.START;
-                   Utils.removeSitEntity(player);
-                   player.setImmobile(false);
+                   helpInfo.helpPlayer.player.setGliding(false);
+                   helpInfo.helpPlayer.player.setImmobile(false);
+
                }
                //加点粒子
                helpInfo.helpPlayer.getLevel().addParticleEffect( helpInfo.helpPlayer.getPlayer().add(0,1.2f),
@@ -1119,7 +1119,7 @@ public class PlayerInfo {
                 waitHelpTime = gameRoom.roomConfig.playerHelperConfig.finalDeathTime;
                 setPlayerType(PlayerType.WAIT_HELP);
                 player.setHealth(gameRoom.roomConfig.playerHelperConfig.collapseHealth);
-                Utils.sitDown(player,player.add(0,1).getLevelBlock());
+                player.setGliding(true);
                 causeCollapse = event;
                 player.setYaw(-90);
                 player.setImmobile(true);
@@ -1127,7 +1127,8 @@ public class PlayerInfo {
             }
 
         }
-        Utils.removeSitEntity(player);
+        player.setGliding(false);
+
 
 
 

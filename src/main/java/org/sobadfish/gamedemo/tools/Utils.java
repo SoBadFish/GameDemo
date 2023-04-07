@@ -2,22 +2,18 @@ package org.sobadfish.gamedemo.tools;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.block.Block;
 import cn.nukkit.entity.BaseEntity;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityFirework;
 import cn.nukkit.item.ItemFirework;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
-import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.network.protocol.SetEntityLinkPacket;
 import cn.nukkit.utils.DyeColor;
-import org.sobadfish.gamedemo.entity.ChairEntity;
 import org.sobadfish.gamedemo.manager.TotalManager;
 
 import java.io.File;
@@ -313,64 +309,7 @@ public class Utils {
         }
 
     }
-    /**
-     * 生物坐下方法
-     * @author Champrin
-     * /
-     * Nukkit-ScientificGames
-     * */
-    public static void sitDown(Entity player, Block block) {
 
-        double x = block.getX();
-        double y = block.getY();
-        double z = block.getZ();
-
-        CompoundTag nbt = Entity.getDefaultNBT(new Vector3(x + 0.5, y, z + 0.4), new Vector3(0, 0, 0), 0, 0);
-
-        ChairEntity entity = new ChairEntity(player.chunk, nbt);
-        entity.spawnToAll();
-
-        SetEntityLinkPacket pk = new SetEntityLinkPacket();
-        pk.vehicleUniqueId = entity.getId();
-        pk.riderUniqueId = player.getId();
-        pk.type = 2;
-
-        SetEntityLinkPacket finalPk = pk;
-        Server.getInstance().getOnlinePlayers().forEach((uuid, p) -> {
-            p.dataPacket(finalPk);
-        });
-
-        pk = new SetEntityLinkPacket();
-        pk.vehicleUniqueId = entity.getId();
-        pk.riderUniqueId = 0;
-        pk.type = 2;
-        SetEntityLinkPacket finalPk1 = pk;
-        Server.getInstance().getOnlinePlayers().forEach((uuid, p) -> {
-            p.dataPacket(finalPk1);
-        });
-
-        removeSitEntity(player);
-        player.namedTag.putLong("Chair", entity.getId());
-
-    }
-
-    public static void removeSitEntity(Entity player) {
-        if (player.namedTag.getLong("Chair") != 0) {
-            Level level = player.getLevel();
-
-            Entity chairEntity = level.getEntity(player.namedTag.getLong("Chair"));
-
-            if (chairEntity != null && "Chair".equals(chairEntity.getName())) {
-                chairEntity.kill();
-                chairEntity.close();
-            }
-            player.namedTag.remove("Chair");
-        }
-        if (player.namedTag.getBoolean("Click")) {
-            player.namedTag.remove("Click");
-        }
-        player.teleport(player.getPosition().add(1,1,1));
-    }
 
 
 }
