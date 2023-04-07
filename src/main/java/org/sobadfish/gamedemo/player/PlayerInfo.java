@@ -1044,7 +1044,7 @@ public class PlayerInfo {
                    helpInfo.helpPlayer.sendTitle(languageManager.getLanguage("player-helping-target-title",
                            "&2你正在被扶起.."), 5);
                    helpInfo.helpPlayer.sendSubTitle(languageManager.getLanguage("player-helping-target-sub-title",
-                           "&7[1] 正在将你扶起", getPlayer().toString()));
+                           "&7[1] 正在将你扶起", this.toString()));
 
                    helpInfo.loadTime++;
                }else{
