@@ -1113,7 +1113,7 @@ public class PlayerInfo {
                 waitHelpTime = gameRoom.roomConfig.playerHelperConfig.finalDeathTime;
                 setPlayerType(PlayerType.WAIT_HELP);
                 player.setHealth(gameRoom.roomConfig.playerHelperConfig.collapseHealth);
-                Utils.sitDown(player,player.add(0,1).getLevelBlock());
+                Utils.sitDown(player,player.add(0,0.5).getLevelBlock());
                 causeCollapse = event;
                 player.setYaw(-90);
                 player.setImmobile(true);
