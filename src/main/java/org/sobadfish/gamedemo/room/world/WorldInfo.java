@@ -5,8 +5,8 @@ import cn.nukkit.block.Block;
 import cn.nukkit.level.Position;
 import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.entity.GameFloatText;
+import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
-import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 
@@ -52,7 +52,7 @@ public class WorldInfo {
                     WorldInfoConfig.positionToString(position),
                     position.add(0.5,1.25,0.5),
                     TotalManager.getLanguage().getLanguage("chest-reset-title","&7[&a[1]&7]",
-                            PlayerInfo.formatTime1((int) ((time - System.currentTimeMillis()) / 1000)))
+                            FunctionManager.formatTime((int) ((time - System.currentTimeMillis()) / 1000)))
             ));
         }
     }
@@ -121,7 +121,7 @@ public class WorldInfo {
                         int time = (int) ((chest.getValue() + room.getRoomConfig().chestResetTime * 1000L
                                 - System.currentTimeMillis()) / 1000);
                         String title = TotalManager.getLanguage().getLanguage("chest-reset-title","&7[&a[1]&7]",
-                                PlayerInfo.formatTime1(time));
+                                FunctionManager.formatTime(time));
                         GameFloatText gameFloatText = resetChestFloat.get(chest.getKey());
                         gameFloatText.setText(title);
                     }

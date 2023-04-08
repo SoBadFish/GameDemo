@@ -782,11 +782,11 @@ public class PlayerInfo {
         if(!isWait){
             IGameRoomEvent event = getGameRoom().getEventControl().getNextEvent();
             if(event != null){
-                lore.add(event.display()+" &a"+formatTime1(event.getEventTime() - getGameRoom().getEventControl().loadTime));
+                lore.add(event.display()+" &a"+FunctionManager.formatTime(event.getEventTime() - getGameRoom().getEventControl().loadTime));
                 lore.add("    ");
             }else{
                 lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-game-end","游戏结束: &a[1]",
-                        gameRoom.roomConfig.infiniteTime?"∞":formatTime1(getGameRoom().loadTime)));
+                        gameRoom.roomConfig.infiniteTime?"∞":FunctionManager.formatTime(getGameRoom().loadTime)));
             }
         }
         return lore;
@@ -851,7 +851,7 @@ public class PlayerInfo {
         return lore;
     }
 
-    private int loadTime = 0;
+    private final int loadTime = 0;
 
     private boolean isSendkey = false;
 

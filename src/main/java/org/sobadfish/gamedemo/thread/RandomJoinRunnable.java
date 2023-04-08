@@ -2,10 +2,7 @@ package org.sobadfish.gamedemo.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import org.sobadfish.gamedemo.manager.PlayerHasChoseRoomManager;
-import org.sobadfish.gamedemo.manager.RandomJoinManager;
-import org.sobadfish.gamedemo.manager.ThreadManager;
-import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.manager.*;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.WorldRoom;
@@ -86,7 +83,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
             return true;
         }
         info.sendForceTitle("&6匹配中",100);
-        info.sendSubTitle(PlayerInfo.formatTime1((int)(System.currentTimeMillis() - i.time) / 1000));
+        info.sendSubTitle(FunctionManager.formatTime((int)(System.currentTimeMillis() - i.time) / 1000));
 
         String input = i.name;
         ArrayList<String> names = TotalManager.getMenuRoomManager().getNames();
