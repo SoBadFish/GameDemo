@@ -1059,10 +1059,10 @@ public class PlayerInfo {
                        ParticleEffect.VILLAGER_HAPPY);
 
            }else{
-               helpInfo.clear();
+               helpInfo.clear(this);
            }
        }else{
-           helpInfo.clear();
+           helpInfo.clear(this);
        }
     }
 
@@ -1104,10 +1104,12 @@ public class PlayerInfo {
     }
 
     public void helperSuccess(){
-        helpInfo.helpPlayer.playerType = PlayerType.START;
-        helpInfo.helpPlayer.player.setGliding(false);
-        helpInfo.helpPlayer.player.setScale(1);
-        helpInfo.helpPlayer.player.setImmobile(false);
+        if(helpInfo != null && helpInfo.helpPlayer != null) {
+            helpInfo.helpPlayer.playerType = PlayerType.START;
+            helpInfo.helpPlayer.player.setGliding(false);
+            helpInfo.helpPlayer.player.setScale(1);
+            helpInfo.helpPlayer.player.setImmobile(false);
+        }
     }
 
     /**

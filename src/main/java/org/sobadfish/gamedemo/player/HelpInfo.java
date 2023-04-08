@@ -11,7 +11,11 @@ public class HelpInfo {
     public int loadTime = 0;
 
 
-    public void clear(){
+    public void clear(PlayerInfo playerInfo){
+        playerInfo.sendTitle("",1);
+        playerInfo.sendSubTitle("");
+        helpPlayer.sendTitle("",1);
+        helpPlayer.sendSubTitle("");
         helpPlayer = null;
         loadTime = 0;
     }
