@@ -529,8 +529,7 @@ public class PlayerInfo {
         if(playerType == PlayerType.WAIT){
             playerType = PlayerType.START;
         }
-        player.setGliding(false);
-        player.setImmobile(false);
+        helperSuccess();
         if(isSendkey){
             isSendkey = false;
         }
@@ -1052,9 +1051,7 @@ public class PlayerInfo {
                    helpInfo.loadTime++;
                }else{
                    helpInfo.helpPlayer.setHealth(getGameRoom().roomConfig.playerHelperConfig.respawnHealth);
-                   helpInfo.helpPlayer.playerType = PlayerType.START;
-                   helpInfo.helpPlayer.player.setGliding(false);
-                   helpInfo.helpPlayer.player.setImmobile(false);
+                   helperSuccess();
 
                }
                //加点粒子
@@ -1106,6 +1103,13 @@ public class PlayerInfo {
         return player.hashCode();
     }
 
+    public void helperSuccess(){
+        helpInfo.helpPlayer.playerType = PlayerType.START;
+        helpInfo.helpPlayer.player.setGliding(false);
+        helpInfo.helpPlayer.player.setScale(1);
+        helpInfo.helpPlayer.player.setImmobile(false);
+    }
+
     /**
      * 玩家死亡后的一些操作
      * @param event 玩家被攻击的事件
@@ -1121,13 +1125,14 @@ public class PlayerInfo {
                 player.setHealth(gameRoom.roomConfig.playerHelperConfig.collapseHealth);
                 player.setGliding(true);
                 causeCollapse = event;
+                player.setScale(-1);
                 player.setYaw(-90);
                 player.setImmobile(true);
                 return;
             }
 
         }
-        player.setGliding(false);
+        helperSuccess();
 
 
 
