@@ -535,7 +535,7 @@ public class PlayerInfo {
         if(playerType == PlayerType.WAIT){
             playerType = PlayerType.START;
         }
-        helperSuccess(this);
+        resetWaitHelper(this);
         if(isSendkey){
             isSendkey = false;
         }
@@ -1061,7 +1061,7 @@ public class PlayerInfo {
                    helpInfo.loadTime++;
                }else{
                    helpInfo.helpPlayer.setHealth(getGameRoom().roomConfig.playerHelperConfig.respawnHealth);
-                   helperSuccess(helpInfo.helpPlayer);
+                   resetWaitHelper(helpInfo.helpPlayer);
 
                }
                //加点粒子
@@ -1116,7 +1116,7 @@ public class PlayerInfo {
         return player.hashCode();
     }
 
-    public void helperSuccess(PlayerInfo playerInfo){
+    public void resetWaitHelper(PlayerInfo playerInfo){
 
         playerInfo.playerType = PlayerType.START;
         playerInfo.player.setGliding(false);
@@ -1148,7 +1148,7 @@ public class PlayerInfo {
 
         }
         if(helpInfo.helpPlayer != null){
-            helperSuccess(helpInfo.helpPlayer);
+            resetWaitHelper(helpInfo.helpPlayer);
         }
 
 
