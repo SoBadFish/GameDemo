@@ -1062,6 +1062,9 @@ public class PlayerInfo {
                helpInfo.clear(this);
            }
        }else{
+           if(helpInfo.helpPlayer == null){
+               return;
+           }
            helpInfo.clear(this);
        }
     }
