@@ -66,7 +66,7 @@ public class GameRoom {
 
     private final ArrayList<TeamInfo> teamInfos = new ArrayList<>();
 
-    private List<IGameRoomDlc> gameRoomDlc = new ArrayList<>();
+    private final List<IGameRoomDlc> gameRoomDlc = new ArrayList<>();
 
     /**
      * 地图配置
