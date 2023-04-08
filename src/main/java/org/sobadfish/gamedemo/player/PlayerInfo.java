@@ -535,7 +535,7 @@ public class PlayerInfo {
         if(playerType == PlayerType.WAIT){
             playerType = PlayerType.START;
         }
-        helperSuccess();
+        helperSuccess(this);
         if(isSendkey){
             isSendkey = false;
         }
@@ -627,6 +627,7 @@ public class PlayerInfo {
         leave();
         player.setImmobile(false);
         player.setGliding(false);
+        player.setScale(1);
 
         //还原皮肤
         if(player instanceof Player){
@@ -1060,7 +1061,7 @@ public class PlayerInfo {
                    helpInfo.loadTime++;
                }else{
                    helpInfo.helpPlayer.setHealth(getGameRoom().roomConfig.playerHelperConfig.respawnHealth);
-                   helperSuccess();
+                   helperSuccess(helpInfo.helpPlayer);
 
                }
                //加点粒子
@@ -1115,13 +1116,13 @@ public class PlayerInfo {
         return player.hashCode();
     }
 
-    public void helperSuccess(){
-        if(helpInfo != null && helpInfo.helpPlayer != null) {
-            helpInfo.helpPlayer.playerType = PlayerType.START;
-            helpInfo.helpPlayer.player.setGliding(false);
-            helpInfo.helpPlayer.player.setScale(1);
-            helpInfo.helpPlayer.player.setImmobile(false);
-        }
+    public void helperSuccess(PlayerInfo playerInfo){
+
+        playerInfo.playerType = PlayerType.START;
+        playerInfo.player.setGliding(false);
+        playerInfo.player.setScale(1);
+        playerInfo.player.setImmobile(false);
+
     }
 
     /**
@@ -1146,7 +1147,9 @@ public class PlayerInfo {
             }
 
         }
-        helperSuccess();
+        if(helpInfo.helpPlayer != null){
+            helperSuccess(helpInfo.helpPlayer);
+        }
 
 
 
