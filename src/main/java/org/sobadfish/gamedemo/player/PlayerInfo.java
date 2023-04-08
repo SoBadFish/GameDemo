@@ -21,6 +21,7 @@ import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
 import org.sobadfish.gamedemo.dlc.IGamePlayerScoreBoard;
 import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
+import org.sobadfish.gamedemo.entity.DeathBodyEntity;
 import org.sobadfish.gamedemo.event.PlayerGameDeathEvent;
 import org.sobadfish.gamedemo.item.button.OpenShopItem;
 import org.sobadfish.gamedemo.manager.*;
@@ -104,6 +105,11 @@ public class PlayerInfo {
      * 等待救起时间
      * */
     public int waitHelpTime;
+
+    /**
+     * 尸体
+     * */
+    public DeathBodyEntity deathBodyEntity = null;
 
 
     /**
@@ -532,6 +538,9 @@ public class PlayerInfo {
         helperSuccess();
         if(isSendkey){
             isSendkey = false;
+        }
+        if(deathBodyEntity != null){
+            deathBodyEntity.close();
         }
         if (player instanceof Player) {
             if(gameRoom.getRoomConfig().enableFood){
@@ -1205,6 +1214,13 @@ public class PlayerInfo {
             cancel();
             return;
         }
+        //传送前生成尸体
+        if(getGameRoom().roomConfig.deathBodyConfig.enable){
+            if(event != null && event.getCause() != EntityDamageEvent.DamageCause.VOID) {
+                deathBodyEntity = DeathBodyEntity.spawnBody(player, player.add(0, 0.5), gameRoom.roomConfig.deathBodyConfig.skin);
+            }
+        }
+
         player.teleport(teamInfo.getSpawnLocation());
         //防止共归于尽
         if(!gameRoom.roomConfig.infiniteTime) {

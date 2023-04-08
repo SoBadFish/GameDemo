@@ -254,6 +254,11 @@ public class GameRoomConfig {
      * 倒地
      * */
     public PlayerHelperConfig playerHelperConfig = new PlayerHelperConfig();
+    /**
+     * 尸体
+     * */
+    public DeathBodyConfig deathBodyConfig = new DeathBodyConfig();
+
 
 
 
@@ -411,6 +416,12 @@ public class GameRoomConfig {
                 playerHelperConfig.canLast = room.getBoolean("player-help-respawn.can-last",false);
 
                 roomConfig.playerHelperConfig = playerHelperConfig;
+
+                DeathBodyConfig deathBodyConfig = new DeathBodyConfig();
+                deathBodyConfig.enable = room.getBoolean("death-body.enable",false);
+                deathBodyConfig.skin = room.getString("death-body.skin","");
+                roomConfig.deathBodyConfig = deathBodyConfig;
+
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
@@ -557,7 +568,7 @@ public class GameRoomConfig {
         }
         config.set("teamSpawn",teamSpawn);
         config.set("player-help-respawn",playerHelperConfig.saveConfig());
-
+        config.set("death-body",deathBodyConfig.saveConfig());
         config.set("waitPosition",WorldInfoConfig.positionToString(worldInfo.getWaitPosition()));
         config.set("ban-command",banCommand);
         config.set("QuitRoom",quitRoomCommand);

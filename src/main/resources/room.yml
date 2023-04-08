@@ -69,10 +69,14 @@ AutomaticNextRound: true
 #是否允许玩家中途加入
 player-cut-in: false
 
+# 开启后会在玩家死亡的位置生成一个尸体
+# 若设置skin则模型以skin为准
+death-body:
+  enable: false
+  skin: ""
 
 # 玩家是否可以被其他玩家救起
 # 开启后复活时间将不再起作用
-# 开启后会出现尸体功能
 player-help-respawn:
   enable: false
   # 多长时间没有玩家救起进入死亡状态(秒)
@@ -85,6 +89,7 @@ player-help-respawn:
   collapse-health: 10
   # 是否允许补刀
   can-last: true
+
 
 
 

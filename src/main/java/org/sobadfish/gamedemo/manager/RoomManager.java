@@ -40,6 +40,7 @@ import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.entity.DamageFloatTextEntity;
+import org.sobadfish.gamedemo.entity.DeathBodyEntity;
 import org.sobadfish.gamedemo.entity.EntityTnt;
 import org.sobadfish.gamedemo.event.GameRoomCreateEvent;
 import org.sobadfish.gamedemo.item.ICustomItem;
@@ -538,6 +539,11 @@ public class RoomManager implements Listener {
      * */
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event){
+        if(event.getEntity() instanceof DeathBodyEntity){
+            //TODO 阻止伤害尸体事件
+            event.setCancelled();
+            return;
+        }
         if(event.getEntity() instanceof EntityHuman){
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
             if(playerInfo != null) {

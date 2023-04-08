@@ -25,12 +25,10 @@ import org.sobadfish.gamedemo.room.GameRoomCreator;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
 import org.sobadfish.gamedemo.room.floattext.FloatTextInfoConfig;
+import org.sobadfish.gamedemo.tools.Utils;
 import org.sobadfish.gamedemo.top.TopItem;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Random;
 
 /**
  *
@@ -223,16 +221,7 @@ public class GameAdminCommand extends Command {
                         Skin.initDefaultSkin();
                         skin = Skin.NO_PERSONA_SKIN;
                     }else{
-                        List<Player> pls = new ArrayList<>(Server.getInstance().getOnlinePlayers().values());
-                        skin = new Skin();
-                        if(pls.size() > 0) {
-                            Player pskin = pls.get(new Random().nextInt(pls.size()));
-                            skin = pskin.getSkin();
-
-                        }else{
-                            skin.setSkinData(new byte[Skin.SINGLE_SKIN_SIZE]);
-                        }
-
+                       skin = Utils.getDefaultSkin();
                     }
 
                     tag.putCompound("Skin",new CompoundTag()

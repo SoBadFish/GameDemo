@@ -119,7 +119,7 @@ public class SkinManager {
 
 
     }
-    public static String getGeometryName(File file) {
+    private static String getGeometryName(File file) {
         Config originGeometry = new Config(file, Config.JSON);
         if (!originGeometry.getString("format_version").equals("1.12.0") && !originGeometry.getString("format_version").equals("1.16.0")) {
             return "nullvalue";
