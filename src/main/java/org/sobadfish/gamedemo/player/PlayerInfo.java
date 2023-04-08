@@ -29,7 +29,6 @@ import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
-import org.sobadfish.gamedemo.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -530,7 +529,7 @@ public class PlayerInfo {
         if(playerType == PlayerType.WAIT){
             playerType = PlayerType.START;
         }
-        Utils.removeSitEntity(player);
+        player.setGliding(false);
         player.setImmobile(false);
         if(isSendkey){
             isSendkey = false;
@@ -619,7 +618,7 @@ public class PlayerInfo {
     public void cancel(){
         leave();
         player.setImmobile(false);
-        Utils.removeSitEntity(player);
+        player.setGliding(false);
 
         //还原皮肤
         if(player instanceof Player){
@@ -1029,8 +1028,12 @@ public class PlayerInfo {
                 return;
             }
         }
+
        if(helpInfo.helpPlayer != null && helpInfo.helpPlayer.getPlayer().distance(getPlayer()) <= 1.5 && getPlayer().isSneaking()){
            //TODO 开始扶起
+           if(helpInfo.helpPlayer.equals(this)){
+               return;
+           }
            if(helpInfo.helpPlayer.isWaitHelper()){
 
                if(helpInfo.loadTime < gameRoom.roomConfig.playerHelperConfig.helperTime) {
@@ -1044,14 +1047,15 @@ public class PlayerInfo {
                    helpInfo.helpPlayer.sendTitle(languageManager.getLanguage("player-helping-target-title",
                            "&2你正在被扶起.."), 5);
                    helpInfo.helpPlayer.sendSubTitle(languageManager.getLanguage("player-helping-target-sub-title",
-                           "&7[1] 正在将你扶起", getPlayer().toString()));
+                           "&7[1] 正在将你扶起", this.toString()));
 
                    helpInfo.loadTime++;
                }else{
                    helpInfo.helpPlayer.setHealth(getGameRoom().roomConfig.playerHelperConfig.respawnHealth);
                    helpInfo.helpPlayer.playerType = PlayerType.START;
-                   Utils.removeSitEntity(player);
-                   player.setImmobile(false);
+                   helpInfo.helpPlayer.player.setGliding(false);
+                   helpInfo.helpPlayer.player.setImmobile(false);
+
                }
                //加点粒子
                helpInfo.helpPlayer.getLevel().addParticleEffect( helpInfo.helpPlayer.getPlayer().add(0,1.2f),
@@ -1069,19 +1073,21 @@ public class PlayerInfo {
         double dis = -1;
         PlayerInfo c = null;
         //找到最近的实体
-        for(PlayerInfo playerInfo: teamInfo.getWaitHelperPlayer()){
-            double va =  playerInfo.getPlayer().distance(getPlayer());
-            if(dis == -1) {
-                dis = va;
-                if(dis <= 1.5f) {
+        if(teamInfo !=null) {
+            for (PlayerInfo playerInfo : teamInfo.getWaitHelperPlayer()) {
+                double va = playerInfo.getPlayer().distance(getPlayer());
+                if (dis == -1) {
+                    dis = va;
+                    if (dis <= 1.5f) {
+                        c = playerInfo;
+                    }
+                }
+                if (va < dis && dis <= 1.5f) {
+                    dis = va;
                     c = playerInfo;
                 }
-            }
-            if(va < dis && dis <= 1.5f){
-                dis = va;
-                c = playerInfo;
-            }
 
+            }
         }
        return c;
 
@@ -1110,10 +1116,10 @@ public class PlayerInfo {
         if(gameRoom.roomConfig.playerHelperConfig.enable && event.getCause() != EntityDamageEvent.DamageCause.VOID){
             //开启倒地状态且不是因为虚空死亡
             if(getPlayerType() != PlayerType.WAIT_HELP){
-                setPlayerType(PlayerType.WAIT_HELP);
                 waitHelpTime = gameRoom.roomConfig.playerHelperConfig.finalDeathTime;
+                setPlayerType(PlayerType.WAIT_HELP);
                 player.setHealth(gameRoom.roomConfig.playerHelperConfig.collapseHealth);
-                Utils.sitDown(player,player.add(0,1).getLevelBlock());
+                player.setGliding(true);
                 causeCollapse = event;
                 player.setYaw(-90);
                 player.setImmobile(true);
@@ -1121,7 +1127,8 @@ public class PlayerInfo {
             }
 
         }
-        Utils.removeSitEntity(player);
+        player.setGliding(false);
+
 
 
 
@@ -1190,8 +1197,10 @@ public class PlayerInfo {
         }
         player.teleport(teamInfo.getSpawnLocation());
         //防止共归于尽
-        if(finalDeath && gameRoom.getLivePlayers().size() == 1){
-            return;
+        if(!gameRoom.roomConfig.infiniteTime) {
+            if (finalDeath && gameRoom.getLivePlayers().size() == 1) {
+                return;
+            }
         }
         addData(PlayerData.DataType.DEATH.getName());
 
