@@ -30,6 +30,7 @@ import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.event.IGameRoomEvent;
+import org.sobadfish.gamedemo.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -565,6 +566,9 @@ public class PlayerInfo {
                 Skin skin = SkinManager.getSkinByName(skinName);
                 if(skin != null){
                     lastSkin = player.getSkin();
+                    if(lastSkin == null){
+                        lastSkin = Utils.getDefaultSkin();
+                    }
                     player.setSkin(skin);
                 }
             }
@@ -625,9 +629,7 @@ public class PlayerInfo {
      * */
     public void cancel(){
         leave();
-        player.setImmobile(false);
-        player.setGliding(false);
-        player.setScale(1);
+
 
         //还原皮肤
         if(player instanceof Player){
@@ -692,6 +694,12 @@ public class PlayerInfo {
                 player.setMovementSpeed(speed);
                 player.getEnderChestInventory().clearAll();
                 ((Player) player).getFoodData().reset();
+                player.setGliding(false);
+                player.setScale(1);
+                player.setImmobile(false);
+                if(lastSkin != null){
+                    player.setSkin(lastSkin);
+                }
                 player.setHealth(player.getMaxHealth());
                 ((Player) player).setExperience(0,0);
                 if(inventory != null && eInventory != null){
