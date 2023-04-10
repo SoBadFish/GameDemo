@@ -1151,6 +1151,11 @@ public class PlayerInfo {
                 player.setScale(-1);
                 player.setYaw(-90);
                 player.setImmobile(true);
+                if(teamInfo != null){
+                    teamInfo.sendMessage(TotalManager.getLanguage().getLanguage("player-help-remind"
+                            ,"&c[1]倒地了，&e在他附近潜行即可救起",
+                            this.toString()));
+                }
                 return;
             }
 
