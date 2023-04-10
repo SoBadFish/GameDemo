@@ -1160,8 +1160,6 @@ public class PlayerInfo {
         }
 
 
-
-
         player.setHealth(player.getMaxHealth());
         if(player instanceof Player){
             ((Player) player).removeAllWindows();

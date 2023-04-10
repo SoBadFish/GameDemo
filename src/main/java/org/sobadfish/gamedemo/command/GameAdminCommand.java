@@ -16,7 +16,6 @@ import org.sobadfish.gamedemo.item.tag.TagItem;
 import org.sobadfish.gamedemo.manager.LanguageManager;
 import org.sobadfish.gamedemo.manager.ThreadManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
-import org.sobadfish.gamedemo.panel.lib.AbstractFakeInventory;
 import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
@@ -120,6 +119,7 @@ public class GameAdminCommand extends Command {
             commandSender.sendMessage(language.getLanguage("command-admin-exp","/[1] exp [玩家] [数量] <由来> 增加玩家经验",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-status","/[1] status 查看线程状态",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-end","/[1] end 停止模板预设",valueData));
+
             commandSender.sendMessage(language.getLanguage("command-admin-float","/[1] float add/remove [房间名称] [名称] [文本] 在脚下设置浮空字/删除浮空字",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-cancel","/[1] cancel 终止房间创建",valueData));
             commandSender.sendMessage(language.getLanguage("command-admin-reset","/[1] reset 重置房间配置文件",valueData));
@@ -208,22 +208,7 @@ public class GameAdminCommand extends Command {
                 for(int i = 0; i < count; i++){
                     Position pos = roomConfig.getWorldInfo().getWaitPosition();
                     CompoundTag tag = EntityHuman.getDefaultNBT(pos);
-                    Skin skin;
-                    boolean c = true;
-                    Class<Skin> sl = Skin.class;
-                    try {
-                        sl.getMethod("initDefaultSkin");
-                    } catch (NoSuchMethodException e) {
-                        c = false;
-                    }
-                    if(AbstractFakeInventory.IS_PM1E && c) {
-
-                        Skin.initDefaultSkin();
-                        skin = Skin.NO_PERSONA_SKIN;
-                    }else{
-                       skin = Utils.getDefaultSkin();
-                    }
-
+                    Skin skin = Utils.getDefaultSkin();
                     tag.putCompound("Skin",new CompoundTag()
                             .putByteArray("Data", skin.getSkinData().data)
                             .putString("ModelId",skin.getSkinId())
@@ -242,12 +227,7 @@ public class GameAdminCommand extends Command {
                     entityHuman.setSkin(skin);
                     entityHuman.spawnToAll();
                     TotalManager.getRoomManager().joinRoom(new PlayerInfo(entityHuman), roomName);
-
-
-
-
                 }
-
                 break;
             case "exp":
                 if(strings.length < 3){
