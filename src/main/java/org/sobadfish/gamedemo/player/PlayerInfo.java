@@ -1148,11 +1148,11 @@ public class PlayerInfo {
                 waitHelpTime = gameRoom.roomConfig.playerHelperConfig.finalDeathTime;
                 setPlayerType(PlayerType.WAIT_HELP);
                 player.setHealth(gameRoom.roomConfig.playerHelperConfig.collapseHealth);
-                player.setGliding(true);
-                player.teleport(player.getLocation().add(0,0.8f));
+                player.teleport(player.getLocation().add(0,0.3f));
                 causeCollapse = event;
                 player.setScale(-1);
                 player.setYaw(-90);
+                player.setGliding(true);
                 player.setImmobile(true);
                 if(teamInfo != null){
                     teamInfo.sendMessage(TotalManager.getLanguage().getLanguage("player-help-remind"
