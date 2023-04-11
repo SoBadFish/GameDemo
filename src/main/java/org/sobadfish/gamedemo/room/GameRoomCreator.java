@@ -6,7 +6,9 @@ import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
+import org.sobadfish.gamedemo.tools.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -236,9 +238,6 @@ public class GameRoomCreator {
 
 
 
-
-
-
     /**
      * 避免出现重复的名称
      * @param name 名称
@@ -264,6 +263,8 @@ public class GameRoomCreator {
     public boolean createRoom(){
         if(isCreate) {
             roomConfig.save();
+            Utils.addDescription(new File(TotalManager.getDataFolder()+"/rooms/"+roomConfig.getName()+"/room.yml"),
+                    TotalManager.getLanguage().roomDescription,true);
             creator.sendForceMessage(TotalManager.getLanguage().getLanguage("create-room-success","&a游戏已创建"));
             return true;
         }else{

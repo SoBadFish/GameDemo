@@ -309,7 +309,7 @@ public class RoomManager implements Listener {
                             TotalManager.sendMessageToConsole(language.getLanguage("room-loading-success","&a加载房间 [1] 完成",roomName));
                             map.put(roomName,roomConfig);
                             //TODO 更新配置注释信息
-                            File roomFile = new File(file+"/room.yml");
+                            File roomFile = new File(nameFile+"/room.yml");
                             Utils.addDescription(roomFile,TotalManager.getLanguage().roomDescription,true);
 
                         }else{

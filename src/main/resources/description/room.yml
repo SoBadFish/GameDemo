@@ -4,6 +4,7 @@ header: |-
   通过修改这个配置文件可以实现不同的小游戏功能
 
 world: "游戏地图"
+
 gameTime: "游戏时长"
 
 infinite-time: "无限时间： 游戏永远不会结束（除非一个玩家没有） 填 true 或 false"
@@ -64,8 +65,7 @@ AutomaticNextRound: "游戏房间结束后 是否自动匹配下一个游戏房�
 
 player-cut-in: "是否允许玩家中途加入这个房间"
 
-# 开启后会在玩家死亡的位置生成一个尸体
-# 若设置skin则模型以skin为准
+
 death-body: "玩家死亡后 在死亡的位置生成一个尸体"
 death-body.enable: "是否启用这个功能"
 death-body.skin: |-
