@@ -476,7 +476,8 @@ public class GameRoomConfig {
                 roomConfig.eventConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/event.yml"));
                 TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("load-game-room-reserve-event","&e开始加载 房间备选事件"));
                 roomConfig.eventListConfig = GameRoomEventConfig.getGameRoomEventConfigByFile(new File(file+"/roomEventList.yml"));
-
+                //更新 room.yml 配置文件
+                roomConfig.save();
                 return roomConfig;
 
             }catch (Exception e){

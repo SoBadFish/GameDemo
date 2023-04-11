@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.manager;
 
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.utils.Config;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -16,12 +17,19 @@ public class LanguageManager {
 
     public HashMap<String, String> ini;
 
+    public Config roomDescription;
+
 
     public LanguageManager(PluginBase plugin){
         ini = new HashMap<>();
-        File iniFile = new File(plugin.getDataFolder()+"/language.ini");
+        if(!new File(plugin.getDataFolder()+"/lang").exists()){
+            if(!new File(plugin.getDataFolder()+"/lang").mkdirs()){
+                plugin.getLogger().error("Could not create lang");
+            }
+        }
+        File iniFile = new File(plugin.getDataFolder()+"/lang/language.ini");
         if(!iniFile.exists()){
-            plugin.saveResource("language.ini",false);
+            plugin.saveResource("language.ini","lang/language.ini",false);
         }
         BufferedReader br;
         try {
@@ -36,10 +44,22 @@ public class LanguageManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //读取 room.yml注释
+        InputStream resource = plugin.getResource("description/room.yml");
+        if (resource == null) {
+            resource = plugin.getResource("description/room.yml");
+        }
+        roomDescription = new Config();
+        roomDescription.load(resource);
+
 
     }
 
-    public String getLanguage(String key,IniValueData... values) {
+    public Config getRoomDescription() {
+        return roomDescription;
+    }
+
+    public String getLanguage(String key, IniValueData... values) {
         String value = "";
         return getLanguage(key,value, values);
     }

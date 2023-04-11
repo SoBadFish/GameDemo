@@ -1,0 +1,140 @@
+header: |-
+  本文件主要是对room房间的配置进行编辑修改
+  如果你没有yaml基础，则不建议对这个文件进行更改
+  通过修改这个配置文件可以实现不同的小游戏功能
+
+world: "游戏地图"
+gameTime: "游戏时长"
+
+infinite-time: "无限时间： 游戏永远不会结束（除非一个玩家没有） 填 true 或 false"
+callbackY: "等待大厅，玩家低于出生点x格后拉回出生点"
+reSpawnTime: "玩家复活时间 若设置-1则玩家无法复活"
+
+pvp: "队伍之间是否允许PVP 填 true 或 false"
+
+money: "游戏内置的经济系统 与其他经济系统不冲突"
+money.enable: "是否启用经济系统 填 true 或 false"
+money.default-money: "内置经济系统默认的金钱数量"
+money.default-unit: "内置经济系统的金钱符号"
+
+
+reSpawnCount: "在开启允许复活时 玩家的复活次数 -1为无限复活"
+
+deathDrop: "开启后玩家死亡是否掉落物品"
+
+hasWatch: "这个房间是否允许玩家旁观"
+
+waitTime: "人数不满的等待时间"
+
+gameInWait: "游戏内等待 当游戏开始后会有一段时间的等待"
+
+ban-craft: "是否允许玩家使用游戏内合成"
+
+enable-food: "是否启用饥饿值掉落"
+
+
+enable-shop: "是否启用游戏内置商店功能"
+
+max-player-waitTime: "满人时等待时长"
+
+minPlayerSize: "房间最低玩家数量"
+
+maxPlayerSize: "房间最高玩家数量"
+
+
+teamSpawn: "队伍出生点 这个要注意与team.yml中的队伍对应"
+
+
+waitPosition: "等待大厅坐标 可以设置其他地图"
+
+
+ban-command: |-
+  禁止玩家执行的指令 格式是yaml的list形式
+  例如: ["say"] 禁用玩家使用 say指令
+
+
+QuitRoom: |-
+  玩家离开游戏房间执行的指令 @p 代表玩家
+  注意这个是玩家退出一次房间就执行一次,别真的给玩家钻石什么的，
+  如果你不怕玩家刷物品，，随意
+  例如: ["give @p 264 1"] 给予玩家一颗钻石
+
+AutomaticNextRound: "游戏房间结束后 是否自动匹配下一个游戏房间"
+
+
+player-cut-in: "是否允许玩家中途加入这个房间"
+
+# 开启后会在玩家死亡的位置生成一个尸体
+# 若设置skin则模型以skin为准
+death-body: "玩家死亡后 在死亡的位置生成一个尸体"
+death-body.enable: "是否启用这个功能"
+death-body.skin: |-
+  尸体的自定义模型 模型文件取决于 skin文件夹中的文件名称 
+  如果填""则为史蒂夫
+
+
+player-help-respawn: |-
+  # 玩家是否可以被其他玩家救起
+  # 开启后复活时间将不再起作用
+
+player-help-respawn.enable: "是否启用这个功能"
+player-help-respawn.final-death-time: "多长时间没有玩家救起进入死亡状态(秒)"
+player-help-respawn.help-time: "救起时间(秒)"
+player-help-respawn.respawn-health: "救起后血量"
+player-help-respawn.collapse-health: "玩家倒地后的血量"
+player-help-respawn.can-last: "是否允许补刀"
+
+
+
+victoryCmd: |-
+  队伍/玩家取得胜利时执行的指令 @p 为玩家
+  例如: ["give @p 264 1"] 给予玩家一颗钻石
+
+
+defeatCmd: |-
+  队伍/玩家取得胜利时执行的指令 @p 为玩家
+  例如: ["give @p 264 1"] 给予玩家一颗钻石
+
+
+roundChest: "玩家开启地图内箱子是否随机刷新物品"
+
+
+tntDamage: "TNT的伤害"
+
+
+tntExplodeTime: "TNT爆炸时间（秒）"
+
+player-chose-team: "是否允许玩家选择队伍"
+
+chest-can-reset: "是否允许箱子重置"
+
+chest-reset-time: "箱子重置时间(秒)"
+
+resetWorld: "游戏结束后是否重置地图"
+
+ban-break: |-
+  禁止破坏的方块
+  当禁止破坏的方块大于0时，全地图可破坏
+
+
+can-break: "当可破坏的方法数大于0时，地图禁止破坏"
+
+floatSpawnPos: "房间内浮空字的坐标"
+
+
+kb-setting: "游戏kb设置 使用独立的算法"
+
+kb-setting.force: "击退力道"
+kb-setting.speed: "击退速度"
+kb-setting.motionY: "击退高度"
+
+enableDlc: |-
+  使用拓展插件列表
+  如果有其他开发者开发了拓展插件
+  可以将拓展插件的名称填入列表中
+  不是文件名！
+
+
+roomStartMessage: "房间开始游戏时，给玩家发送的消息"
+
+

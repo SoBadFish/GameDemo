@@ -55,6 +55,7 @@ import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.GameRoom.GameType;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.ItemConfig;
+import org.sobadfish.gamedemo.tools.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -307,6 +308,9 @@ public class RoomManager implements Listener {
                         if(roomConfig != null){
                             TotalManager.sendMessageToConsole(language.getLanguage("room-loading-success","&a加载房间 [1] 完成",roomName));
                             map.put(roomName,roomConfig);
+                            //TODO 更新配置注释信息
+                            File roomFile = new File(file+"/room.yml");
+                            Utils.addDescription(roomFile,TotalManager.getLanguage().roomDescription,true);
 
                         }else{
                             TotalManager.sendMessageToConsole(language.getLanguage("room-loading-error","&c加载房间 [1] 失败",roomName));
