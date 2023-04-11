@@ -943,6 +943,8 @@ public class PlayerInfo {
 
         if(playerType == PlayerType.WAIT_HELP){
             if(waitHelpTime > 0){
+                sendTip(TotalManager.getLanguage().getLanguage("player-wait-help-tip","&c你进入濒危状态 &2[1] &c秒后死亡",
+                        waitHelpTime+""));
                 waitHelpTime--;
             }else{
                 if(waitHelpTime != -1) {
@@ -1147,6 +1149,7 @@ public class PlayerInfo {
                 setPlayerType(PlayerType.WAIT_HELP);
                 player.setHealth(gameRoom.roomConfig.playerHelperConfig.collapseHealth);
                 player.setGliding(true);
+                player.teleport(player.getLocation().add(0,0.8f));
                 causeCollapse = event;
                 player.setScale(-1);
                 player.setYaw(-90);
@@ -1236,6 +1239,7 @@ public class PlayerInfo {
         }
 
         player.teleport(teamInfo.getSpawnLocation());
+        player.setImmobile(false);
         //防止共归于尽
         if(!gameRoom.roomConfig.infiniteTime) {
             if (finalDeath && gameRoom.getLivePlayers().size() == 1) {

@@ -72,7 +72,7 @@ player-cut-in: false
 # 开启后会在玩家死亡的位置生成一个尸体
 # 若设置skin则模型以skin为准
 death-body:
-  enable: false
+  enable: true
   skin: ""
 
 # 玩家是否可以被其他玩家救起
