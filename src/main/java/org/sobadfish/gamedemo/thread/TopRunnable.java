@@ -6,7 +6,7 @@ import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.top.TopItemInfo;
 
-public class TopRunnable extends ThreadManager.AbstractBedWarRunnable {
+public class TopRunnable extends ThreadManager.AbstractGameRunnable {
 
     @Override
     public GameRoom getRoom() {

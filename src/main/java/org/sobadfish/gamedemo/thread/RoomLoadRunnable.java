@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class RoomLoadRunnable extends ThreadManager.AbstractBedWarRunnable {
+public class RoomLoadRunnable extends ThreadManager.AbstractGameRunnable {
 
     public LinkedHashMap<String,Long> time = new LinkedHashMap<>();
 

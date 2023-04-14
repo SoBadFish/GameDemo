@@ -7,7 +7,7 @@ import org.sobadfish.gamedemo.manager.ThreadManager;
  * @author SoBadFish
  * 2022/1/7
  */
-public abstract class BaseTimerRunnable extends ThreadManager.AbstractBedWarRunnable{
+public abstract class BaseTimerRunnable extends ThreadManager.AbstractGameRunnable {
 
     private int time = 0;
 

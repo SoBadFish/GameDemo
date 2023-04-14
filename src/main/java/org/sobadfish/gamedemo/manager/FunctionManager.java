@@ -1,9 +1,12 @@
 package org.sobadfish.gamedemo.manager;
 
+import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockAir;
 import cn.nukkit.item.Item;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.manager.data.TagItemDataManager;
+import org.sobadfish.gamedemo.room.area.GameArea;
 import org.sobadfish.gamedemo.room.config.ItemConfig;
 
 import java.util.*;
@@ -264,6 +267,30 @@ public class FunctionManager {
         return v3.multiply(speed).add(x,motionY,z);
 
 
+    }
+
+
+    /**
+     * 后台清空区域中的方块
+     * @param roomArea 区域
+     * */
+    public static void clearAreaBlocks(GameArea roomArea){
+        ThreadManager.runRunnable(new ThreadManager.AbstractThreadRunnable(){
+            @Override
+            public void run() {
+                //TODO 提取出最短循环
+                long time = System.currentTimeMillis();
+                for(Block block: roomArea.asValueBlocks()){
+                    roomArea.level.setBlock(block,new BlockAir());
+                }
+                TotalManager.sendMessageToConsole("Clear "+roomArea.level.getFolderName()
+                        +" Area useTime: "+(System.currentTimeMillis() - time) + "ms");
+            }
+            @Override
+            public String getThreadName() {
+                return "清空地图方块";
+            }
+        });
     }
 
 }

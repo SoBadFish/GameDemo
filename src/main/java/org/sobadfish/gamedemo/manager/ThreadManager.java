@@ -1,6 +1,7 @@
 package org.sobadfish.gamedemo.manager;
 
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.thread.PluginMasterRunnable;
 import org.sobadfish.gamedemo.thread.RandomJoinRunnable;
@@ -11,10 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 线程管理器
@@ -25,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class ThreadManager {
 
 
-    public static final List<AbstractBedWarRunnable> RUNNABLE = new CopyOnWriteArrayList<>();
+    public static final List<AbstractGameRunnable> RUNNABLE = new CopyOnWriteArrayList<>();
 
     /**
      * 线程池数量
@@ -33,20 +31,36 @@ public class ThreadManager {
     private final static Integer CORE_POOL_SIZE = 5;
 
 
+
+    /**
+     * 后台任务
+     * */
+    private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 1000, TimeUnit.MILLISECONDS
+            , new ArrayBlockingQueue<>(5), new ThreadFactory() {
+        @Override
+        public Thread newThread(@NonNull Runnable r) {
+            if(r instanceof AbstractThreadRunnable){
+                return new Thread(r,"后台任务: "+((AbstractThreadRunnable) r).getThreadName());
+            }
+            return new Thread(r,"后台任务: "+r.hashCode());
+        }
+    });
+
+
     private static final ScheduledThreadPoolExecutor SCHEDULED = new ScheduledThreadPoolExecutor(CORE_POOL_SIZE,new ThreadPoolExecutor.AbortPolicy());
 
 
-    public static void cancel(AbstractBedWarRunnable r) {
+    public static void cancel(AbstractGameRunnable r) {
         RUNNABLE.remove(r);
         SCHEDULED.remove(r);
     }
 
-    private static void schedule(AbstractBedWarRunnable r,int delay) {
+    private static void schedule(AbstractGameRunnable r, int delay) {
         RUNNABLE.add(r);
         SCHEDULED.scheduleAtFixedRate(r,delay,1,TimeUnit.SECONDS);
     }
 
-    private static void schedule(AbstractBedWarRunnable r) {
+    private static void schedule(AbstractGameRunnable r) {
         schedule(r,0);
     }
 
@@ -72,8 +86,8 @@ public class ThreadManager {
 
     public static String info() {
         StringBuilder builder = new StringBuilder();
-        Map<String, List<AbstractBedWarRunnable>> map = getRunnables();
-        for(Map.Entry<String, List<AbstractBedWarRunnable>> me : map.entrySet()){
+        Map<String, List<AbstractGameRunnable>> map = getRunnables();
+        for(Map.Entry<String, List<AbstractGameRunnable>> me : map.entrySet()){
             builder.append("&r").append(me.getKey()).append("\n").append(listToString(me.getValue()));
         }
         String s = builder.toString();
@@ -83,24 +97,29 @@ public class ThreadManager {
         return s;
     }
 
-    private static String listToString(List<AbstractBedWarRunnable> runnables){
+
+    public static void runRunnable(Runnable runnable){
+        THREAD_POOL_EXECUTOR.execute(runnable);
+    }
+
+    private static String listToString(List<AbstractGameRunnable> runnables){
         StringBuilder s = new StringBuilder();
-        for(AbstractBedWarRunnable runnable: runnables){
+        for(AbstractGameRunnable runnable: runnables){
             s.append("  &r- ").append(runnable.getThreadName()).append("\n");
         }
         return s.toString();
     }
 
-    private static Map<String,List<AbstractBedWarRunnable>> getRunnables(){
-        LinkedHashMap<String, List<AbstractBedWarRunnable>> threadList = new LinkedHashMap<>();
+    private static Map<String,List<AbstractGameRunnable>> getRunnables(){
+        LinkedHashMap<String, List<AbstractGameRunnable>> threadList = new LinkedHashMap<>();
 
-        for(AbstractBedWarRunnable workerValue: RUNNABLE) {
+        for(AbstractGameRunnable workerValue: RUNNABLE) {
             GameRoom room = workerValue.getRoom();
             if (room != null) {
                 if (!threadList.containsKey(room.getRoomConfig().name)) {
                     threadList.put(room.getRoomConfig().name, new ArrayList<>());
                 }
-                List<AbstractBedWarRunnable> runnables = threadList.get(room.getRoomConfig().name);
+                List<AbstractGameRunnable> runnables = threadList.get(room.getRoomConfig().name);
                 runnables.add(workerValue);
                 threadList.put(room.getRoomConfig().name, runnables);
             } else {
@@ -108,7 +127,7 @@ public class ThreadManager {
                 if (!threadList.containsKey(name)) {
                     threadList.put(name, new ArrayList<>());
                 }
-                List<AbstractBedWarRunnable> runnables = threadList.get(name);
+                List<AbstractGameRunnable> runnables = threadList.get(name);
                 runnables.add(workerValue);
                 threadList.put(name, runnables);
             }
@@ -125,8 +144,22 @@ public class ThreadManager {
 
     }
 
+    public abstract static class AbstractThreadRunnable implements Runnable{
 
-    public abstract static class AbstractBedWarRunnable implements Runnable{
+        public boolean isClose;
+
+        /**
+         * 获取线程名称
+         * @return 线程名称
+         * */
+        abstract public String getThreadName();
+
+        public boolean isClose() {
+            return isClose;
+        }
+    }
+
+    public abstract static class AbstractGameRunnable implements Runnable{
 
         public boolean isClose;
 
@@ -147,7 +180,7 @@ public class ThreadManager {
         }
     }
 
-    public static class RunnableCheck extends AbstractBedWarRunnable{
+    public static class RunnableCheck extends AbstractGameRunnable {
         @Override
         public GameRoom getRoom() {
             return null;
@@ -171,7 +204,7 @@ public class ThreadManager {
                 isClose = true;
                 return;
             }
-            for (AbstractBedWarRunnable runnable : RUNNABLE) {
+            for (AbstractGameRunnable runnable : RUNNABLE) {
                 if (runnable.isClose) {
                     cancel(runnable);
                 }

@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * @author Sobadfish
  */
-public class PluginMasterRunnable extends ThreadManager.AbstractBedWarRunnable {
+public class PluginMasterRunnable extends ThreadManager.AbstractGameRunnable {
 
     private long loadTime = 0;
 

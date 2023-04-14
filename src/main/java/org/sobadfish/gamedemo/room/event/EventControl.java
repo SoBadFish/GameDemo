@@ -194,7 +194,7 @@ public class EventControl {
          * */
         public int successCount;
         /**
-         * 成功失败的事件数量
+         * 失败的事件数量
          * */
         public int defeatCount;
         /**

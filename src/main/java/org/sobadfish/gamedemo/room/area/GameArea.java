@@ -1,8 +1,10 @@
 package org.sobadfish.gamedemo.room.area;
 
+import cn.nukkit.block.Block;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +12,7 @@ import java.util.Map;
  * @author Sobadfish
  * 2023/1/12
  */
-public class RoomArea {
+public class GameArea {
 
     public Level level;
 
@@ -26,7 +28,7 @@ public class RoomArea {
 
     public int maxZ;
 
-    public RoomArea(Position startPosition,Position endPosition,Level level) {
+    public GameArea(Position startPosition, Position endPosition, Level level) {
         this.level = level;
         this.minX = startPosition.getFloorX();
         this.minY = startPosition.getFloorY();
@@ -54,6 +56,28 @@ public class RoomArea {
     }
 
     /**
+     * 获取这个区域中的所有方块
+     * */
+    public ArrayList<Block> asValueBlocks(){
+        ArrayList<Block> blocks = new ArrayList<>();
+        int i1 = maxX - minX;
+        int i2 = maxY - minY;
+        int i3 = maxZ - minZ;
+        int[] cube = new int[i1 * i2 * i3];
+        for(int i = 0; i < cube.length;i++){
+            int x = (i % i1)+minX;
+            int y = ((i / i1) % i2)+minY;
+            int z = (i / (i1 * i2))+minZ;
+            Block block = level.getBlock(x, y, z);
+            if(block != null && block.getId() != 0){
+                blocks.add(block);
+            }
+        }
+        return blocks;
+
+    }
+
+    /**
      * 检测坐标是否在区域内
      * @param position 被检测坐标
      * @return 是否在区域内
@@ -66,6 +90,8 @@ public class RoomArea {
         }
         return false;
     }
+
+
 
     public Map<String,Object> asConfigMap(){
         Map<String,Object> configMap = new HashMap<>();

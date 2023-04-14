@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Sobadfish
  * 21:57
  */
-public class RandomJoinRunnable extends ThreadManager.AbstractBedWarRunnable {
+public class RandomJoinRunnable extends ThreadManager.AbstractGameRunnable {
     @Override
     public GameRoom getRoom() {
         return null;
