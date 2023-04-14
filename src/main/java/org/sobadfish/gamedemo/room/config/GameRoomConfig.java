@@ -224,6 +224,11 @@ public class GameRoomConfig {
     public int chestResetTime = 120;
 
     /**
+     * 玩家游戏模式
+     * */
+    public int playerGameMode = 0;
+
+    /**
      * 箱子是否允许重置
      * */
     public boolean chestCanReset = true;
@@ -422,6 +427,7 @@ public class GameRoomConfig {
                 deathBodyConfig.skin = room.getString("death-body.skin","");
                 roomConfig.deathBodyConfig = deathBodyConfig;
 
+                roomConfig.playerGameMode = room.getInt("player-game-mode",0);
                 if(roomConfig.roundChest) {
                     //TODO 如果小游戏需要使用箱子内随机刷新物品 就解开这个配置
                     //////////////////////////////////////////////////////////
@@ -555,6 +561,7 @@ public class GameRoomConfig {
         config.set("deathDrop",deathDrop);
         config.set("hasWatch",hasWatch);
         config.set("ban-craft",banCraft);
+        config.set("player-game-mode",playerGameMode);
         config.set("player-cut-in",playerCutIn);
         config.set("enable-food",enableFood);
         config.set("enable-shop",enableShop);

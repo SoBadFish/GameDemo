@@ -590,7 +590,7 @@ public class PlayerInfo {
             throw new NullPointerException(TotalManager.getLanguage().getLanguage("player-teleport-team-spawn-error","无法将玩家传送到队伍出生点"));
         }
         if (getPlayer() instanceof Player) {
-            ((Player) getPlayer()).setGamemode(0);
+            ((Player) getPlayer()).setGamemode(gameRoom.getRoomConfig().playerGameMode);
 
             ((Player) getPlayer()).setExperience(0,0);
 
@@ -707,7 +707,8 @@ public class PlayerInfo {
                     player.getEnderChestInventory().setContents(eInventory);
                 }
                 if(getPlayer() instanceof Player) {
-                    ((Player) getPlayer()).setGamemode(0);
+                    ((Player) getPlayer()).setGamemode(TotalManager.getConfig()
+                            .getInt("player-leave-game-mode",0));
                 }
             }
         }

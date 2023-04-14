@@ -84,7 +84,8 @@ player-help-respawn.respawn-health: "救起后血量"
 player-help-respawn.collapse-health: "玩家倒地后的血量"
 player-help-respawn.can-last: "是否允许补刀"
 
-
+player-game-mode: |-
+  玩家进入游戏的游戏模式
 
 victoryCmd: |-
   队伍/玩家取得胜利时执行的指令 @p 为玩家

@@ -23,6 +23,9 @@ money:
 # 在允许复活的时候玩家复活次数
 reSpawnCount: 0
 
+# 玩家进入游戏的游戏模式
+player-game-mode: 0
+
 # 死亡是否掉落物品
 deathDrop: true
 # 是否允许玩家旁观

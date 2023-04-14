@@ -11,6 +11,8 @@ command-admin: "gda"
 
 command-msg: "gds"
 
+# 玩家离开游戏后设置的游戏模式
+player-leave-game-mode: 2
 
 
 # 是否保存玩家背包
