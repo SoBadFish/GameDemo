@@ -60,24 +60,9 @@ public class GameArea {
      * */
     public ArrayList<Block> asValueBlocks(){
         ArrayList<Block> blocks = new ArrayList<>();
-        //这个算法的执行效率还不如 三重for
-//        int i1 = maxX - minX;
-//        int i2 = maxY - minY;
-//        int i3 = maxZ - minZ;
-//        int[] cube = new int[i1 * i2 * i3];
-//        for(int i = 0; i < cube.length;i++){
-//            int x = (i % i1)+minX;
-//            int y = ((i / i1) % i2)+minY;
-//            int z = (i / (i1 * i2))+minZ;
-//            Block block = level.getBlock(x, y, z);
-//            if(block != null && block.getId() != 0){
-//                blocks.add(block);
-//            }
-//        }
-
-        for(int x1 = minX; x1 < maxX; x1++){
-            for(int y1 = minY; y1 < maxY; y1++){
-                for(int z1 = minZ; z1 < maxZ; z1++){
+        for(int x1 = minX; x1 <= maxX; x1++){
+            for(int y1 = minY; y1 <= maxY; y1++){
+                for(int z1 = minZ; z1 <= maxZ; z1++){
                     Block block = level.getBlock(x1, y1, z1);
                     if(block != null && block.getId() != 0){
                         blocks.add(block);
