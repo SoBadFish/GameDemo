@@ -694,8 +694,7 @@ public class PlayerInfo {
                 player.setMovementSpeed(speed);
                 player.getEnderChestInventory().clearAll();
                 ((Player) player).getFoodData().reset();
-                player.setGliding(false);
-                player.setScale(1);
+                hide(false,this);
                 player.setImmobile(false);
                 if(lastSkin != null){
                     player.setSkin(lastSkin);
@@ -1130,9 +1129,9 @@ public class PlayerInfo {
     public void resetWaitHelper(PlayerInfo playerInfo){
 
         playerInfo.playerType = PlayerType.START;
-        playerInfo.player.setGliding(false);
-        playerInfo.player.setScale(1);
         playerInfo.player.setImmobile(false);
+        hide(false,playerInfo);
+
 
     }
 
@@ -1149,11 +1148,12 @@ public class PlayerInfo {
                 waitHelpTime = gameRoom.roomConfig.playerHelperConfig.finalDeathTime;
                 setPlayerType(PlayerType.WAIT_HELP);
                 player.setHealth(gameRoom.roomConfig.playerHelperConfig.collapseHealth);
-                player.teleport(player.getLocation().add(0,0.3f));
+
                 causeCollapse = event;
-                player.setScale(-1);
-                player.setYaw(-90);
-                player.setGliding(true);
+                hide(true,this);
+
+
+
                 player.setImmobile(true);
                 if(teamInfo != null){
                     teamInfo.sendMessage(TotalManager.getLanguage().getLanguage("player-help-remind"
@@ -1164,10 +1164,11 @@ public class PlayerInfo {
             }
 
         }
-        if(helpInfo.helpPlayer != null){
-            resetWaitHelper(helpInfo.helpPlayer);
-        }
 
+        if(deathBodyEntity != null){
+            deathBodyEntity.close();
+            deathBodyEntity = null;
+        }
 
         player.setHealth(player.getMaxHealth());
         if(player instanceof Player){
@@ -1235,7 +1236,7 @@ public class PlayerInfo {
         //传送前生成尸体
         if(getGameRoom().roomConfig.deathBodyConfig.enable){
             if(event != null && event.getCause() != EntityDamageEvent.DamageCause.VOID) {
-                deathBodyEntity = DeathBodyEntity.spawnBody(player, player.add(0, 0.5), gameRoom.roomConfig.deathBodyConfig.skin);
+                deathBodyEntity = DeathBodyEntity.spawnBody(this, player.add(0, 0.5), gameRoom.roomConfig.deathBodyConfig.skin,true);
             }
         }
 
@@ -1293,6 +1294,33 @@ public class PlayerInfo {
         }
     }
 
+    public void hide(boolean b,PlayerInfo playerInfo){
+
+        if(b) {
+            playerInfo.deathBodyEntity = DeathBodyEntity.spawnBody(this, player, gameRoom.roomConfig.deathBodyConfig.skin,false);
+            if (playerInfo.player instanceof Player) {
+                for (Player player : playerInfo.player.getLevel().getPlayers().values()) {
+                    if (!player.equals(playerInfo.player)) {
+                        player.hidePlayer((Player) playerInfo.player);
+                    }
+                }
+            } else {
+                playerInfo.player.close();
+            }
+        }else {
+            if(playerInfo.deathBodyEntity != null){
+                playerInfo.deathBodyEntity.close();
+                playerInfo.deathBodyEntity = null;
+            }
+            if (playerInfo.player instanceof Player) {
+                for (Player player : playerInfo.player.getLevel().getPlayers().values()) {
+                    player.showPlayer((Player) playerInfo.player);
+                }
+            } else {
+                playerInfo.player.respawnToAll();
+            }
+        }
+    }
     /**
      * 设置玩家生命次数
      * @param health 生命次数

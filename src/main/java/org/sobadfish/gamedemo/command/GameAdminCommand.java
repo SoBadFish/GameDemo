@@ -379,7 +379,7 @@ public class GameAdminCommand extends Command {
                                         color = "&7";
                                         break;
                                 }
-                                playerI.append("     - ").append(color).append(playerInfo.getName()).append("\n");
+                                playerI.append("     - ").append(color).append(playerInfo.getName()).append(" ").append(playerInfo.getPlayerType()).append("\n");
                             }
                             team.append("   - ").append(teamInfo.getTeamConfig().getNameColor()).append(teamInfo.getTeamConfig().getName()).
                                     append("\n").append(playerI).append("\n");

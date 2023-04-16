@@ -5,7 +5,9 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.utils.SerializedImage;
 import org.sobadfish.gamedemo.manager.SkinManager;
+import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.tools.Utils;
 
 /**
@@ -20,8 +22,12 @@ public class DeathBodyEntity extends EntityHuman {
         setMaxHealth(20);
     }
 
+    public PlayerInfo bindPlayer;
 
-    public static DeathBodyEntity spawnBody(EntityHuman entityHuman,Position location, String skinName){
+    public boolean isDeath;
+
+
+    public static DeathBodyEntity spawnBody(PlayerInfo playerInfo,Position location, String skinName,boolean isDeath){
         Skin skin = null;
         boolean isFly = true;
         if(skinName != null && !"".equalsIgnoreCase(skinName)){
@@ -29,11 +35,18 @@ public class DeathBodyEntity extends EntityHuman {
            isFly = false;
         }
         if(skin == null){
-            if(entityHuman.getSkin() != null){
-                skin = entityHuman.getSkin();
+            if(playerInfo.player.getSkin() != null){
+                skin = playerInfo.player.getSkin();
             }else {
+
                 skin = Utils.getDefaultSkin();
             }
+        }
+        try{
+            //NK核心奇怪的问题 从生物上获取到的皮肤没法用作生物上
+            SerializedImage img = SerializedImage.fromLegacy(skin.getSkinData().data);
+        }catch (Exception e){
+            skin = Utils.getDefaultSkin();
         }
         CompoundTag tag = EntityHuman.getDefaultNBT(location);
         tag.putCompound("Skin",new CompoundTag()
@@ -46,6 +59,13 @@ public class DeathBodyEntity extends EntityHuman {
             deathBodyEntity.setGliding(true);
             deathBodyEntity.setScale(-1f);
         }
+        if(!isDeath){
+            deathBodyEntity.setNameTag(playerInfo.player.getNameTag());
+            deathBodyEntity.setNameTagVisible(true);
+            deathBodyEntity.setNameTagAlwaysVisible(true);
+        }
+        deathBodyEntity.isDeath = isDeath;
+        deathBodyEntity.bindPlayer = playerInfo;
         deathBodyEntity.spawnToAll();
         return deathBodyEntity;
 
