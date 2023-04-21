@@ -60,7 +60,9 @@ QuitRoom: |-
   如果你不怕玩家刷物品，，随意
   例如: ["give @p 264 1"] 给予玩家一颗钻石
 
-AutomaticNextRound: "游戏房间结束后 是否自动匹配下一个游戏房间"
+AutomaticNextRound: |-
+  游戏房间结束后 是否自动匹配下一个游戏房间
+  有BUG还未解决 请不要开启这个功能
 
 
 player-cut-in: "是否允许玩家中途加入这个房间"

@@ -545,8 +545,29 @@ public class RoomManager implements Listener {
     public void onEntityDamage(EntityDamageEvent event){
         if(event.getEntity() instanceof DeathBodyEntity){
             //TODO 阻止伤害尸体事件
-            event.setCancelled();
+            if(((DeathBodyEntity) event.getEntity()).isDeath){
+                event.setCancelled();
+                return;
+            }
+            PlayerInfo playerInfo = ((DeathBodyEntity) event.getEntity()).bindPlayer;
+            //TODO 倒地补刀
+            if(playerInfo != null && playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT_HELP){
+                if(!playerInfo.getGameRoom().roomConfig.playerHelperConfig.canLast){
+                    event.setCancelled();
+                    return;
+                }else{
+                    if(event.getDamage()+ 1> event.getEntity().getHealth()){
+                        ((DeathBodyEntity) event.getEntity()).bindPlayer.death(event);
+                    }
+                }
+            }else{
+                event.getEntity().close();
+                return;
+            }
+
+
             return;
+
         }
         if(event.getEntity() instanceof EntityHuman){
             PlayerInfo playerInfo = getPlayerInfo((EntityHuman) event.getEntity());
@@ -606,14 +627,6 @@ public class RoomManager implements Listener {
                             }
                         }
                     }
-                    //击退..
-                    if(room.roomConfig.knockConfig.enable){
-                        event.getEntity().setMotion(FunctionManager.knockBack(event.getEntity(),entity,
-                                room.roomConfig.knockConfig.speed,
-                                room.roomConfig.knockConfig.force,
-                                room.roomConfig.knockConfig.motionY));
-                        ((EntityDamageByEntityEvent) event).setKnockBack(0f);
-                    }
 
                     if (entity instanceof EntityHuman) {
                         PlayerInfo damageInfo = room.getPlayerInfo((EntityHuman) entity);
@@ -626,13 +639,7 @@ public class RoomManager implements Listener {
                                 event.setCancelled();
                                 return;
                             }
-                            //TODO 倒地补刀
-                            if(playerInfo.getPlayerType() == PlayerInfo.PlayerType.WAIT_HELP){
-                                if(!room.roomConfig.playerHelperConfig.canLast){
-                                    event.setCancelled();
-                                    return;
-                                }
-                            }
+
                             ///////////////// 阻止队伍PVP///////////////
                             //TODO 阻止队伍PVP
                             TeamInfo t1 = playerInfo.getTeamInfo();
@@ -663,8 +670,19 @@ public class RoomManager implements Listener {
                             playerInfo.setDamageByInfo(damageInfo);
                         } else {
                             event.setCancelled();
+                            return;
                         }
+                        //击退..
+                        if(room.roomConfig.knockConfig.enable && !event.isCancelled()){
+                            event.getEntity().setMotion(FunctionManager.knockBack(event.getEntity(),entity,
+                                    room.roomConfig.knockConfig.speed,
+                                    room.roomConfig.knockConfig.force,
+                                    room.roomConfig.knockConfig.motionY));
+                            ((EntityDamageByEntityEvent) event).setKnockBack(0f);
+                        }
+
                     }
+
 
                 }
 
