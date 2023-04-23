@@ -1,10 +1,18 @@
 package org.sobadfish.gamedemo.manager.data;
 
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.sobadfish.gamedemo.manager.BaseDataWriterGetterManager;
+import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.PlayerData;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +46,31 @@ public class PlayerDataManager extends BaseDataWriterGetterManager<PlayerData> {
      * @return 玩家控制类
      * */
     public static PlayerDataManager asFile(File file){
-        return (PlayerDataManager) BaseDataWriterGetterManager.asFile(file,"player.json", PlayerData[].class,PlayerDataManager.class);
+        Gson gson = new Gson();
+        InputStreamReader reader = null;
+        try{
+            if(!file.exists()){
+                TotalManager.saveResource("player.json",false);
+            }
+            reader = new InputStreamReader(new FileInputStream(file));
+
+            JsonArray map =gson.fromJson(reader, JsonArray.class);
+            List<PlayerData> data = new ArrayList<>();
+            for(Object o: map){
+                String json = o.toString();
+                JsonObject jsb = new Gson().fromJson(json, JsonObject.class);
+                PlayerData d = PlayerData.asJsonObject(jsb);
+                data.add(d);
+            }
+            Constructor<?> constructor = PlayerDataManager.class.getConstructor(List.class,File.class);
+            return (PlayerDataManager) constructor.newInstance(data,file);
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+        return new PlayerDataManager(new ArrayList<>(),file);
+
     }
+
 
 }

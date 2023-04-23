@@ -25,6 +25,8 @@ import org.sobadfish.gamedemo.entity.DeathBodyEntity;
 import org.sobadfish.gamedemo.event.PlayerGameDeathEvent;
 import org.sobadfish.gamedemo.item.button.OpenShopItem;
 import org.sobadfish.gamedemo.manager.*;
+import org.sobadfish.gamedemo.player.data.IDataValue;
+import org.sobadfish.gamedemo.player.data.IntegerDataValue;
 import org.sobadfish.gamedemo.player.message.ScoreBoardMessage;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
@@ -63,7 +65,7 @@ public class PlayerInfo {
     public EntityDamageEvent causeCollapse;
 
     //记录信息
-    public LinkedHashMap<String,Integer> statistics = new LinkedHashMap<>();
+    public LinkedHashMap<String, IDataValue<? extends Object>> statistics = new LinkedHashMap<>();
 
     //小游戏强制等待的时间
     public int waitTime = 0;
@@ -127,11 +129,11 @@ public class PlayerInfo {
      * @param type 类型
      * @return int 内容
      * */
-    public int getData(String type){
+    public IDataValue<?> getData(String type){
         if(statistics.containsKey(type)){
             return statistics.get(type);
         }
-        return 0;
+        return null;
     }
 
     /**
@@ -139,9 +141,11 @@ public class PlayerInfo {
      * @param type 类型
      * @param  value 数据
      * */
-    public void addData(String type,int value){
+    public void addData(String type,IDataValue<?> value){
         if(statistics.containsKey(type)){
-            statistics.put(type,statistics.get(type) + value);
+            IDataValue<?> dataValue = statistics.get(type);
+            dataValue.addValue(value);
+            statistics.put(type,dataValue);
         }else{
             statistics.put(type,value);
         }
@@ -152,9 +156,13 @@ public class PlayerInfo {
      * */
     public void addData(String type){
         if(statistics.containsKey(type)){
-            statistics.put(type,statistics.get(type) + 1);
+            IDataValue<?> data = statistics.get(type);
+            if(data instanceof IntegerDataValue){
+                data.addValue(new IntegerDataValue(1));
+            }
+            statistics.put(type,data);
         }else{
-            statistics.put(type,1);
+            statistics.put(type,new IntegerDataValue(1));
         }
     }
 

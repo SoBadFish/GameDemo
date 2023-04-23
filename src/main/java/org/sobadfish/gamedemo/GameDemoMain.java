@@ -2,11 +2,14 @@ package org.sobadfish.gamedemo;
 
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
-
 import org.sobadfish.gamedemo.command.GameAdminCommand;
 import org.sobadfish.gamedemo.command.GameCommand;
 import org.sobadfish.gamedemo.command.GameSpeakCommand;
 import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.player.PlayerData;
+import org.sobadfish.gamedemo.player.data.IDataValue;
+import org.sobadfish.gamedemo.player.data.IntegerDataValue;
+import org.sobadfish.gamedemo.player.data.StringDataValue;
 import org.sobadfish.gamedemo.proxy.ItemProxy;
 
 /**
@@ -32,6 +35,8 @@ public class GameDemoMain extends PluginBase {
         this.getLogger().info(TextFormat.colorize('&',"&e"));
         this.getLogger().info(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("version","&e正在加载[1] 插件 本版本为&av[2]"
                 ,TotalManager.GAME_NAME,this.getDescription().getVersion())));
+        //TODO 注册
+        IDataValue.init();
         ItemProxy.init();
 
         TotalManager.init(this);
@@ -40,6 +45,12 @@ public class GameDemoMain extends PluginBase {
         this.getServer().getCommandMap().register(TotalManager.GAME_NAME,new GameSpeakCommand(TotalManager.COMMAND_MESSAGE_NAME));
 
         this.getLogger().info(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("success","&a插件加载完成，祝您使用愉快")));
+
+        //需要测试一下
+        PlayerData data = TotalManager.getDataManager().getData("test");
+        data.addData("test",new IntegerDataValue(25));
+        data.addData("test2",new StringDataValue("时间"));
+        data.save();
 
     }
 

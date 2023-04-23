@@ -2,10 +2,15 @@ package org.sobadfish.gamedemo.player;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.sobadfish.gamedemo.event.PlayerGetExpEvent;
 import org.sobadfish.gamedemo.event.PlayerLevelChangeEvent;
 import org.sobadfish.gamedemo.manager.FunctionManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
+import org.sobadfish.gamedemo.player.data.IDataValue;
+import org.sobadfish.gamedemo.player.data.IntegerDataValue;
+import org.sobadfish.gamedemo.player.data.RoomData;
 
 import java.util.*;
 
@@ -14,16 +19,16 @@ import java.util.*;
  *
  * @author Sobadfish
  * */
-public class PlayerData {
+public class PlayerData{
 
     //玩家名称
-    private String name = "";
+    public String name = "";
 
     //玩家经验
-    private int exp;
+    public int exp;
 
     //玩家等级
-    private int level;
+    public int level;
 
     public PlayerData(String name){
         this.name = name;
@@ -31,28 +36,32 @@ public class PlayerData {
 
     public PlayerData(){}
 
-    public Map<String,Integer> data = new LinkedHashMap<>();
+    public Map<String,IDataValue<?>> data = new LinkedHashMap<>();
 
     public List<RoomData> roomData = new ArrayList<>();
 
 
 
-    public int getDataByRoom(String room,String dataType){
+    public IDataValue<?> getDataByRoom(String room,String dataType){
         for(RoomData data: roomData){
             if(data.roomName.equalsIgnoreCase(room)){
-                return data.getInt(dataType);
+                return data.data.get(dataType);
             }
         }
-        return 0;
+        return new IntegerDataValue(0);
     }
 
     public int getFinalData(String dataType){
         int c = 0;
         for(RoomData data: roomData){
+
             c += data.getInt(dataType);
         }
         if(data.containsKey(dataType)){
-            c += data.get(dataType);
+            IDataValue<?> dataValue = data.get(dataType);
+            if(dataValue instanceof IntegerDataValue) {
+                c += ((IntegerDataValue) dataValue).getValue();
+            }
         }
         return c;
     }
@@ -201,42 +210,53 @@ public class PlayerData {
        return (int)l * TotalManager.getUpExp();
     }
 
-
-
-    public static class RoomData{
-
-        String roomName = "";
-
-        public LinkedHashMap<String, Integer> data = new LinkedHashMap<>();
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            RoomData roomData = (RoomData) o;
-            return Objects.equals(roomName, roomData.roomName);
+    /**
+     * 添加属性
+     * */
+    public void addData(String key,IDataValue<?> dataValue){
+        if(data.containsKey(key)){
+            IDataValue<?> value = data.get(key);
+            value.addValue(dataValue);
+        }else{
+            data.put(key,dataValue);
         }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(roomName);
-        }
-
-        public int getInt(String type){
-            int c = 0;
-            if(type == null){
-                return c;
-            }
-            if(data.containsKey(type)){
-                return data.get(type);
-            }
-            return c;
-        }
     }
+
+    /**
+     * 设置属性
+     * */
+    public void setData(String key,IDataValue<?> dataValue){
+        if(data.containsKey(key)){
+            IDataValue<?> value = data.get(key);
+            value.setValue(dataValue);
+        }else{
+            data.put(key,dataValue);
+        }
+
+    }
+    /**
+     * 移除属性
+     * */
+    public void removeData(String key,IDataValue<?> dataValue){
+        if(data.containsKey(key)){
+            IDataValue<?> value = data.get(key);
+            value.removeValue(dataValue);
+        }else{
+            data.put(key,dataValue);
+        }
+
+    }
+
+    /**
+     * 移除属性
+     * */
+    public void removeData(String key){
+        data.remove(key);
+
+    }
+
+
 
     public RoomData getRoomData(String room){
         RoomData roomData = new RoomData();
@@ -254,10 +274,15 @@ public class PlayerData {
         if(info.getPlayer() instanceof Player) {
             for (String dataType : info.statistics.keySet()) {
                 if(data.data.containsKey(dataType)){
-                    data.data.put(dataType, data.data.get(dataType)
-                            + info.statistics.get(dataType));
+                    IDataValue<?> dataValue =  data.data.get(dataType);
+                    IDataValue<?> pValue = info.statistics.get(dataType);
+                    if(pValue.asAppend()){
+                        dataValue.addValue((IDataValue<?>) pValue.getValue());
+                    }
+
+                    data.data.put(dataType,dataValue);
                 }else{
-                    data.data.put(dataType,info.statistics.getOrDefault(dataType,0));
+                    data.data.put(dataType, info.statistics.get(dataType));
                 }
 
             }
@@ -323,5 +348,43 @@ public class PlayerData {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public void save(){
+        TotalManager.getDataManager().save();
+    }
+
+    public static PlayerData asJsonObject(JsonObject jsonObject){
+        PlayerData data = new PlayerData(jsonObject.get("name").getAsString());
+        Map<String,IDataValue<?>> dataValueMap = new HashMap<>();
+        JsonObject sub = jsonObject.getAsJsonObject("data");
+        for(String sk: sub.keySet()){
+            JsonObject sub2 = sub.getAsJsonObject(sk);
+            dataValueMap.put(sk,IDataValue.jsonObjectAsDataValue(sub2));
+
+        }
+        data.data = dataValueMap;
+        List<RoomData> roomData = new ArrayList<>();
+        JsonArray roomJson = jsonObject.getAsJsonArray("roomData");
+        for(int i = 0; i < roomJson.size(); i++){
+            JsonObject jsb = (JsonObject) roomJson.get(i);
+            roomData.add(RoomData.asRoomDataByJson(jsb));
+        }
+        data.roomData = roomData;
+        data.exp = jsonObject.get("exp").getAsInt();
+        data.level = jsonObject.get("level").getAsInt();
+        return data;
+    }
+
+
+    @Override
+    public String toString() {
+        return "PlayerData{" +
+                "name='" + name + '\'' +
+                ", exp=" + exp +
+                ", level=" + level +
+                ", data=" + data +
+                ", roomData=" + roomData +
+                '}';
     }
 }

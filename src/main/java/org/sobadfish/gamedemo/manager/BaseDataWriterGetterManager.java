@@ -75,7 +75,9 @@ public class BaseDataWriterGetterManager<T>{
         try {
 
             OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file));
+
             String json = gson.toJson(dataList);
+
             writer.write(json,0,json.length());
             writer.close();
         } catch (IOException e) {
