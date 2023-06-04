@@ -1121,6 +1121,13 @@ public class PlayerInfo {
 
     }
 
+    public double distance(EntityHuman player) {
+        if(this.player == null || player == null){
+            return 0d;
+        }
+        return this.player.distance(player);
+    }
+
     public enum PlayerType{
         /**
          * WAIT: 等待 START: 开始 DEATH: 死亡(等待复活)  LEAVE: 离开 WATCH 观察(真正的死亡)

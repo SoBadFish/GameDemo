@@ -3,10 +3,7 @@ package org.sobadfish.gamedemo.manager;
 import cn.nukkit.item.Item;
 import cn.nukkit.nbt.tag.CompoundTag;
 import org.sobadfish.gamedemo.item.ICustomItem;
-import org.sobadfish.gamedemo.item.button.FollowItem;
-import org.sobadfish.gamedemo.item.button.OpenShopItem;
-import org.sobadfish.gamedemo.item.button.RoomQuitItem;
-import org.sobadfish.gamedemo.item.button.TeamChoseItem;
+import org.sobadfish.gamedemo.item.button.*;
 
 import java.util.LinkedHashMap;
 
@@ -98,5 +95,6 @@ public class ButtonItemManager {
         registerItem(OpenShopItem.class);
         registerItem(RoomQuitItem.class);
         registerItem(TeamChoseItem.class);
+        registerItem(PointPlayerItem.class);
     }
 }
