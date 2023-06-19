@@ -44,14 +44,14 @@ public class GameNpcVariable extends BaseVariableV2 {
                     p+= room.getPlayerInfos().size();
                 }
             }
-            addVariable("%"+worldRoom.getName()+"-player%",p+"");
+            addVariable("%"+TotalManager.COMMAND_NAME+"-"+worldRoom.getName()+"-player%",p+"");
 
         }
         int game = 0;
         for(GameRoom gameRoom: TotalManager.getRoomManager().getRooms().values()){
             game += gameRoom.getPlayerInfos().size();
         }
-        addVariable("%all-player%",game+"");
+        addVariable("%"+TotalManager.COMMAND_NAME+"-all-player%",game+"");
 
     }
 
@@ -73,8 +73,8 @@ public class GameNpcVariable extends BaseVariableV2 {
                 default:break;
             }
         }
-        addVariable("%"+roomConfig.getName()+"-player%",p+"");
-        addVariable("%"+roomConfig.getName()+"-maxplayer%",mp+"");
-        addVariable("%"+roomConfig.getName()+"-status%",status);
+        addVariable("%"+TotalManager.COMMAND_NAME+"-"+roomConfig.getName()+"-player%",p+"");
+        addVariable("%"+TotalManager.COMMAND_NAME+"-"+roomConfig.getName()+"-maxplayer%",mp+"");
+        addVariable("%"+TotalManager.COMMAND_NAME+"-"+roomConfig.getName()+"-status%",status);
     }
 }

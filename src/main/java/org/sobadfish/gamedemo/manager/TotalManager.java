@@ -189,6 +189,8 @@ public class TotalManager {
         ButtonItemManager.init();
         //TODO 初始化皮肤
         SkinManager.init();
+        //TODO 初始化文件
+        plugin.saveResource("变量表_v1.0.txt", true);
 
     }
     public static PlayerDataManager getDataManager() {

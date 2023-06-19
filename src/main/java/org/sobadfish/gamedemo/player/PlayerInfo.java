@@ -48,10 +48,19 @@ public class PlayerInfo {
 
     public EntityHuman player;
 
+    /**
+     * 玩家状态
+     * */
     private PlayerType playerType;
 
+    /**
+     * 游戏房间
+     * */
     private GameRoom gameRoom;
 
+    /**
+     * 队伍信息
+     * */
     private TeamInfo teamInfo;
 
     public boolean cancel;
@@ -1159,8 +1168,6 @@ public class PlayerInfo {
 
                 causeCollapse = event;
                 hide(true,this);
-
-
 
                 player.setImmobile(true);
                 if(teamInfo != null){

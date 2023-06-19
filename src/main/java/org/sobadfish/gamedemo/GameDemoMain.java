@@ -6,10 +6,7 @@ import org.sobadfish.gamedemo.command.GameAdminCommand;
 import org.sobadfish.gamedemo.command.GameCommand;
 import org.sobadfish.gamedemo.command.GameSpeakCommand;
 import org.sobadfish.gamedemo.manager.TotalManager;
-import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.data.IDataValue;
-import org.sobadfish.gamedemo.player.data.IntegerDataValue;
-import org.sobadfish.gamedemo.player.data.StringDataValue;
 import org.sobadfish.gamedemo.proxy.ItemProxy;
 
 /**
@@ -46,11 +43,11 @@ public class GameDemoMain extends PluginBase {
 
         this.getLogger().info(TextFormat.colorize('&',TotalManager.getLanguage().getLanguage("success","&a插件加载完成，祝您使用愉快")));
 
-        //需要测试一下
-        PlayerData data = TotalManager.getDataManager().getData("test");
-        data.addData("test",new IntegerDataValue(25));
-        data.addData("test2",new StringDataValue("时间"));
-        data.save();
+//        //需要测试一下
+//        PlayerData data = TotalManager.getDataManager().getData("test");
+//        data.addData("test",new IntegerDataValue(25));
+//        data.addData("test2",new StringDataValue("时间"));
+//        data.save();
 
     }
 
