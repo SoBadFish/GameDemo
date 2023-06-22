@@ -12,7 +12,7 @@ import org.sobadfish.gamedemo.item.ItemIDSunName;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
-import org.sobadfish.gamedemo.proxy.ItemProxy;
+
 import org.sobadfish.gamedemo.room.GameRoom;
 
 /**
@@ -33,16 +33,7 @@ public class TeamChoseItem implements ICustomItem {
                 FormWindowSimple simple = new FormWindowSimple(TotalManager.getLanguage().getLanguage("player-chose-team", "请选择队伍"), "");
                 for (TeamInfo teamInfoConfig : room.getTeamInfos()) {
                     Item wool = teamInfoConfig.getTeamConfig().getTeamConfig().getBlockWoolColor();
-                    //得随时翻译回来
-                    String ws = ItemProxy.asNewWool(wool.getId()+"");
-                    int id,damage;
-                    if(ws != null){
-                        id = Integer.parseInt(ws.split(":")[0]);
-                        damage = Integer.parseInt(ws.split(":")[1]);
-                    }else{
-                        id = wool.getId();
-                        damage = wool.getDamage();
-                    }
+
 
                     int max;
                     if(teamInfoConfig.getTeamConfig().getTeamConfig().maxPlayer > 0){
@@ -55,7 +46,7 @@ public class TeamChoseItem implements ICustomItem {
 
                     simple.addButton(new ElementButton(TextFormat.colorize('&', teamInfoConfig + " &r" + teamInfoConfig.getTeamPlayers().size() + " / " +max ),
                             new ElementButtonImageData("path",
-                                    ItemIDSunName.getIDByPath(id,damage))));
+                                    ItemIDSunName.getIDByPath(wool.getId(),wool.getDamage()))));
                 }
                 ((Player)player.getPlayer()).showFormWindow(simple, 102);
             }

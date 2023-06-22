@@ -7,7 +7,7 @@ import org.sobadfish.gamedemo.command.GameCommand;
 import org.sobadfish.gamedemo.command.GameSpeakCommand;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.data.IDataValue;
-import org.sobadfish.gamedemo.proxy.ItemProxy;
+
 
 /**
 
@@ -34,7 +34,6 @@ public class GameDemoMain extends PluginBase {
                 ,TotalManager.GAME_NAME,this.getDescription().getVersion())));
         //TODO 注册
         IDataValue.init();
-        ItemProxy.init();
 
         TotalManager.init(this);
         this.getServer().getCommandMap().register(TotalManager.GAME_NAME,new GameAdminCommand(TotalManager.COMMAND_ADMIN_NAME));

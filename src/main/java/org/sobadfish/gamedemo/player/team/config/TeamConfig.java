@@ -5,7 +5,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.BlockColor;
 import org.sobadfish.gamedemo.manager.FunctionManager;
-import org.sobadfish.gamedemo.proxy.ItemProxy;
+
 
 import java.util.*;
 
@@ -215,7 +215,7 @@ public class TeamConfig {
         int r = Integer.parseInt(m.get("r").toString());
         int g = Integer.parseInt(m.get("g").toString());
         int b = Integer.parseInt(m.get("b").toString());
-        TeamConfig teamConfig = new TeamConfig(name,nameColor, ItemProxy.getItem(map.get("blockWoolColor")
+        TeamConfig teamConfig = new TeamConfig(name,nameColor, Item.fromString(map.get("blockWoolColor")
                 .toString()),new BlockColor(r,g,b));
         if(map.containsKey("canPvp")){
             teamConfig.setCanPvp(Boolean.parseBoolean(map.get("canPvp").toString()));
