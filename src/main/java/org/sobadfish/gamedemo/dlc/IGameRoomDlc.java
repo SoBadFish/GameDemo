@@ -12,6 +12,8 @@ import org.sobadfish.gamedemo.room.world.WorldInfo;
 public abstract class IGameRoomDlc {
 
 
+
+
     public IGameRoomDlc(){}
     /**
      * 在房间中启动
@@ -54,6 +56,7 @@ public abstract class IGameRoomDlc {
      * @param room 房间
      * */
     public void onDisable(GameRoom room){}
+
 
 
 

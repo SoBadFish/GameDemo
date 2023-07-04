@@ -18,7 +18,7 @@ public class DisPlayWindowsFrom {
 
     public static int FROM_ID = 155;
 
-    public static int FROM_MAX_ID = 105478;
+    public static int FROM_MAX_ID = 1054780;
 
     public static LinkedHashMap<String, GameFrom> FROM = new LinkedHashMap<>();
 

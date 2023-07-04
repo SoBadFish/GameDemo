@@ -5,11 +5,11 @@ import cn.nukkit.Server;
 import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.scheduler.AsyncTask;
 import org.sobadfish.gamedemo.entity.GameFloatText;
+import org.sobadfish.gamedemo.event.ReloadWorldEvent;
 import org.sobadfish.gamedemo.manager.*;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.config.GameRoomConfig;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,19 +101,14 @@ public class PluginMasterRunnable extends ThreadManager.AbstractGameRunnable {
             Server.getInstance().getScheduler().scheduleAsyncTask(TotalManager.getPlugin(), new AsyncTask() {
                 @Override
                 public void onRun() {
+
                     List<GameRoomConfig> bufferQueue = new ArrayList<>();
                     try {
-                        GameRoomConfig roomConfig;
                         for(Map.Entry<String,String> map: WorldResetManager.RESET_QUEUE.entrySet()){
-                            roomConfig = TotalManager.getRoomManager().getRoomConfig(map.getKey());
-                            if(roomConfig != null && roomConfig.resetWorld) {
-                                if (WorldInfoConfig.toPathWorld(map.getKey(), map.getValue())) {
-                                    TotalManager.sendMessageToConsole("&a" + map.getKey() + " 地图已还原");
-                                }
-                                Server.getInstance().loadLevel(map.getValue());
-                                TotalManager.sendMessageToConsole("&r释放房间 " + map.getKey());
-                                TotalManager.sendMessageToConsole("&r房间 " + map.getKey() + " 已回收");
+                            if (WorldInfoConfig.toPathWorld(map.getKey(), map.getValue())) {
+                                TotalManager.sendMessageToConsole("&a" + map.getKey() + " 地图已还原");
                             }
+                            Server.getInstance().getPluginManager().callEvent(new ReloadWorldEvent(TotalManager.getPlugin(), map.getKey()));
                             bufferQueue.add(TotalManager.getRoomManager().getRoomConfig(map.getKey()));
                         }
                         //TODO 从列表中移除

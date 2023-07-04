@@ -43,6 +43,7 @@ import org.sobadfish.gamedemo.entity.DamageFloatTextEntity;
 import org.sobadfish.gamedemo.entity.DeathBodyEntity;
 import org.sobadfish.gamedemo.entity.EntityTnt;
 import org.sobadfish.gamedemo.event.GameRoomCreateEvent;
+import org.sobadfish.gamedemo.event.ReloadWorldEvent;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.panel.ChestInventoryPanel;
 import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
@@ -845,10 +846,12 @@ public class RoomManager implements Listener {
 
     @EventHandler
     public void onFrom(PlayerFormRespondedEvent event){
+        Player player = event.getPlayer();
         if(event.wasClosed()){
+            DisPlayWindowsFrom.FROM.remove(player.getName());
             return;
         }
-        Player player = event.getPlayer();
+
         if(DisPlayWindowsFrom.FROM.containsKey(player.getName())){
             GameFrom simple = DisPlayWindowsFrom.FROM.get(player.getName());
             if (onGameFrom(event, player, simple)) {
@@ -1101,6 +1104,13 @@ public class RoomManager implements Listener {
         }
     }
 
+    @EventHandler
+    public void onWorldReloadEvent(ReloadWorldEvent event) {
+        Server.getInstance().loadLevel(event.world);
+        TotalManager.sendMessageToConsole("&r释放房间 " + event.world);
+        TotalManager.sendMessageToConsole("&r房间 " + event.world + " 已回收");
+
+    }
 
 
 }
