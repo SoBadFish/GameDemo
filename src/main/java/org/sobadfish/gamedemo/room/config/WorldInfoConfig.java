@@ -141,10 +141,13 @@ public class WorldInfoConfig {
                 }
             }
             if (files != null && files.length > 0) {
+                //扔到主线程
                 if(!isInit) {
-                    if (Server.getInstance().isLevelLoaded(levelName)) {
-                        Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName), true);
-                    }
+                    Server.getInstance().getScheduler().scheduleTask(TotalManager.getPlugin(), () -> {
+                        if (Server.getInstance().isLevelLoaded(levelName)) {
+                            Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName), true);
+                        }
+                    });
                 }
                 Utils.toDelete(f2);
                 if(!f2.exists() && !f2.mkdirs()){
