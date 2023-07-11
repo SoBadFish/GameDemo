@@ -104,7 +104,7 @@ public class PluginMasterRunnable extends ThreadManager.AbstractGameRunnable {
                 public void onRun() {
                     try {
                         for(Map.Entry<String,String> map: WorldResetManager.RESET_QUEUE.entrySet()){
-                            if (WorldInfoConfig.toPathWorld(map.getKey(), map.getValue())) {
+                            if (WorldInfoConfig.toPathWorld(map.getKey(), map.getValue(),false)) {
                                 TotalManager.sendMessageToConsole("&a" + map.getKey() + " 地图已还原");
                             }
                             Server.getInstance().getPluginManager().callEvent(new ReloadWorldEvent(TotalManager.getPlugin(), TotalManager.getRoomManager().getRoomConfig(map.getKey())));
