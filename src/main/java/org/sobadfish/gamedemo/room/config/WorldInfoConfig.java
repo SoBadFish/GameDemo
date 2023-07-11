@@ -79,7 +79,7 @@ public class WorldInfoConfig {
         //主世界地图
         File world = new File(nameFile+File.separator+"world"+File.separator+levelName);
         if(world.exists() && world.isDirectory()){
-            if(toPathWorld(roomName, levelName)){
+            if(toPathWorld(roomName, levelName,true)){
                 Server.getInstance().loadLevel(levelName);
                 TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("world-init-success","&a地图 &e[1] &a初始化完成",
                         levelName));
@@ -121,10 +121,11 @@ public class WorldInfoConfig {
      * 还原地图核心算法
      * @param roomName 房间名称
      * @param levelName 地图名称
+     * @param isInit 是否是初始化状态
      *
      * @return 是否还原成功
      * */
-    public static boolean toPathWorld(String roomName,String levelName){
+    public static boolean toPathWorld(String roomName,String levelName,boolean isInit){
         try {
 
             File nameFile = new File(TotalManager.getDataFolder() + File.separator + "rooms" + File.separator + roomName);
@@ -140,8 +141,10 @@ public class WorldInfoConfig {
                 }
             }
             if (files != null && files.length > 0) {
-                if(Server.getInstance().isLevelLoaded(levelName)) {
-                    Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName), true);
+                if(!isInit) {
+                    if (Server.getInstance().isLevelLoaded(levelName)) {
+                        Server.getInstance().unloadLevel(Server.getInstance().getLevelByName(levelName), true);
+                    }
                 }
                 Utils.toDelete(f2);
                 if(!f2.exists() && !f2.mkdirs()){
