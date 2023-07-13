@@ -48,6 +48,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractGameRunnable {
                     RandomJoinManager.newInstance().playerInfos.remove(info);
                     continue;
                 }
+                info.getPlayerInfo().sendSubTitle(FunctionManager.formatTime((int)((System.currentTimeMillis() - info.time) / 1000f)));
                 if(!joinRandomRoom(info)){
                     if(info.isNext){
                         if(info.getPlayerInfo().getPlayer() instanceof Player) {
