@@ -4,6 +4,9 @@ import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockAir;
 import cn.nukkit.item.Item;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.nbt.tag.ListTag;
+import cn.nukkit.nbt.tag.StringTag;
 import cn.nukkit.utils.TextFormat;
 import org.sobadfish.gamedemo.manager.data.TagItemDataManager;
 import org.sobadfish.gamedemo.room.area.GameArea;
@@ -18,6 +21,10 @@ import java.util.*;
  */
 public class FunctionManager {
 
+    /**
+     * 物品随机附魔的标签
+     * */
+    public static final String RANDOM_TAG = "ITEM_RANDOM_ENCHANT";
     /**
      * 画一条进度条
      * ■■■■□□□□□□
@@ -212,6 +219,30 @@ public class FunctionManager {
                 }
             }
         }
+        //TODO 给物品一个附魔 先做一个TAG标记 然后在设置箱子内附魔
+        String[] sEnchant = s.split("&");
+        if(sEnchant.length > 1){
+            CompoundTag compoundTag = item.getNamedTag();
+            ListTag<StringTag> rEnchants =new ListTag<>(RANDOM_TAG);
+            if(compoundTag == null){
+                compoundTag = new CompoundTag();
+            }
+            for(int i = 1;i < sEnchant.length;i++){
+                String[] dEnchant = sEnchant[i].split(":");
+                String dLevel = "1~1";
+                if(dEnchant.length > 1){
+                    String[] rLevel = dEnchant[1].split("~");
+                    if(rLevel.length > 1){
+                        dLevel =  dEnchant[1];
+                    }
+                }
+                rEnchants.add(new StringTag(dEnchant[0],dLevel));
+            }
+            compoundTag.putList(rEnchants);
+            item.setNamedTag(compoundTag);
+
+        }
+
 
         return item;
 
