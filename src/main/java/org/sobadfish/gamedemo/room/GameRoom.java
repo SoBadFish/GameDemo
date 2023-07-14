@@ -1209,13 +1209,17 @@ public class GameRoom {
                         if(item.hasCompoundTag() && item.getNamedTag().contains(FunctionManager.RANDOM_TAG)){
                             ListTag<StringTag> ls = item.getNamedTag().getList(FunctionManager.RANDOM_TAG,StringTag.class);
                             for(StringTag st: ls.getAll()){
-                                String[] sdl = st.parseValue().split("~");
+                                String[] ds = st.parseValue().split("&");
+                                String[] sdl = ds[1].split("~");
                                 int level = Utils.rand(Integer.parseInt(sdl[0]),Integer.parseInt(sdl[1]));
                                 if(level > 0){
-                                    item.addEnchantment(Enchantment.getEnchantment(Integer.parseInt(st.getName())).setLevel(level));
+                                    item.addEnchantment(Enchantment.getEnchantment(Integer.parseInt(ds[0])).setLevel(level));
                                 }
 
                             }
+                            CompoundTag compoundTag = item.getNamedTag();
+                            compoundTag.remove(FunctionManager.RANDOM_TAG);
+                            item.setNamedTag(compoundTag);
                         }
                         itemLinkedHashMap.put(i, item);
                     }

@@ -236,7 +236,7 @@ public class FunctionManager {
                         dLevel =  dEnchant[1];
                     }
                 }
-                rEnchants.add(new StringTag(dEnchant[0],dLevel));
+                rEnchants.add(new StringTag(dEnchant[0],dEnchant[0]+"&"+dLevel));
             }
             compoundTag.putList(rEnchants);
             item.setNamedTag(compoundTag);
