@@ -101,6 +101,7 @@ defeatCmd: |-
 
 roundChest: "玩家开启地图内箱子是否随机刷新物品"
 
+round: "箱子内出现物品的概率 （百分比）必须要填整数"
 
 tntDamage: "TNT的伤害"
 

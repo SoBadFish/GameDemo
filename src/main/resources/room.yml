@@ -106,6 +106,9 @@ defeatCmd: []
 
 roundChest: false
 
+# 箱子内物品出现的概率
+round: 15
+
 # TNT的伤害
 tntDamage: 8
 
