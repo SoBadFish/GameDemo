@@ -730,12 +730,15 @@ public class GameRoom {
                         info.getPlayer().removeAllEffects();
                         ((Player) info.getPlayer()).setExperience(0, 0);
                     }
-                    info.cancel();
+//                    info.cancel();
                     TotalManager.getRoomManager().playerJoin.remove(info.getPlayer().getName());
                 } else {
                     TotalManager.getRoomManager().playerJoin.remove(info.getPlayer().getName());
 
                 }
+                info.cancel();
+                //清除玩家在游戏房间内的信息
+                playerInfos.remove(info);
             } else {
                 info.getPlayer().close();
                 playerInfos.remove(info);

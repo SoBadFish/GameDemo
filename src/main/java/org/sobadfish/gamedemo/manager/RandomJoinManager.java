@@ -63,6 +63,7 @@ public class RandomJoinManager {
         if(info.getGameRoom() != null && info.getGameRoom().getType() != GameRoom.GameType.END){
             return;
         }
+        info = new PlayerInfo(info.getPlayer());
         IPlayerInfo iPlayerInfo = new IPlayerInfo();
         iPlayerInfo.playerInfo = info;
         iPlayerInfo.isNext = isNext;
