@@ -16,7 +16,7 @@ import java.util.Objects;
 public class RoomData implements Serializable {
     public String roomName = "";
 
-    public LinkedHashMap<String, IDataValue<?>> data = new LinkedHashMap<>();
+    private LinkedHashMap<String, IDataValue<?>> data = new LinkedHashMap<>();
 
     @Override
     public boolean equals(Object o) {
@@ -30,7 +30,11 @@ public class RoomData implements Serializable {
         return Objects.equals(roomName, roomData.roomName);
     }
 
-    public void add(String type,IDataValue<? extends Objects> value){
+    public LinkedHashMap<String, IDataValue<?>> getData() {
+        return data;
+    }
+
+    public void add(String type, IDataValue<? extends Objects> value){
         if(data.containsKey(type)){
             IDataValue<?> dataValue = data.get(type);
             dataValue.addValue(value);
@@ -53,6 +57,8 @@ public class RoomData implements Serializable {
     }
 
 
+
+
     public void set(String type,IDataValue<Objects> value){
         if(data.containsKey(type)){
             IDataValue<?> dataValue = data.get(type);
@@ -60,6 +66,13 @@ public class RoomData implements Serializable {
         }else{
             data.put(type,value);
         }
+    }
+
+    public IDataValue<?> get(String type,IDataValue<?> defaultValue){
+        if(!data.containsKey(type)){
+            data.put(type,defaultValue);
+        }
+        return data.get(type);
     }
 
     @Override
@@ -97,6 +110,14 @@ public class RoomData implements Serializable {
         roomData.data = new LinkedHashMap<>(dataValueMap);
 
         return roomData;
+    }
+
+    public IDataValue<?> copy(){
+        try {
+            return (IDataValue<?>) this.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 
 

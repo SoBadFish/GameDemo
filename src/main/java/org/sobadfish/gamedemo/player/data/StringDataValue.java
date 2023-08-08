@@ -17,7 +17,9 @@ public class StringDataValue extends IDataValue<String>{
 
     @Override
     public void addValue(IDataValue<?> value) {
-        this.value = value.getValue().toString();
+        if(asAppend()) {
+            this.value += value.getValue().toString();
+        }
     }
 
     @Override

@@ -45,7 +45,7 @@ public class PlayerData{
     public IDataValue<?> getDataByRoom(String room,String dataType){
         for(RoomData data: roomData){
             if(data.roomName.equalsIgnoreCase(room)){
-                return data.data.get(dataType);
+                return data.get(dataType,new IntegerDataValue(0));
             }
         }
         return new IntegerDataValue(0);
@@ -273,19 +273,24 @@ public class PlayerData{
         RoomData data = getRoomData(info.getGameRoom().getRoomConfig().name);
         if(info.getPlayer() instanceof Player) {
             for (String dataType : info.statistics.keySet()) {
-                if(data.data.containsKey(dataType)){
-                    IDataValue<?> dataValue =  data.data.get(dataType);
-                    IDataValue<?> pValue = info.statistics.get(dataType);
-                    if(pValue.asAppend()){
-                        dataValue.addValue((IDataValue<?>) pValue.getValue());
-                    }
-
-                    data.data.put(dataType,dataValue);
-                }else{
-                    data.data.put(dataType, info.statistics.get(dataType));
+                IDataValue<?> dataValue = data.get(dataType,info.statistics.get(dataType));
+                IDataValue<?> pValue = info.statistics.get(dataType);
+                if(pValue.asAppend()){
+                    dataValue.addValue((IDataValue<?>) pValue.getValue());
                 }
 
             }
+//            for (String dataType : info.statistics.keySet()) {
+//                if(data.data.containsKey(dataType)){
+//                    IDataValue<?> dataValue =  data.data.get(dataType);
+//                    IDataValue<?> pValue = info.statistics.get(dataType);
+//                    dataValue.addValue((IDataValue<?>) pValue.getValue());
+//                    data.data.put(dataType,dataValue);
+//                }else{
+//                    data.data.put(dataType, info.statistics.get(dataType));
+//                }
+//
+//            }
         }
     }
 

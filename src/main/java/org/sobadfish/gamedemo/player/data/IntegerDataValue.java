@@ -20,8 +20,10 @@ public class IntegerDataValue extends IDataValue<Integer>{
 
     @Override
     public void addValue(IDataValue<?> value) {
-        if(value instanceof IntegerDataValue || value.getValue() instanceof Integer){
-            this.value += (Integer) value.getValue();
+        if(asAppend()) {
+            if (value instanceof IntegerDataValue || value.getValue() instanceof Integer) {
+                this.value += (Integer) value.getValue();
+            }
         }
     }
 
