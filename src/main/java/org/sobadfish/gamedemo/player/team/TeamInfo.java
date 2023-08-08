@@ -193,6 +193,12 @@ public class TeamInfo {
                 v = v.replace("["+(++i)+"]", playerInfo.getData(type)+"");
             }
             event.getRoom().sendTipMessage(FunctionManager.getCentontString(v,line.length()));
+
+            //TODO 记录胜利次数
+            playerInfo.addData(PlayerData.DataType.VICTORY.getName());
+            //TODO 记录游戏次数
+            playerInfo.addData(PlayerData.DataType.GAME.getName());
+
         }
         event.getRoom().sendTipMessage("&a"+line);
 
@@ -208,6 +214,11 @@ public class TeamInfo {
         TeamDefeatEvent event = new TeamDefeatEvent(this,room,TotalManager.getPlugin());
         Server.getInstance().getPluginManager().callEvent(event);
         for (PlayerInfo info:event.getTeamInfo().getDefeatPlayers()) {
+            //TODO 记录失败次数
+            info.addData(PlayerData.DataType.DEFEAT.getName());
+
+            //TODO 记录游戏次数
+            info.addData(PlayerData.DataType.GAME.getName());
             room.getRoomConfig().defeatCommand.forEach(cmd->Server.getInstance().dispatchCommand(new ConsoleCommandSender(),cmd.replace("@p",info.getName())));
             if(event.getRoom().getRoomConfig().isAutomaticNextRound){
                 info.sendMessage(TotalManager.language.getLanguage("player-auto-join-next-room","&7即将自动进行下一局"));
