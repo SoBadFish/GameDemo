@@ -1194,9 +1194,6 @@ public class GameRoom {
 
     /**
      * 设置资源箱的物品
-     * @param size 箱子的格子数量
-     * @param block 可以存放物品的容器
-     * @return 箱子内物品
      * */
     public LinkedHashMap<Integer, Item> getRandomItem(int size, Block block){
         LinkedHashMap<Integer,Item> itemLinkedHashMap = new LinkedHashMap<>();
@@ -1209,21 +1206,25 @@ public class GameRoom {
                 for (int i = 0; i < size; i++) {
                     if (Utils.rand(0, 100) <= getRoomConfig().getRound()) {
                         Item item = list.get(new Random().nextInt(list.size()));
-                        if(item.hasCompoundTag() && item.getNamedTag().contains(FunctionManager.RANDOM_TAG)){
-                            ListTag<StringTag> ls = item.getNamedTag().getList(FunctionManager.RANDOM_TAG,StringTag.class);
-                            for(StringTag st: ls.getAll()){
-                                String[] ds = st.parseValue().split("&");
-                                String[] sdl = ds[1].split("~");
-                                int level = Utils.rand(Integer.parseInt(sdl[0]),Integer.parseInt(sdl[1]));
-                                if(level > 0){
-                                    item.addEnchantment(Enchantment.getEnchantment(Integer.parseInt(ds[0])).setLevel(level));
-                                }
+                        if(item.hasCompoundTag() ){
+                            if(item.getNamedTag().contains("ROUND_ENCHANT")){
+                                ListTag<StringTag> ls = item.getNamedTag().getList("ROUND_ENCHANT",StringTag.class);
+                                for(StringTag st: ls.getAll()){
+                                    String[] ds = st.parseValue().split("&");
+                                    String[] sdl = ds[1].split("~");
+                                    int level = Utils.rand(Integer.parseInt(sdl[0]),Integer.parseInt(sdl[1]));
+                                    if(level > 0){
+                                        item.addEnchantment(Enchantment.getEnchantment(Integer.parseInt(ds[0])).setLevel(level));
+                                    }
 
+                                }
+                                CompoundTag compoundTag = item.getNamedTag();
+                                compoundTag.remove("ROUND_ENCHANT");
+                                item.setNamedTag(compoundTag);
                             }
-                            CompoundTag compoundTag = item.getNamedTag();
-                            compoundTag.remove(FunctionManager.RANDOM_TAG);
-                            item.setNamedTag(compoundTag);
+
                         }
+
                         itemLinkedHashMap.put(i, item);
                     }
                 }
