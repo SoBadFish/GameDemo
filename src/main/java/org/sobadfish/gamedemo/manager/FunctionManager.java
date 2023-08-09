@@ -191,12 +191,17 @@ public class FunctionManager {
     }
 
     public static Item stringToItem(String s){
+
+        String[] sEnchant = s.split("&");
         String[] sList = s.split(":");
+        if(sEnchant.length > 1){
+            sList = sEnchant[0].split(":");
+        }
         //tag物品截胡检测一下
         Item item = Item.get(0);
         TagItemDataManager itemDataManager = TotalManager.getTagItemDataManager();
         if(itemDataManager.hasItem(sList[0])){
-             item = itemDataManager.getItem(sList[0]);
+            item = itemDataManager.getItem(sList[0]);
             int count = 1;
             if(sList.length > 1){
                 count = Integer.parseInt(sList[1]);
@@ -220,10 +225,10 @@ public class FunctionManager {
             }
         }
         //TODO 给物品一个附魔 先做一个TAG标记 然后在设置箱子内附魔
-        String[] sEnchant = s.split("&");
+
         if(sEnchant.length > 1){
             CompoundTag compoundTag = item.getNamedTag();
-            ListTag<StringTag> rEnchants =new ListTag<>(RANDOM_TAG);
+            ListTag<StringTag> rEnchants =new ListTag<>("ROUND_ENCHANT");
             if(compoundTag == null){
                 compoundTag = new CompoundTag();
             }
