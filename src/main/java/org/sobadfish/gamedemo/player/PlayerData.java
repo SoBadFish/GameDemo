@@ -276,21 +276,10 @@ public class PlayerData{
                 IDataValue<?> dataValue = data.get(dataType,info.statistics.get(dataType));
                 IDataValue<?> pValue = info.statistics.get(dataType);
                 if(pValue.asAppend()){
-                    dataValue.addValue((IDataValue<?>) pValue.getValue());
+                    dataValue.addValue(pValue);
                 }
 
             }
-//            for (String dataType : info.statistics.keySet()) {
-//                if(data.data.containsKey(dataType)){
-//                    IDataValue<?> dataValue =  data.data.get(dataType);
-//                    IDataValue<?> pValue = info.statistics.get(dataType);
-//                    dataValue.addValue((IDataValue<?>) pValue.getValue());
-//                    data.data.put(dataType,dataValue);
-//                }else{
-//                    data.data.put(dataType, info.statistics.get(dataType));
-//                }
-//
-//            }
         }
     }
 
