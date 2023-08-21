@@ -142,8 +142,11 @@ floatSpawnPos: []
 # 游戏kb设置 使用独立的算法
 kb-setting:
   enable: true
+  # 击退力道
   force: 0.4
+  # 击退速度
   speed: 0.5
+  # 高度
   motionY: 0.1
 
 # 使用拓展插件列表

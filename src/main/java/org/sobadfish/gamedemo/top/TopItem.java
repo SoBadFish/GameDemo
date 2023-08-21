@@ -21,8 +21,8 @@ public class TopItem {
     public String room;
 
 
-    public TopItem(String name, PlayerData.DataType topType, Position position, String title){
-        this.topType = topType.getName();
+    public TopItem(String name, String topType, Position position, String title){
+        this.topType = topType;
         this.position = WorldInfoConfig.positionToString(position);
         this.name = name;
         this.title = title;

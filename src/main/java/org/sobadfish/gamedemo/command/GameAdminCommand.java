@@ -272,23 +272,25 @@ public class GameAdminCommand extends Command {
                             commandSender.sendMessage(language.getLanguage("command-admin-usage","/[1] help 查看指令帮助",TotalManager.COMMAND_ADMIN_NAME));
                             return false;
                         }
+                        String typeName = strings[3];
                         PlayerData.DataType type = PlayerData.DataType.byName(strings[3]);
-                        if (type == null) {
-                            commandSender.sendMessage(language.getLanguage("type-unknown","未知类型"));
-                            return true;
+                        if (type != null) {
+                            typeName = type.getName();
+//                            commandSender.sendMessage(language.getLanguage("type-unknown","未知类型"));
+//                            return true;
                         }
                         String room = null;
                         if (strings.length > 4) {
                             room = strings[4];
                         }
-                        TopItem item = new TopItem(name,type,((Player) commandSender).getPosition(),"");
+                        TopItem item = new TopItem(name,typeName,((Player) commandSender).getPosition(),"");
                         item.room = room;
                         if(TotalManager.getTopManager().hasTop(name)){
                             commandSender.sendMessage(language.getLanguage("top-exists","存在名称为 [1] 的排行榜了", name));
                             return true;
                         }
                         item.setTitle(TextFormat.colorize('&',language.getLanguage("top-title","[1] &a[2] &r排行榜",
-                                        TotalManager.getTitle(),type.getName())));
+                                        TotalManager.getTitle(),typeName)));
                         TotalManager.getTopManager().addTopItem(item);
                         commandSender.sendMessage(language.getLanguage("top-create-success","排行榜创建成功"));
                     } else {
