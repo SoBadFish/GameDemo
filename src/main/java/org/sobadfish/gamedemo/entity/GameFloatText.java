@@ -128,13 +128,16 @@ public class GameFloatText extends Entity {
                 this.player.remove(player);
             }else {
                 if (player1.getLevel().getFolderName().equalsIgnoreCase(getLevel().getFolderName())) {
-                    if (this.hasSpawned.containsValue(player1)) {
-                        this.despawnFrom(player1);
+                    if (!this.hasSpawned.containsValue(player1)) {
+//                        this.despawnFrom(player1);
+                        spawnTo(player1);
                     }
-                    spawnTo(player1);
+//                    spawnTo(player1);
                 } else {
+                    this.despawnFrom(player1);
                     this.player.remove(player);
                     close();
+
                 }
             }
         }

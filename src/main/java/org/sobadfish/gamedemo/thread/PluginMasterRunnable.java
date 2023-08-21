@@ -2,7 +2,6 @@ package org.sobadfish.gamedemo.thread;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.network.protocol.RemoveEntityPacket;
 import cn.nukkit.scheduler.AsyncTask;
 import org.sobadfish.gamedemo.entity.GameFloatText;
 import org.sobadfish.gamedemo.event.ReloadWorldEvent;
@@ -75,23 +74,24 @@ public class PluginMasterRunnable extends ThreadManager.AbstractGameRunnable {
                         FloatTextManager.removeFloatText(floatText);
                         continue;
                     }
-                    if (floatText.player.contains(player.getName())) {
-                        if (!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
-                            if (!floatText.closed) {
-                                RemoveEntityPacket rp = new RemoveEntityPacket();
-                                rp.eid = floatText.getId();
-                                player.dataPacket(rp);
-                            }
-                            floatText.player.remove(player.getName());
-                        }
-                    }
+//                    if (floatText.player.contains(player.getName())) {
+//                        if (!player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName()) || !player.isOnline()) {
+//                            if (!floatText.closed) {
+//                                RemoveEntityPacket rp = new RemoveEntityPacket();
+//                                rp.eid = floatText.getId();
+//                                player.dataPacket(rp);
+//                            }
+//                            floatText.player.remove(player.getName());
+//                        }
+//                    }
+
                     if (player.getLevel().getFolderName().equalsIgnoreCase(floatText.getPosition().getLevel().getFolderName())) {
                         if(!floatText.player.contains(player.getName())){
                             floatText.player.add(player.getName());
                         }
 
                     }
-                    if(update > 5){
+                    if(update > 3){
                         floatText.disPlayers();
                         update = 0;
                     }
