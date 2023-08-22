@@ -21,6 +21,7 @@ import cn.nukkit.event.entity.EntityExplodeEvent;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
+import cn.nukkit.event.level.ChunkUnloadEvent;
 import cn.nukkit.event.level.WeatherChangeEvent;
 import cn.nukkit.event.player.*;
 import cn.nukkit.form.response.FormResponseSimple;
@@ -42,6 +43,7 @@ import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.entity.DamageFloatTextEntity;
 import org.sobadfish.gamedemo.entity.DeathBodyEntity;
 import org.sobadfish.gamedemo.entity.EntityTnt;
+import org.sobadfish.gamedemo.entity.GameFloatText;
 import org.sobadfish.gamedemo.event.GameRoomCreateEvent;
 import org.sobadfish.gamedemo.event.ReloadWorldEvent;
 import org.sobadfish.gamedemo.item.ICustomItem;
@@ -714,6 +716,21 @@ public class RoomManager implements Listener {
         }
     }
 
+
+    /**
+     * 阻止区块卸载 如果区块卸载会出现如下问题
+     *
+     * 1. 还原房间部分方块无法还原
+     * 2. 导致后台循环报错空指针异常
+     * */
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent event){
+        for(Entity entity: event.getChunk().getEntities().values()){
+            if(entity instanceof GameFloatText){
+                event.setCancelled();
+            }
+        }
+    }
 
 
 
