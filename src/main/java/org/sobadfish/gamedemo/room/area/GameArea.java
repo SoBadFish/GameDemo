@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 这个类只是提供了一直区域划分的算法
+ * 通过这个算法可检测到区域 可以对这个区域进行操作
  * @author Sobadfish
  * 2023/1/12
  */
@@ -56,7 +58,7 @@ public class GameArea {
     }
 
     /**
-     * 获取这个区域中的所有方块
+     * 获取这个区域中的所有的非空气方块
      * */
     public ArrayList<Block> asValueBlocks(){
         ArrayList<Block> blocks = new ArrayList<>();
@@ -77,16 +79,20 @@ public class GameArea {
     /**
      * 检测坐标是否在区域内
      * @param position 被检测坐标
+     * @param ignoreY 忽略Y轴
      * @return 是否在区域内
      * */
-    public boolean chunkPosition(Position position){
-        if(position.x >= this.minX && position.x <= this.maxX && position.y >= this.minY
-                && position.y <= this.maxY && position.z >= this.minZ
+    public boolean chunkPosition(Position position,boolean ignoreY){
+        if(position.x >= this.minX && position.x <= this.maxX && (ignoreY || position.y >= this.minY)
+                && (ignoreY || position.y <= this.maxY) && position.z >= this.minZ
                 && position.z <= this.maxZ){
             return this.level != null && position.level == this.level;
         }
         return false;
     }
+
+
+
 
 
 
