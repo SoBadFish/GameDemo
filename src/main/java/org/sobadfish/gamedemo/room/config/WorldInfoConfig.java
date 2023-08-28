@@ -28,6 +28,8 @@ public class WorldInfoConfig {
      * */
     private String waitPosition;
 
+
+
     private WorldInfoConfig(String gameWorld,
                             String waitPosition
     ){

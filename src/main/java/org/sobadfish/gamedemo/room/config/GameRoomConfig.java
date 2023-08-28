@@ -265,6 +265,13 @@ public class GameRoomConfig {
     public DeathBodyConfig deathBodyConfig = new DeathBodyConfig();
 
 
+    /**
+     * 游戏内区域
+     *
+     * */
+    public List<GameAreaConfig> gameAreaConfigs = new ArrayList<>();
+
+
 
 
 
@@ -368,6 +375,20 @@ public class GameRoomConfig {
                     TotalManager.sendMessageToConsole(TotalManager.getLanguage().getLanguage("load-game-room-world-error","&c未成功加载 &a"+name+"&c 的游戏地图"));
                     return null;
                 }
+                List<GameAreaConfig> areaConfigs = new ArrayList<>();
+
+                Config gameAreaConfig = new Config(file+"/area.yml",Config.YAML);
+                //TODO 读取区域数据
+                Map<String,Object> areaDefaultConfig = gameAreaConfig.getAll();
+                for(Map.Entry<String, Object> areaCfg: areaDefaultConfig.entrySet()){
+                    Object mapCfg = areaCfg.getValue();
+                    if(mapCfg instanceof List){
+                        GameAreaConfig gameAreaCfg = GameAreaConfig.loadByConfigMap(areaCfg.getKey(), (List<?>) mapCfg);
+                        areaConfigs.add(gameAreaCfg);
+                    }
+
+                }
+
 
                 int time = room.getInt("gameTime");
                 int waitTime = room.getInt("waitTime");
@@ -381,6 +402,8 @@ public class GameRoomConfig {
                             teamConfigs.get(map.get("name").toString()),map));
                 }
                 GameRoomConfig roomConfig = new GameRoomConfig(name,worldInfoConfig,time,waitTime,maxWaitTime,minPlayerSize,maxPlayerSize,teamInfoConfigs);
+                //TODO 区域信息
+                roomConfig.gameAreaConfigs = areaConfigs;
                 roomConfig.hasWatch = room.getBoolean("hasWatch",true);
                 roomConfig.gameInWait = room.getInt("gameInWait",10);
                 roomConfig.reSpawnTime = room.getInt("reSpawnTime",0);
@@ -598,6 +621,9 @@ public class GameRoomConfig {
         }
         config.set("floatSpawnPos",pos);
         config.save();
+
+        //保存区域
+        Config areaConfig = new Config(TotalManager.getDataFolder()+"/rooms/"+getName()+"/area.yml",Config.YAML);
 
     }
 

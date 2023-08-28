@@ -1,8 +1,10 @@
 package org.sobadfish.gamedemo.room.area;
 
+import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
+import cn.nukkit.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +18,7 @@ import java.util.Map;
  */
 public class GameArea {
 
-    public Level level;
+    public String level;
 
     public int minX;
 
@@ -30,7 +32,7 @@ public class GameArea {
 
     public int maxZ;
 
-    public GameArea(Position startPosition, Position endPosition, Level level) {
+    public GameArea(Vector3 startPosition, Vector3 endPosition, String level) {
         this.level = level;
         this.minX = startPosition.getFloorX();
         this.minY = startPosition.getFloorY();
@@ -62,16 +64,21 @@ public class GameArea {
      * */
     public ArrayList<Block> asValueBlocks(){
         ArrayList<Block> blocks = new ArrayList<>();
-        for(int x1 = minX; x1 <= maxX; x1++){
-            for(int y1 = minY; y1 <= maxY; y1++){
-                for(int z1 = minZ; z1 <= maxZ; z1++){
-                    Block block = level.getBlock(x1, y1, z1);
-                    if(block != null && block.getId() != 0){
-                        blocks.add(block);
+        //首先检测地图有没有加载
+        Level world = Server.getInstance().getLevelByName(level);
+        if(world != null){
+            for(int x1 = minX; x1 <= maxX; x1++){
+                for(int y1 = minY; y1 <= maxY; y1++){
+                    for(int z1 = minZ; z1 <= maxZ; z1++){
+                        Block block = world.getBlock(x1, y1, z1);
+                        if(block != null && block.getId() != 0){
+                            blocks.add(block);
+                        }
                     }
                 }
             }
         }
+
         return blocks;
 
     }
@@ -86,7 +93,7 @@ public class GameArea {
         if(position.x >= this.minX && position.x <= this.maxX && (ignoreY || position.y >= this.minY)
                 && (ignoreY || position.y <= this.maxY) && position.z >= this.minZ
                 && position.z <= this.maxZ){
-            return this.level != null && position.level == this.level;
+            return this.level != null && position.level.getFolderName().equalsIgnoreCase(this.level);
         }
         return false;
     }
@@ -104,6 +111,7 @@ public class GameArea {
         configMap.put("maxY",this.maxY);
         configMap.put("minZ",this.minZ);
         configMap.put("maxZ",this.maxZ);
+        configMap.put("level",this.level);
         return configMap;
     }
 }
