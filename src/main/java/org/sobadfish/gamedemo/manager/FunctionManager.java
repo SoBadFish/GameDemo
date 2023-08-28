@@ -1,8 +1,10 @@
 package org.sobadfish.gamedemo.manager;
 
+import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockAir;
 import cn.nukkit.item.Item;
+import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
@@ -316,10 +318,14 @@ public class FunctionManager {
             public void run() {
                 //TODO 提取出最短循环
                 long time = System.currentTimeMillis();
-                for(Block block: roomArea.asValueBlocks()){
-                    roomArea.level.setBlock(block,new BlockAir());
+                Level level = Server.getInstance().getLevelByName(roomArea.level);
+                if(level != null){
+                    for(Block block: roomArea.asValueBlocks()){
+                        level.setBlock(block,new BlockAir());
+                    }
                 }
-                TotalManager.sendMessageToConsole("Clear "+roomArea.level.getFolderName()
+
+                TotalManager.sendMessageToConsole("Clear "+roomArea.level
                         +" Area useTime: "+(System.currentTimeMillis() - time) + "ms");
             }
             @Override
