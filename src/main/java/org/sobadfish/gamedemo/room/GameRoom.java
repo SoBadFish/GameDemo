@@ -896,6 +896,14 @@ public class GameRoom {
     public void gameEnd(TeamInfo teamInfo,boolean more){
         if(!more){
             teamInfo.echoDefeat();
+        }else{
+            //其他队伍失败...
+            for(TeamInfo otherTeamInfo: teamInfos){
+                if(otherTeamInfo.equals(teamInfo)){
+                    continue;
+                }
+                otherTeamInfo.echoDefeat();
+            }
         }
         teamInfo.echoVictory();
         teamInfo.givePlayerAward();

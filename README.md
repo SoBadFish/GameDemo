@@ -113,3 +113,28 @@ DLC实体类要实现接口，重写方法
 ```
 IGameRoomDlc
 ```
+#### 重写结束条件
+如果要重写小游戏房间的结束条件 继承接口
+```
+IGameEndJudge
+//重写
+boolean judgeGameEnd(GameRoom room);
+```
+当实现的方法 返回值为true 则立即结束此游戏  
+此时就需要你在这个方法中设置好胜利的队伍与失败的队伍，总得有胜利者不是吗
+你可以调用GameRoom中的方法。
+```
+/**
+*@param teamInfo 胜利的队伍
+* @param more 是否为多队伍模式
+*/
+public void gameEnd(TeamInfo teamInfo,boolean more);
+```
+不过这个方法有局限性 你可以参考GameRoom中的demoGameEnd 来开发  
+
+#### 重写计分板
+
+实现接口中的方法可以重写玩家在游戏中的计分板信息
+```
+IGamePlayerScoreBoard
+```
