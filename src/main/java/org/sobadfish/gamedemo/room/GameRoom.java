@@ -44,31 +44,68 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class GameRoom {
 
+    /**
+     * 游戏房间的配置信息
+     * */
     public GameRoomConfig roomConfig;
 
 
+    /**
+     * 内部参数 是否被初始化
+     * */
     private boolean isInit = true;
-
+    /**
+     * 内部参数 标记是否满员
+     * */
     private boolean isMax;
 
+    /**
+     * 内部参数 标记队伍是否分配完成
+     * */
     private boolean teamAll;
 
 
+    /**
+     * 房间内浮空字
+     * */
     private final ArrayList<FloatTextInfo> floatTextInfos = new ArrayList<>();
 
     //房间内的玩家
     private final CopyOnWriteArrayList<PlayerInfo> playerInfos = new CopyOnWriteArrayList<>();
 
+    /**
+     * 玩家计分板信息
+     * */
     private final LinkedHashMap<PlayerInfo, Scoreboard> scoreboards = new LinkedHashMap<>();
 
+    /**
+     * 内部参数 游戏是否启动
+     * */
     private boolean hasStart;
 
+    /**
+     * 小游戏运行倒计时
+     * */
     public int loadTime = -1;
 
+    /**
+     * 游戏房间状态
+     * */
     private GameType type;
 
+    /**
+     * 游戏结束条件是否检查玩家数量
+     * */
+    public boolean chunkPlayer = true;
+
+    /**
+     * 游戏房间内部队伍
+     * */
     private final ArrayList<TeamInfo> teamInfos = new ArrayList<>();
 
+    /**
+     * 游戏房间拓展插件 可以更改小游戏玩法
+     * */
     private final List<IGameRoomDlc> gameRoomDlc = new ArrayList<>();
 
     /**
@@ -156,6 +193,9 @@ public class GameRoom {
         return null;
     }
 
+    /**
+     * 给所有的旁观者发送消息
+     * */
     public void sendMessageOnWatch(String msg) {
         ArrayList<PlayerInfo> watchPlayer = new ArrayList<>();
         for(PlayerInfo info: playerInfos){
@@ -166,6 +206,11 @@ public class GameRoom {
         watchPlayer.forEach(dp -> dp.sendMessage(msg));
     }
 
+    /**
+     * 玩家加入旁观者阵营
+     * @param info 玩家
+     * @param isTeleport 是否传送到主世界出生点
+     * */
     public void joinWatch(PlayerInfo info,boolean isTeleport){
         //TODO 欢迎加入观察者大家庭
         if(!playerInfos.contains(info)){
@@ -205,6 +250,9 @@ public class GameRoom {
 
     }
 
+    /**
+     * 开启一个游戏房间
+     * */
     public static GameRoom enableRoom(GameRoomConfig roomConfig){
 
         if(roomConfig.getWorldInfo().getGameWorld() == null){
@@ -962,7 +1010,7 @@ public class GameRoom {
      * */
     private void demoGameEnd(){
 
-        if(loadTime > 0) {
+        if(loadTime > 0 && chunkPlayer) {
             //TODO 在房间倒计时内
             if(!roomConfig.infiniteTime) {
                 if (getRoomConfig().teamConfigs.size() > 1) {
@@ -987,7 +1035,7 @@ public class GameRoom {
                     end();
                 }
             }
-        } else{
+        } else if(loadTime <= 0){
             //TODO 在房间倒计时结束
             TeamInfo successInfo;
             if(getRoomConfig().teamConfigs.size() > 1) {
