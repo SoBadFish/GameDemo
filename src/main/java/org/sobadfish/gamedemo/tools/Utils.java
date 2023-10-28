@@ -435,6 +435,76 @@ public class Utils {
         }
     }
 
+    public static String getCentontString(String input,int lineWidth){
+        input = input.replace(' ','$');
+        return justify(input,lineWidth,'c').replace('$',' ');
+    }
+    /**
+     * 字符串居中算法
+     *
+     * @param input 输入的字符串
+     * @param lineWidth 一共多少行
+     * @param just 对齐方法 l: 左对齐 c: 居中 r右对齐
+     *
+     * @return 对齐的字符串
+     * */
+    public static String justify(String input, int lineWidth, char just) {
+        StringBuilder sb = new StringBuilder("");
+        char[] inputText = input.toCharArray();
+        ArrayList<String> words = new ArrayList<>();
+        for (int i = 0; i < inputText.length; i++) {
+            if (inputText[i] != ' ' && inputText[i] != '\n') {
+                sb.append(inputText[i]);
+            } else {
+                inputText[i] = '\n';
+                words.add(sb.toString());
+                //clear content
+                sb = new StringBuilder("");
+            }
+        }
+        //add last word because the last char is not space/'\n'.
+        words.add(sb.toString());
+        for (String s : words) {
+            if (s.length() >= lineWidth) {
+                lineWidth = s.length();
+            }
+        }
+        char[] output = null;
+        StringBuilder sb2 = new StringBuilder("");
+        StringBuilder line;
+        for (String word : words) {
+            line = new StringBuilder();
+            for (int i = 0; i < lineWidth; i++) {
+                line.append(" ");
+            }
+            switch (just) {
+                case 'l':
+                    line.replace(0, word.length(), word);
+                    break;
+                case 'r':
+                    line.replace(lineWidth - word.length(), lineWidth, word);
+                    break;
+                case 'c':
+                    //all the spaces' length
+                    int rest = lineWidth - word.length();
+                    int begin = 0;
+                    if (rest % 2 != 0) {
+                        begin = (rest / 2) + 1;
+                    } else {
+                        begin = rest / 2;
+                    }
+                    line.replace(begin, begin + word.length(), word);
+                    break;
+                default:break;
+            }
+
+            line.append('\n');
+            sb2.append(line);
+        }
+        return sb2.toString();
+
+    }
+
 
 
 }

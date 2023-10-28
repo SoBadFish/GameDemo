@@ -45,6 +45,7 @@ import org.sobadfish.gamedemo.entity.DeathBodyEntity;
 import org.sobadfish.gamedemo.entity.EntityTnt;
 import org.sobadfish.gamedemo.entity.GameFloatText;
 import org.sobadfish.gamedemo.event.GameRoomCreateEvent;
+import org.sobadfish.gamedemo.event.PlayerGetExpEvent;
 import org.sobadfish.gamedemo.event.ReloadWorldEvent;
 import org.sobadfish.gamedemo.item.ICustomItem;
 import org.sobadfish.gamedemo.panel.ChestInventoryPanel;
@@ -52,6 +53,7 @@ import org.sobadfish.gamedemo.panel.DisPlayWindowsFrom;
 import org.sobadfish.gamedemo.panel.from.GameFrom;
 import org.sobadfish.gamedemo.panel.from.button.BaseIButton;
 import org.sobadfish.gamedemo.panel.items.BasePlayPanelItemInstance;
+import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 import org.sobadfish.gamedemo.room.GameRoom;
@@ -1119,6 +1121,43 @@ public class RoomManager implements Listener {
                 event.setCancelled();
             }
         }
+    }
+
+    @EventHandler
+    public void onGetExp(PlayerGetExpEvent event){
+        String playerName = event.getPlayerName();
+        Player player = Server.getInstance().getPlayer(playerName);
+        if(player != null){
+            player.sendMessage(TextFormat.colorize('&',"&b +"+event.getExp()+" 经验("+event.getCause()+")"));
+            PlayerInfo info = TotalManager.getRoomManager().getPlayerInfo(player);
+            PlayerData data = TotalManager.getDataManager().getData(playerName);
+
+            if(info == null || info.getGameRoom() == null){
+
+                TotalManager.sendTipMessageToObject("&l&m"+Utils.writeLine(5,"&a▁▁▁"),player);
+                TotalManager.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
+                String line = String.format("%20s","");
+                player.sendMessage(line);
+                String inputTitle = TotalManager.getLanguage().getLanguage("game-exp-msg","&b&l小游戏经验")+"\n";
+                TotalManager.sendTipMessageToObject(Utils.getCentontString(inputTitle,30),player);
+                TotalManager.sendTipMessageToObject(Utils.getCentontString( TotalManager.getLanguage()
+                        .getLanguage("game-level-msg","&b等级")+" "
+                        +data.getLevel()+String.format("%"+inputTitle.length()+"s","")+" "+
+                        TotalManager.getLanguage()
+                                .getLanguage("game-level-msg","&b等级")
+                        +" "+(data.getLevel() + 1)+"\n",30),player);
+
+
+                TotalManager.sendTipMessageToObject("&7["+data.getExpLine(20)+"&7]\n",player);
+
+                String d = String.format("%.1f",data.getExpPercent() * 100.0);
+                TotalManager.sendTipMessageToObject(Utils.getCentontString("&b"+data.getExpString(data.getExp())+" &7/ &a"+data.getExpString(data.getNextLevelExp())+" &7("+d+"％)",40)+"\n",player);
+                TotalManager.sendTipMessageToObject("&l&m"+Utils.writeLine(5,"&a▁▁▁"),player);
+                TotalManager.sendTipMessageToObject("&l"+Utils.writeLine(9,"&a﹉﹉"),player);
+
+            }
+        }
+
     }
 
     @EventHandler
