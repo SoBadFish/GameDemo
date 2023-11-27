@@ -744,21 +744,12 @@ public class RoomManager implements Listener {
             String roomName = playerJoin.get(player.getName());
             GameRoom room = getRoom(roomName);
             if(room != null){
-                if(room.getType() != GameRoom.GameType.START ){
+                if(room.getType() == GameRoom.GameType.START ){
                     PlayerInfo info = room.getPlayerInfo(player);
                     if(info != null){
-                        room.quitPlayerInfo(info,true);
-                    }
-
-                }else{
-                    PlayerInfo info = room.getPlayerInfo(player);
-                    if(info != null){
-                        if(info.isWatch()){
-                            room.quitPlayerInfo(info,true);
-                            return;
+                        if(!info.isWatch()) {
+                            info.setLeave(true);
                         }
-                        player.getInventory().clearAll();
-                        info.setLeave(true);
                     }
                 }
             }
