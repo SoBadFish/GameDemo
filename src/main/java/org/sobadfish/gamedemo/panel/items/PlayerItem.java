@@ -11,6 +11,7 @@ import org.sobadfish.gamedemo.panel.ChestInventoryPanel;
 import org.sobadfish.gamedemo.panel.from.GameFrom;
 import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
+import org.sobadfish.gamedemo.player.data.IDataValue;
 import org.sobadfish.gamedemo.player.team.TeamInfo;
 
 import java.util.ArrayList;
@@ -53,7 +54,8 @@ public class PlayerItem extends BasePlayPanelItemInstance{
         lore.add(TextFormat.colorize('&',"&r "));
         lore.add(TextFormat.colorize('&',"&r&7血量 &a"+this.info.getPlayer().getHealth()+" / "+this.info.getPlayer().getMaxHealth()));
         lore.add(TextFormat.colorize('&',"&r  "));
-        lore.add(TextFormat.colorize('&',"&r&7击杀 &a"+this.info.getData(PlayerData.DataType.KILL.getName())));
+        IDataValue<?> killData = this.info.getData(PlayerData.DataType.KILL.getName());
+        lore.add(TextFormat.colorize('&',"&r&7击杀 &a"+ (killData != null ? killData.getValue() : 0)));
         lore.add(TextFormat.colorize('&',"&r   "));
         String status = "&a存活";
 
