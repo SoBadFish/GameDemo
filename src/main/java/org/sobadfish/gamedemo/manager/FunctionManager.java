@@ -196,7 +196,7 @@ public class FunctionManager {
 
         String[] sEnchant = s.split("&");
         String[] sList = s.split(":");
-        if(sEnchant.length > 1){
+        if(sEnchant.length > 0){
             sList = sEnchant[0].split(":");
         }
         //tag物品截胡检测一下
@@ -275,7 +275,7 @@ public class FunctionManager {
 
             return mi+":"+sss;
         }else{
-            return "00:"+sss+"";
+            return "00:"+sss;
         }
 
     }
