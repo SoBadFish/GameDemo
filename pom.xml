@@ -8,15 +8,12 @@
     <artifactId>GameDemo</artifactId>
     <version>2.5.0</version>
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
-    <distributionManagement>
-        <repository>
-            <id>maven-repo</id>
-            <url>file:/www/wwwroot/repo.lanink.cn</url>
-        </repository>
-    </distributionManagement>
 
     <repositories>
         <repository>
@@ -41,9 +38,23 @@
         </repository>
         <repository>
             <id>repo-lanink-cn</id>
-            <url>https://repo.lanink.cn/</url>
+            <url>https://repo.lanink.cn/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>maven-repo</id>
+            <url>file:/www/wwwroot/repo.lanink.cn</url>
+        </repository>
+    </distributionManagement>
+
+
 
     <dependencies>
         <dependency>
@@ -56,9 +67,9 @@
         <dependency>
             <groupId>cn.nukkit</groupId>
             <artifactId>Nukkit</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath> ${project.basedir}/lib/Nukkit-PM1E-MOT-SNAPSHOT.jar</systemPath>
+            <version>MOT-java8-SNAPSHOT</version>
+            <scope>provided</scope>
+            <!--<systemPath> ${project.basedir}/lib/Nukkit-PM1E-MOT-SNAPSHOT.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>com.smallaswater.npc</groupId>
