@@ -19,6 +19,7 @@ import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
+import org.jetbrains.annotations.Nullable;
 import org.sobadfish.gamedemo.dlc.IGamePlayerScoreBoard;
 import org.sobadfish.gamedemo.dlc.IGameRoomDlc;
 import org.sobadfish.gamedemo.entity.DeathBodyEntity;
@@ -138,6 +139,7 @@ public class PlayerInfo {
      * @param type 类型
      * @return int 内容
      * */
+    @Nullable
     public IDataValue<?> getData(String type){
         if(statistics.containsKey(type)){
             return statistics.get(type);
@@ -874,11 +876,13 @@ public class PlayerInfo {
             }
 
             lore.add("      ");
+            IDataValue<?> killData = getData(PlayerData.DataType.KILL.getName());
+            IDataValue<?> assistsData = getData(PlayerData.DataType.ASSISTS.getName());
             lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-kill","击杀数: &a[1]",
-                    getData(PlayerData.DataType.KILL.getName())+""));
+                    (killData != null ? killData.getValue().toString() : "0")));
             lore.add(TotalManager.getLanguage().getLanguage("scoreboard-line-assists",
                     "助攻数: &a[1]",
-                    getData(PlayerData.DataType.ASSISTS.getName())+""));
+                    (assistsData != null ? assistsData.getValue().toString() : "0")));
 
             lore.add("        ");
         }
@@ -1013,14 +1017,14 @@ public class PlayerInfo {
             if(scoreBoard != null){
                 if(playerType == PlayerType.WAIT){
                     score = scoreBoard.displayPlayerWaitGameScoreBoard(this);
-                    if(score != null && score.size() > 0){
+                    if(score != null && !score.isEmpty()){
                         boardMessage.setLore(score);
                     }else{
                         boardMessage.setLore(getLore(true));
                     }
                 }else{
                     score = scoreBoard.displayPlayerGameStartScoreBoard(this);
-                    if(score != null && score.size() > 0){
+                    if(score != null && !score.isEmpty()){
                         boardMessage.setLore(score);
                     }else{
                         boardMessage.setLore(getLore(false));

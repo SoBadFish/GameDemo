@@ -14,6 +14,7 @@ import org.sobadfish.gamedemo.manager.RandomJoinManager;
 import org.sobadfish.gamedemo.manager.TotalManager;
 import org.sobadfish.gamedemo.player.PlayerData;
 import org.sobadfish.gamedemo.player.PlayerInfo;
+import org.sobadfish.gamedemo.player.data.IDataValue;
 import org.sobadfish.gamedemo.player.team.config.TeamInfoConfig;
 import org.sobadfish.gamedemo.room.GameRoom;
 import org.sobadfish.gamedemo.room.config.WorldInfoConfig;
@@ -190,7 +191,8 @@ public class TeamInfo {
             int i = 1;
             playerInfo.sendTitle(TotalManager.language.getLanguage("game-victory","&e&l胜利!"),5);
             for(String type: types){
-                v = v.replace("["+(++i)+"]", playerInfo.getData(type)+"");
+                IDataValue<?> data = playerInfo.getData(type);
+                v = v.replace("["+(++i)+"]", data != null ? data.getValue().toString() : "null");
             }
             event.getRoom().sendTipMessage(FunctionManager.getCentontString(v,line.length()));
 

@@ -121,7 +121,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractGameRunnable {
                     }
                 }
             }
-            if (names.size() == 0) {
+            if (names.isEmpty()) {
                 info.sendForceMessage("&c暂时没有合适的房间");
                 i.cancel = true;
                 return true;
@@ -144,7 +144,7 @@ public class RandomJoinRunnable extends ThreadManager.AbstractGameRunnable {
 
             WorldRoom worldRoom = TotalManager.getMenuRoomManager().getRoom(i.name);
             ArrayList<GameRoomConfig> roomConfigs = worldRoom.getRoomConfigs();
-            if (roomConfigs.size() > 0) {
+            if (!roomConfigs.isEmpty()) {
                 GameRoomConfig roomConfig = roomConfigs.get(0);
                 if (roomConfigs.size() > 1) {
                     roomConfig = roomConfigs.get(Utils.rand(0, roomConfigs.size() - 1));
