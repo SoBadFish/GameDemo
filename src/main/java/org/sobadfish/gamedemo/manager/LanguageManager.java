@@ -67,10 +67,8 @@ public class LanguageManager {
     public String getLanguage(String key,String defaultValue,String... values) {
         IniValueData[] iniValueData = new IniValueData[values.length];
         int size = 0;
-        if(values.length > 0) {
-            for(String s: values){
-                iniValueData[size++] = new IniValueData(size, s);
-            }
+        for (String s : values) {
+            iniValueData[size++] = new IniValueData(size, s);
         }
 
         return getLanguage(key,defaultValue, iniValueData);

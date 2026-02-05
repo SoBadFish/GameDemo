@@ -15,21 +15,21 @@ public class MoneyConfig {
 
     public void add(PlayerInfo playerInfo, double value) {
         playerInfo.money += value;
-        TotalManager.getLanguage().getLanguage("player-money-add",
+        playerInfo.sendMessage(TotalManager.getLanguage().getLanguage("player-money-add",
                 "&e&l+ [1][2]",
-                moneyUnit, String.format("%.1f", value));
+                moneyUnit, String.format("%.1f", value)));
     }
 
     public boolean reduce(PlayerInfo playerInfo, double value){
         if(playerInfo.money > value) {
             playerInfo.money -= value;
-            TotalManager.getLanguage().getLanguage("player-money-reduce",
+            playerInfo.sendMessage(TotalManager.getLanguage().getLanguage("player-money-reduce",
                     "&c&l- [1][2]",
-                    moneyUnit, String.format("%.1f", value));
+                    moneyUnit, String.format("%.1f", value)));
             return true;
         }else{
-            TotalManager.getLanguage().getLanguage("player-money-lack",
-                    "&c您的金钱不足");
+            playerInfo.sendMessage(TotalManager.getLanguage().getLanguage("player-money-lack",
+                    "&c您的金钱不足"));
         }
         return false;
     }
